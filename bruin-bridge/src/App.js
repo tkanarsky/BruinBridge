@@ -1,27 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import LandingPage from "./pages/LandingPage";
+import ForumPage from "./pages/ForumPage";
+import ProfilePage from "./pages/ProfilePage";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-          Test: it's working on my end!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <div className="App">
+        <Router>
+          <LandingPage></LandingPage>
+          <Route exact path="/forum">
+            <ForumPage></ForumPage>
+          </Route>
+          <Route exact path="/profile">
+            <ProfilePage></ProfilePage>
+          </Route>
+          <div className="fill-window"></div>
+        </Router>
+      </div>
+    );
+  }
 }
 
 export default App;
