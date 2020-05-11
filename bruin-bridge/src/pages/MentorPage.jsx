@@ -10,6 +10,7 @@ export default class MentorPage extends React.Component {
         <h2>Major: </h2>
         <h2>Graduation Year: </h2>
         <h2>Shared Interests: </h2>
+        <h2>Chat with mentor (will be link to chat with mentor page)</h2>
       </div>
     );
   }
