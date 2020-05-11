@@ -3,6 +3,14 @@ import styled from "styled-components";
 
 export default class MentorPage extends React.Component {
   render() {
-    return <>This is the mentor page haha</>;
+    return (
+      <div>
+        <h1>This is the mentor page haha</h1>
+        <h2>Name: </h2>
+        <h2>Major: </h2>
+        <h2>Graduation Year: </h2>
+        <h2>Shared Interests: </h2>
+      </div>
+    );
   }
 }
