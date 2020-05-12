@@ -27,7 +27,7 @@ export default class NavBar extends React.Component {
     return (
       <Element
         name="navbar"
-        classname={css`
+        className={css`
           position: sticky;
           top: 0;
           z-index: 100000;

@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import firebase, { auth, provider } from "../firebase.js";
 
 const Button = styled("button")`
@@ -93,40 +93,6 @@ const Container = styled("div")`
 `;
 
 export default class LandingPage extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      user: null
-    };
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
-  }
-
-  login() {
-    auth.signInWithPopup(provider).then(result => {
-      const user = result.user;
-      this.setState({
-        user
-      });
-    });
-  }
-
-  logout() {
-    auth.signOut().then(() => {
-      this.setState({
-        user: null
-      });
-    });
-  }
-
-  componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ user });
-      }
-    });
-  }
-
   render() {
     return (
       <>
@@ -137,12 +103,12 @@ export default class LandingPage extends React.Component {
               Bridging the gap between prospective bruins and current bruins.
             </Caption>
             <ButtonContainer>
-              {this.state.user ? (
-                <Button onClick={this.logout}>Sign Out</Button>
+              {this.props.userInfo ? (
+                <Button onClick={this.props.logout}>Sign Out</Button>
               ) : (
                 <div>
-                  <Button onClick={this.login}>Be a Mentor</Button>
-                  <Button onClick={this.login}>Find a Mentor</Button>
+                  <Button onClick={this.props.login}>Be a Mentor</Button>
+                  <Button onClick={this.props.login}>Find a Mentor</Button>
                 </div>
               )}
               <Img></Img>
