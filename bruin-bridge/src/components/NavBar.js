@@ -33,7 +33,7 @@ export default class NavBar extends React.Component {
         `}
       >
         <Container>
-          <StyledLink to="/'">Home</StyledLink>
+          <StyledLink to="/">Home</StyledLink>
           <StyledLink to="/forum">Forum</StyledLink>
           <StyledLink to="/mentor">My Mentor</StyledLink>
           <StyledLink to="profile">My Profile</StyledLink>
