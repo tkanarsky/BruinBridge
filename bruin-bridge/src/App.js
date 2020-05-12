@@ -23,7 +23,6 @@ class App extends React.Component {
             <Route exact path="/mentor">
               <MentorPage></MentorPage>
             </Route>
-
             <Route exact path="/profile">
               <ProfilePage></ProfilePage>
             </Route>

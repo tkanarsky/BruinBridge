@@ -99,6 +99,7 @@ export default class LandingPage extends React.Component {
       user: null
     };
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login() {
@@ -106,6 +107,14 @@ export default class LandingPage extends React.Component {
       const user = result.user;
       this.setState({
         user
+      });
+    });
+  }
+
+  logout() {
+    auth.signOut().then(() => {
+      this.setState({
+        user: null
       });
     });
   }
@@ -128,8 +137,14 @@ export default class LandingPage extends React.Component {
               Bridging the gap between prospective bruins and current bruins.
             </Caption>
             <ButtonContainer>
-              <Button onClick={this.login}>Be a Mentor</Button>
-              <Button onClick={this.login}>Find a Mentor</Button>
+              {this.state.user ? (
+                <Button onClick={this.logout}>Sign Out</Button>
+              ) : (
+                <div>
+                  <Button onClick={this.login}>Be a Mentor</Button>
+                  <Button onClick={this.login}>Find a Mentor</Button>
+                </div>
+              )}
               <Img></Img>
             </ButtonContainer>
             {/* <BouncingArrow>&#8964;</BouncingArrow> */}

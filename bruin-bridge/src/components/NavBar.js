@@ -16,6 +16,7 @@ const StyledLink = styled(Link)`
 
 const Container = styled("div")`
   background-color: #fff7cc;
+  width: 100%;
   height: 30px;
 `;
 
