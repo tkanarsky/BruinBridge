@@ -8,7 +8,7 @@ export default class ProfilePage extends React.Component {
         This is the profile page
         <div>
           {this.props.userInfo ? (
-            <div>{this.props.userInfo.displayName}</div>
+            <div>Name: {this.props.userInfo.displayName}</div>
           ) : (
             <div>No Name Found</div>
           )}
