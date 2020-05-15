@@ -24,6 +24,7 @@ class App extends React.Component {
       this.setState({
         user
       });
+      // TO-DO: add user to database/update user in database
     });
   }
 

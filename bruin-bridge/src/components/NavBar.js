@@ -6,6 +6,7 @@ import { css } from "emotion";
 
 const StyledLink = styled(Link)`
   font-size: 18px;
+  font-family: "Open Sans";
   margin: 30px;
   box-sizing: border-box;
   color: black;

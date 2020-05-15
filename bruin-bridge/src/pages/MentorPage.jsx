@@ -3,6 +3,16 @@ import styled from "styled-components";
 
 export default class MentorPage extends React.Component {
   render() {
-    return <>This is the mentor page haha</>;
+    return (
+      <div
+        style={{
+          backgroundColor: "#ADE1FF",
+          width: "100%",
+          height: "100vh"
+        }}
+      >
+        This is the mentor page haha
+      </div>
+    );
   }
 }
