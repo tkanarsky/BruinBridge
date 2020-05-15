@@ -6,6 +6,7 @@ import { css } from "emotion";
 
 const StyledLink = styled(Link)`
   font-size: 18px;
+  font-family: "Open Sans";
   margin: 30px;
   box-sizing: border-box;
   color: black;
@@ -16,6 +17,7 @@ const StyledLink = styled(Link)`
 
 const Container = styled("div")`
   background-color: #fff7cc;
+  width: 100%;
   height: 30px;
 `;
 
@@ -26,14 +28,14 @@ export default class NavBar extends React.Component {
     return (
       <Element
         name="navbar"
-        classname={css`
+        className={css`
           position: sticky;
           top: 0;
           z-index: 100000;
         `}
       >
         <Container>
-          <StyledLink to="/'">Home</StyledLink>
+          <StyledLink to="/">Home</StyledLink>
           <StyledLink to="/forum">Forum</StyledLink>
           <StyledLink to="/mentor">My Mentor</StyledLink>
           <StyledLink to="profile">My Profile</StyledLink>
