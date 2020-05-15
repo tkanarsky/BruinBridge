@@ -24,6 +24,13 @@ const BoldInfo = styled("div")`
 
 // this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      major: null,
+      year: null
+    };
+  }
   render() {
     return (
       <div
