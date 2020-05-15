@@ -56,16 +56,15 @@ export default class ProfilePage extends React.Component {
           ) : (
             <div>No Name Found</div>
           )}
-        <div>
-          <h2>Email: </h2>
-          <h2>ID: </h2>
-          <h2>Major: </h2>
-          <h2>Graduation Year: </h2>
-          <h2>Bio: </h2>
-          <h2>Karma: </h2>
-          <h2>Interests: </h2>
-        </div>
-      </Container>
+        </Container>
+        <h2>Email: </h2>
+        <h2>ID: </h2>
+        <h2>Major: </h2>
+        <h2>Graduation Year: </h2>
+        <h2>Bio: </h2>
+        <h2>Karma: </h2>
+        <h2>Interests: </h2>
+      </div>
     );
   }
 }
