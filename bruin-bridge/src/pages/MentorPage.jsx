@@ -11,7 +11,13 @@ export default class MentorPage extends React.Component {
           height: "100vh"
         }}
       >
-        This is the mentor page haha
+      <div>
+        <h1>This is the mentor page haha</h1>
+        <h2>Name: </h2>
+        <h2>Major: </h2>
+        <h2>Graduation Year: </h2>
+        <h2>Shared Interests: </h2>
+        <h2>Chat with mentor (will be link to chat with mentor page)</h2>
       </div>
     );
   }
