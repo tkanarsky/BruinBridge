@@ -21,7 +21,7 @@ export const majors = [
   "Asian Studies",
   "Astrophysics",
   "Atmospheric and Oceanic Sciences",
-  "Atmospheric and Oceanis Sciences/Mathematics",
+  "Atmospheric and Oceanic Sciences/Mathematics",
   "Biochemistry",
   "Bioengineering",
   "Biology",

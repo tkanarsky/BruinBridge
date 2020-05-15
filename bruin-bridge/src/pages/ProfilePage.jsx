@@ -51,19 +51,16 @@ export default class ProfilePage extends React.Component {
                   width: 200px;
                 `}
               />
-              <BoldInfo>Name: {this.props.userInfo.displayName}</BoldInfo>
+              <BoldInfo>{this.props.userInfo.displayName}</BoldInfo>
             </div>
           ) : (
-            <div>No Name Found</div>
+            <div>No Name</div>
           )}
+          <h2>Major: </h2>
+          <h2>Graduation Year: </h2>
+          <h2>Bio: </h2>
+          <h2>Karma: </h2>
         </Container>
-        <h2>Email: </h2>
-        <h2>ID: </h2>
-        <h2>Major: </h2>
-        <h2>Graduation Year: </h2>
-        <h2>Bio: </h2>
-        <h2>Karma: </h2>
-        <h2>Interests: </h2>
       </div>
     );
   }
