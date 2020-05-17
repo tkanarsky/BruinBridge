@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import EditableLabel from "react-inline-editing";
 
 export default class MentorPage extends React.Component {
   render() {

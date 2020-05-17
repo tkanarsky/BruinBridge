@@ -91,13 +91,9 @@ export default class ProfilePage extends React.Component {
             <EditableLabel text='Edit Here'
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
+                save={value => {
+                  console.log(`Saving '${value}'`);
+                }}
             /> 
             </h2>
 
@@ -105,11 +101,6 @@ export default class ProfilePage extends React.Component {
             <EditableLabel text='Edit Here'
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             /> 
@@ -119,65 +110,33 @@ export default class ProfilePage extends React.Component {
             <EditableLabel text='Edit Here'
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
             <EditableLabel text='Edit Here'
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
             <EditableLabel text='Edit Here'
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
             </h2>
 
           <h2>Bio: 
-            <EditableLabel text='Edit Here'
+          <EditableLabel text='Edit Here'
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
-            /> 
+            />
             </h2>
 
-          <h2>Karma: 
-            <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
-                inputWidth='200px'
-                inputHeight='25px'
-                inputMaxLength='50'
-                labelFontWeight='bold'
-                inputFontWeight='bold'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-            /> 
-            </h2>
+          <h2>Karma: </h2>
 
       </div>
     );
