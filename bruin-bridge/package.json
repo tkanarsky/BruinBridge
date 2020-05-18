@@ -10,10 +10,12 @@
     "emotion": "^10.0.27",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-dropdown-select": "^4.4.1",
     "react-inline-editing": "^1.0.10",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-scroll": "^1.7.16",
+    "react-select": "^3.1.0",
     "react-spinners": "^0.8.3",
     "styled-components": "^5.1.0"
   },
