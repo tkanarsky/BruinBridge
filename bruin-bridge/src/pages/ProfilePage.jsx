@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { css } from "emotion";
-import { majors } from "./majors";
+import { majorList } from "./majors";
+import InlineEdit from "react-inline-editing";
 import EditableLabel from "react-inline-editing";
+import Select from "react-select";
 
 const Container = styled("div")`
   background-color: white;
@@ -34,35 +36,58 @@ const Pair = styled("div")`
   display: flex;
   flex-direction: row;
 `;
+        
+class MajorDropdown extends React.Component {
+  state = {
+    selectedOption: null
+  };
+  handleChange = selectedOption => {
+    this.setState({ selectedOption }, () =>
+      console.log(`Option selected:`, this.state.selectedOption)
+    );
+  };
+  render() {
+    const { selectedOption } = this.state;
 
-// class ExampleInlineEditDefault extends React.Component {
-//   constructor(props) {
-//     super(props);
-//   }
+    return (
+      <Select
+        value={selectedOption}
+        onChange={this.handleChange}
+        options={majorList}
+      />
+    );
+  }
+}
 
-//   state = {
-//     inlineValue: "Example value"
-//   };
+class ExampleInlineEditDefault extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-//   handleSave = event => {
-//     if (event.target.name === "test") {
-//       this.setState({ inlineValue: event.target.value });
-//     }
-//   };
+  state = {
+    inlineValue: "Example value"
+  };
 
-//   render = () => {
-//     return (
-//       <div>
-//         <InlineEdit
-//           name="test"
-//           value={this.state.inlineValue}
-//           changeCallback={this.handleSave}
-//         />
-//         <code>The Inline Edit value is '{this.state.inlineValue}'.</code>
-//       </div>
-//     );
-//   };
-// }
+  handleSave = event => {
+    if (event.target.name === "test") {
+      this.setState({ inlineValue: event.target.value });
+    }
+  };
+
+  render = () => {
+    return (
+      <div>
+        <InlineEdit
+          name="test"
+          value={this.state.inlineValue}
+          changeCallback={this.handleSave}
+        />
+        <code>The Inline Edit value is '{this.state.inlineValue}'.</code>
+      </div>
+    );
+  };
+}
+
 
 // this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
@@ -82,6 +107,7 @@ export default class ProfilePage extends React.Component {
   _handleFocus(text) {
     console.log("Focused with text: " + text);
   }
+
 
   _handleFocusOut(text) {
     console.log("Left editor with text: " + text);
@@ -113,16 +139,11 @@ export default class ProfilePage extends React.Component {
           ) : (
             <div>No Name</div>
           )}
+
           <InfoContainer>
             <Pair>
               Major: &#8287;
-              <EditableLabel
-                text="Click to Edit"
-                labelClassName="Major"
-                inputClassName="userMajor"
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-              />
+              <MajorDropdown></MajorDropdown>
             </Pair>
 
             <Pair>
