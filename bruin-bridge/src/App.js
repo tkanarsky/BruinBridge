@@ -5,7 +5,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import firebase, { auth, provider, database } from "./firebase.js";
+import { auth, provider, database, userExists } from "./firebase.js";
 import "./App.css";
 
 class App extends React.Component {
@@ -23,8 +23,9 @@ class App extends React.Component {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       this.setState({ user });
-      // if user does not exist in database:
-      // this.createNewUser(this.state.user);
+      if (!userExists(user.uid)) {
+        this.createNewUser(this.state.user);
+      }
     });
   }
 
