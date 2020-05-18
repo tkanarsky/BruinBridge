@@ -30,13 +30,16 @@ const InfoContainer = styled("div")`
   flex-direction: column;
   padding-left: 30px;
   padding-top: 30px;
+  width: 40%;
 `;
 
 const Pair = styled("div")`
   display: flex;
   flex-direction: row;
+  width: 100%;
+  padding-top: 15px;
 `;
-        
+
 class MajorDropdown extends React.Component {
   state = {
     selectedOption: null
@@ -88,7 +91,6 @@ class ExampleInlineEditDefault extends React.Component {
   };
 }
 
-
 // this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
   constructor(props) {
@@ -108,11 +110,16 @@ export default class ProfilePage extends React.Component {
     console.log("Focused with text: " + text);
   }
 
-
   _handleFocusOut(text) {
     console.log("Left editor with text: " + text);
     // need to send updates back to database
   }
+
+  handleMajorChange = selectedOption => {
+    this.setState({ major: selectedOption }, () =>
+      console.log(`Option selected:`, this.state.selectedOption)
+    );
+  };
 
   render() {
     return (
@@ -141,13 +148,10 @@ export default class ProfilePage extends React.Component {
           )}
 
           <InfoContainer>
+            <strong>Major: &#8287;</strong>
+            <MajorDropdown></MajorDropdown>
             <Pair>
-              Major: &#8287;
-              <MajorDropdown></MajorDropdown>
-            </Pair>
-
-            <Pair>
-              Graduation Year: &#8287;
+              <strong>Graduation Year: &#8287;</strong>
               <EditableLabel
                 text="Click to Edit"
                 labelClassName="GradYear"
@@ -156,7 +160,6 @@ export default class ProfilePage extends React.Component {
                 onFocusOut={this._handleFocusOut}
               />
             </Pair>
-
             {/* <Pair>
               Interests:
               <EditableLabel
@@ -181,9 +184,8 @@ export default class ProfilePage extends React.Component {
                 onFocusOut={this._handleFocusOut}
               />
             </Pair> */}
-
             <Pair>
-              Bio: &#8287;
+              <strong>Bio: &#8287;</strong>
               <EditableLabel
                 text="Click to Edit"
                 labelClassName="Bio"
@@ -192,8 +194,11 @@ export default class ProfilePage extends React.Component {
                 onFocusOut={this._handleFocusOut}
               />
             </Pair>
-
-            <Pair>Karma: {this.state.karma}</Pair>
+            <Pair>
+              {" "}
+              <strong>Karma: </strong>
+              {this.state.karma}
+            </Pair>
           </InfoContainer>
         </Container>
       </div>
