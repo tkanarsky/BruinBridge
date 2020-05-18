@@ -89,8 +89,8 @@ export default class ProfilePage extends React.Component {
         </Container>
           <h2>Major: 
             <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
+                labelClassName='Major'
+                inputClassName='userMajor'
                 save={value => {
                   console.log(`Saving '${value}'`);
                 }}
@@ -99,8 +99,8 @@ export default class ProfilePage extends React.Component {
 
           <h2>Graduation Year: 
             <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
+                labelClassName='GradYear'
+                inputClassName='userGradYear'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             /> 
@@ -108,20 +108,20 @@ export default class ProfilePage extends React.Component {
 
           <h2>Interests: 
             <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
+                labelClassName='Interest1'
+                inputClassName='userInterest1'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
             <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
+                labelClassName='Interest2'
+                inputClassName='userInterest2'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
             <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
+                labelClassName='Interest3'
+                inputClassName='userInterest3'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
@@ -129,14 +129,14 @@ export default class ProfilePage extends React.Component {
 
           <h2>Bio: 
           <EditableLabel text='Edit Here'
-                labelClassName='myLabelClass'
-                inputClassName='myInputClass'
+                labelClassName='Bio'
+                inputClassName='userBio'
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
             />
             </h2>
 
-          <h2>Karma: </h2>
+          <h2>Karma: 0</h2>
 
       </div>
     );
