@@ -1,4 +1,4 @@
-export const majors = [
+const majors = [
   "Aerospace Engineering",
   "African American Studies",
   "African and Middle Eastern Studies",
@@ -130,3 +130,13 @@ export const majors = [
   "Theater",
   "World Arts and Cultures"
 ];
+
+let majorList = [];
+for (var i = 0; i < majors.length; i++) {
+  majorList.push({
+    label: majors[i],
+    value: majors[i]
+  });
+}
+
+export { majorList };
