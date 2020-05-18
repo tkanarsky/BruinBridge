@@ -115,12 +115,6 @@ export default class ProfilePage extends React.Component {
     // need to send updates back to database
   }
 
-  handleMajorChange = selectedOption => {
-    this.setState({ major: selectedOption }, () =>
-      console.log(`Option selected:`, this.state.selectedOption)
-    );
-  };
-
   render() {
     return (
       <div
