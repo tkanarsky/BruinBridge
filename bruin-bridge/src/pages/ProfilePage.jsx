@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { css } from "emotion";
 import { majors } from "./majors";
-import InlineEdit from "react-inline-editing";
 import EditableLabel from "react-inline-editing";
 
 const Container = styled("div")`
@@ -24,33 +23,46 @@ const BoldInfo = styled("div")`
   padding: 20px;
 `;
 
+const InfoContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+  padding-top: 30px;
+`;
 
+const Pair = styled("div")`
+  display: flex;
+  flex-direction: row;
+`;
 
+// class ExampleInlineEditDefault extends React.Component {
+//   constructor(props) {
+//     super(props);
+//   }
 
-class ExampleInlineEditDefault extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+//   state = {
+//     inlineValue: "Example value"
+//   };
 
-  state = {
-    inlineValue: 'Example value'
-  }
+//   handleSave = event => {
+//     if (event.target.name === "test") {
+//       this.setState({ inlineValue: event.target.value });
+//     }
+//   };
 
-  handleSave = event => {
-    if (event.target.name === 'test') {
-      this.setState({ inlineValue: event.target.value })
-    }
-  }
-
-  render = () => {
-    return (
-      <div>
-        <InlineEdit name='test' value={this.state.inlineValue} changeCallback={this.handleSave} />
-        <code>The Inline Edit value is '{this.state.inlineValue}'.</code>
-      </div>
-    )
-  }
-}
+//   render = () => {
+//     return (
+//       <div>
+//         <InlineEdit
+//           name="test"
+//           value={this.state.inlineValue}
+//           changeCallback={this.handleSave}
+//         />
+//         <code>The Inline Edit value is '{this.state.inlineValue}'.</code>
+//       </div>
+//     );
+//   };
+// }
 
 // this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
@@ -58,9 +70,24 @@ export default class ProfilePage extends React.Component {
     super(props);
     this.state = {
       major: null,
-      year: null
+      year: null,
+      bio: null,
+      karma: 0
     };
+
+    this._handleFocus = this._handleFocus.bind(this);
+    this._handleFocusOut = this._handleFocusOut.bind(this);
   }
+
+  _handleFocus(text) {
+    console.log("Focused with text: " + text);
+  }
+
+  _handleFocusOut(text) {
+    console.log("Left editor with text: " + text);
+    // need to send updates back to database
+  }
+
   render() {
     return (
       <div
@@ -86,58 +113,68 @@ export default class ProfilePage extends React.Component {
           ) : (
             <div>No Name</div>
           )}
+          <InfoContainer>
+            <Pair>
+              Major: &#8287;
+              <EditableLabel
+                text="Click to Edit"
+                labelClassName="Major"
+                inputClassName="userMajor"
+                onFocus={this._handleFocus}
+                onFocusOut={this._handleFocusOut}
+              />
+            </Pair>
+
+            <Pair>
+              Graduation Year: &#8287;
+              <EditableLabel
+                text="Click to Edit"
+                labelClassName="GradYear"
+                inputClassName="userGradYear"
+                onFocus={this._handleFocus}
+                onFocusOut={this._handleFocusOut}
+              />
+            </Pair>
+
+            {/* <Pair>
+              Interests:
+              <EditableLabel
+                text="Edit Here"
+                labelClassName="Interest1"
+                inputClassName="userInterest1"
+                onFocus={this._handleFocus}
+                onFocusOut={this._handleFocusOut}
+              />
+              <EditableLabel
+                text="Edit Here"
+                labelClassName="Interest2"
+                inputClassName="userInterest2"
+                onFocus={this._handleFocus}
+                onFocusOut={this._handleFocusOut}
+              />
+              <EditableLabel
+                text="Edit Here"
+                labelClassName="Interest3"
+                inputClassName="userInterest3"
+                onFocus={this._handleFocus}
+                onFocusOut={this._handleFocusOut}
+              />
+            </Pair> */}
+
+            <Pair>
+              Bio: &#8287;
+              <EditableLabel
+                text="Click to Edit"
+                labelClassName="Bio"
+                inputClassName="userBio"
+                onFocus={this._handleFocus}
+                onFocusOut={this._handleFocusOut}
+              />
+            </Pair>
+
+            <Pair>Karma: {this.state.karma}</Pair>
+          </InfoContainer>
         </Container>
-          <h2>Major: 
-            <EditableLabel text='Edit Here'
-                labelClassName='Major'
-                inputClassName='userMajor'
-                save={value => {
-                  console.log(`Saving '${value}'`);
-                }}
-            /> 
-            </h2>
-
-          <h2>Graduation Year: 
-            <EditableLabel text='Edit Here'
-                labelClassName='GradYear'
-                inputClassName='userGradYear'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-            /> 
-            </h2>
-
-          <h2>Interests: 
-            <EditableLabel text='Edit Here'
-                labelClassName='Interest1'
-                inputClassName='userInterest1'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-            />
-            <EditableLabel text='Edit Here'
-                labelClassName='Interest2'
-                inputClassName='userInterest2'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-            />
-            <EditableLabel text='Edit Here'
-                labelClassName='Interest3'
-                inputClassName='userInterest3'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-            />
-            </h2>
-
-          <h2>Bio: 
-          <EditableLabel text='Edit Here'
-                labelClassName='Bio'
-                inputClassName='userBio'
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-            />
-            </h2>
-
-          <h2>Karma: 0</h2>
-
       </div>
     );
   }
