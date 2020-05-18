@@ -5,7 +5,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import firebase, { auth, provider } from "./firebase.js";
+import { auth, provider, database, userExists } from "./firebase.js";
 import "./App.css";
 
 class App extends React.Component {
@@ -16,15 +16,28 @@ class App extends React.Component {
     };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.createNewUser = this.createNewUser.bind(this);
   }
 
   login() {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      this.setState({
-        user
-      });
-      // TO-DO: add user to database/update user in database
+      this.setState({ user });
+      if (!userExists(user.uid)) {
+        this.createNewUser(this.state.user);
+      }
+    });
+  }
+
+  createNewUser(user) {
+    if (user == null) return;
+    database.ref("users/" + user.uid).set({
+      name: user.displayName,
+      email: user.email,
+      major: null,
+      year: null,
+      bio: null,
+      karma: 0
     });
   }
 
@@ -43,7 +56,6 @@ class App extends React.Component {
       }
     });
   }
-  componentWillUnmount() {}
 
   render() {
     return (
@@ -65,9 +77,7 @@ class App extends React.Component {
               <MentorPage></MentorPage>
             </Route>
             <Route exact path="/profile">
-              <ProfilePage userInfo={this.state.user}>
-                {console.log(this.state.user)}
-              </ProfilePage>
+              <ProfilePage userInfo={this.state.user}></ProfilePage>
             </Route>
             <div className="fill-window"></div>
           </Switch>

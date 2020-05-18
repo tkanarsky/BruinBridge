@@ -12,4 +12,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const auth = firebase.auth();
+export const database = firebase.database();
 export default firebase;
+
+export function userExists(id) {
+  var ref = database.ref("users");
+  ref.once("value").then(function(snapshot) {
+    return snapshot.child(id).exists();
+  });
+}
