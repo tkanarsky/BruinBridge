@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { css } from "emotion";
 import { majorList } from "./majors";
-import InlineEdit from "react-inline-editing";
+import { interestsList } from "./interests"
 import EditableLabel from "react-inline-editing";
 import Select from "react-select";
 
@@ -62,34 +62,28 @@ class MajorDropdown extends React.Component {
   }
 }
 
-class ExampleInlineEditDefault extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+class InterestsDropdown extends React.Component {
   state = {
-    inlineValue: "Example value"
+    selectedOption: null
   };
-
-  handleSave = event => {
-    if (event.target.name === "test") {
-      this.setState({ inlineValue: event.target.value });
-    }
-  };
-
-  render = () => {
-    return (
-      <div>
-        <InlineEdit
-          name="test"
-          value={this.state.inlineValue}
-          changeCallback={this.handleSave}
-        />
-        <code>The Inline Edit value is '{this.state.inlineValue}'.</code>
-      </div>
+  handleChange = selectedOption => {
+    this.setState({ selectedOption }, () =>
+      console.log(`Option selected:`, this.state.selectedOption)
     );
   };
+  render() {
+    const { selectedOption } = this.state;
+
+    return (
+      <Select
+        value={selectedOption}
+        onChange={this.handleChange}
+        options={interestsList}
+      />
+    );
+  }
 }
+
 
 // this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
@@ -99,7 +93,10 @@ export default class ProfilePage extends React.Component {
       major: null,
       year: null,
       bio: null,
-      karma: 0
+      karma: 0,
+      interest1: null,
+      interest2: null,
+      interest3: null
     };
 
     this._handleFocus = this._handleFocus.bind(this);
@@ -154,36 +151,12 @@ export default class ProfilePage extends React.Component {
                 onFocusOut={this._handleFocusOut}
               />
             </Pair>
-            {/* <Pair>
-              Interests:
-              <EditableLabel
-                text="Edit Here"
-                labelClassName="Interest1"
-                inputClassName="userInterest1"
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-              />
-              <EditableLabel
-                text="Edit Here"
-                labelClassName="Interest2"
-                inputClassName="userInterest2"
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-              />
-              <EditableLabel
-                text="Edit Here"
-                labelClassName="Interest3"
-                inputClassName="userInterest3"
-                onFocus={this._handleFocus}
-                onFocusOut={this._handleFocusOut}
-              />
-            </Pair> */}
             <Pair>
               <strong>Bio: &#8287;</strong>
               <EditableLabel
                 text="Click to Edit"
-                labelClassName="Bio"
-                inputClassName="userBio"
+                labelClassName="GradYear"
+                inputClassName="userGradYear"
                 onFocus={this._handleFocus}
                 onFocusOut={this._handleFocusOut}
               />
@@ -193,6 +166,12 @@ export default class ProfilePage extends React.Component {
               <strong>Karma: </strong>
               {this.state.karma}
             </Pair>
+            <Pair>
+              <strong>Interests: &#8287;</strong>
+            </Pair>
+            <InterestsDropdown></InterestsDropdown>
+            <InterestsDropdown></InterestsDropdown>
+            <InterestsDropdown></InterestsDropdown>
           </InfoContainer>
         </Container>
       </div>
