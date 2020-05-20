@@ -21,3 +21,9 @@ export function userExists(id) {
     return snapshot.child(id).exists();
   });
 }
+
+export function changeMajor(id, major) {
+  var ref = database.ref("users/" + id);
+  ref.update({ major: major });
+  return;
+}

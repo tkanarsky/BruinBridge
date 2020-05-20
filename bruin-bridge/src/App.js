@@ -12,7 +12,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: null
+      user: null,
+      disable: true
     };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
@@ -52,7 +53,7 @@ class App extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ user });
+        this.setState({ user: user, disable: false });
       }
     });
   }
@@ -60,28 +61,35 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Router>
-          <NavBar />
-          <Switch>
-            <Route exact path="/">
-              <LandingPage
-                userInfo={this.state.user}
-                login={this.login}
-                logout={this.logout}
-              ></LandingPage>
-            </Route>
-            <Route exact path="/forum">
-              <ForumPage></ForumPage>
-            </Route>
-            <Route exact path="/mentor">
-              <MentorPage></MentorPage>
-            </Route>
-            <Route exact path="/profile">
-              <ProfilePage userInfo={this.state.user}></ProfilePage>
-            </Route>
-            <div className="fill-window"></div>
-          </Switch>
-        </Router>
+        {!this.state.user && <p>Loading...</p>}
+        {this.state.user && (
+          <Router>
+            <NavBar />
+            <Switch>
+              <Route exact path="/">
+                <LandingPage
+                  userInfo={this.state.user}
+                  login={this.login}
+                  logout={this.logout}
+                  disabled={this.state.disable}
+                ></LandingPage>
+              </Route>
+              <Route exact path="/forum">
+                <ForumPage></ForumPage>
+              </Route>
+              <Route exact path="/mentor">
+                <MentorPage></MentorPage>
+              </Route>
+              <Route exact path="/profile">
+                <ProfilePage
+                  user={this.state.user}
+                  disabled={this.state.disable}
+                ></ProfilePage>
+              </Route>
+              <div className="fill-window"></div>
+            </Switch>
+          </Router>
+        )}
       </div>
     );
   }
