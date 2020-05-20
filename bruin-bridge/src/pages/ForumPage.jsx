@@ -62,13 +62,26 @@ const Fact = styled("div")`
   white-space: nowrap;
 `;
 
-const Post = styled("div")`
-  background-color: #fffcef;
+const PostBackground = styled("div")`
+  background-color: #fffecf;
   width: 100%;
+  height: 140px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 25px;
 `;
+
+const Post = (props) => (
+  <PostBackground>
+    <div>
+      <h3>Title</h3>
+      <p>Description</p>
+      <p>42 Upvotes</p>
+      <p>12 Downvotes</p>
+    </div>
+  </PostBackground>
+)
 
 const PostContainer = styled("div")`
   background-color: white;
@@ -150,7 +163,9 @@ export default class ForumPage extends React.Component {
               <SubmitButton>Submit</SubmitButton>
             </SubmitQuestion>
             <PostContainer>
-              <Post>hello</Post>
+              <Post />
+              <Post />
+              <Post />
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
