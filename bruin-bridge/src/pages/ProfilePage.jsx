@@ -103,6 +103,7 @@ export default class ProfilePage extends React.Component {
           value: snapshot.val()
         });
         this.setState({ major: m });
+        console.log(m);
       });
       let bioRef = userRef.child("/bio");
       bioRef.on("value", snapshot => {
@@ -114,6 +115,31 @@ export default class ProfilePage extends React.Component {
       });
     }
   }
+
+  // componentWillUnmount() {
+  //   const { user } = this.props;
+  //   if (user) {
+  //     let userRef = database.ref("users/" + user.uid);
+  //     let majorRef = userRef.child("major");
+  //     majorRef.on("value", snapshot => {
+  //       let m = [];
+  //       m.push({
+  //         label: snapshot.val(),
+  //         value: snapshot.val()
+  //       });
+  //       this.setState({ major: m });
+  //       console.log(m);
+  //     });
+  //     let bioRef = userRef.child("/bio");
+  //     bioRef.on("value", snapshot => {
+  //       this.setState({ bio: snapshot.val() });
+  //     });
+  //     let yearRef = userRef.child("/year");
+  //     yearRef.on("value", snapshot => {
+  //       this.setState({ year: snapshot.val() });
+  //     });
+  //   }
+  // }
 
   handleMajor(m) {
     this.setState({ major: m });
