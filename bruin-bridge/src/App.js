@@ -22,7 +22,7 @@ class App extends React.Component {
   login() {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      this.setState({ user });
+      //this.setState({ user });
       if (!userExists(user.uid)) {
         this.createNewUser(this.state.user);
       }
@@ -34,9 +34,9 @@ class App extends React.Component {
     database.ref("users/" + user.uid).set({
       name: user.displayName,
       email: user.email,
-      major: null,
-      year: null,
-      bio: null,
+      major: "",
+      year: "",
+      bio: "",
       karma: 0
     });
   }
@@ -60,6 +60,8 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        {/* {!this.state.user && <p>Loading...</p>}
+        {this.state.user && ( */}
         <Router>
           <NavBar />
           <Switch>
@@ -77,11 +79,12 @@ class App extends React.Component {
               <MentorPage></MentorPage>
             </Route>
             <Route exact path="/profile">
-              <ProfilePage userInfo={this.state.user}></ProfilePage>
+              <ProfilePage user={this.state.user}></ProfilePage>
             </Route>
             <div className="fill-window"></div>
           </Switch>
         </Router>
+        )}
       </div>
     );
   }
