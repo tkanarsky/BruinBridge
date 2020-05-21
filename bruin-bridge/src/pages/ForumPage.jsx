@@ -143,20 +143,36 @@ export default class ForumPage extends React.Component {
     super(props);
     this.state = {
       postInput: '',
+      title: '',
       posts: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTitle = this.handleTitle.bind(this);
   }
   
   handleChange(event) {
     this.setState({postInput: event.target.value});
   }
 
+  handleTitle(event) {
+    this.setState({title: event.target.value});
+  }
+
   handleSubmit(event) {
+    if (this.state.title === ''){
+      alert('Must have post title');
+      return;
+    }
+    if (this.state.postInput === ''){
+      alert('Must not submit blank question');
+      return;
+    }
     if (this.props.user) {
       createPost(this.props.user, "Forum Post", this.state.postInput);
       console.log("Created post!");
+      alert(this.state.title + ' Post: ' + this.state.postInput); //testing purposes can delete later
+      this.setState({title: '', postInput: '',});
     }
     else alert('You must be logged in to submit a post!');
     event.preventDefault();
@@ -185,8 +201,12 @@ export default class ForumPage extends React.Component {
             <SubmitQuestion>
             <form onSubmit={this.handleSubmit}>
               <label>
+                Title:
+                <input type="text" value value={this.state.title} onChange={this.handleTitle}/>
+              </label>
+              <label>
                 Post:
-                <input type="text" value={this.state.value} onChange={this.handleChange} />
+                <input type="text" value={this.state.postInput} onChange={this.handleChange} />
               </label>
               <input type="submit" value="Submit"/>
               </form>
@@ -194,7 +214,6 @@ export default class ForumPage extends React.Component {
             </SubmitQuestion>
             <PostContainer>
               <Post />
-              <h1>{this.state.postInput}</h1>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
