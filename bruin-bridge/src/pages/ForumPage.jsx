@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { createPost } from "../firebase.js"
+import { createPost } from "../firebase.js";
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -64,7 +64,7 @@ const Fact = styled("div")`
 `;
 
 const PostBackground = styled("div")`
-  background-color: #fffecf;
+  background-color: #fff7cc;
   width: 100%;
   height: 140px;
   display: flex;
@@ -73,7 +73,7 @@ const PostBackground = styled("div")`
   margin-top: 25px;
 `;
 
-const Post = (props) => (
+const Post = props => (
   <PostBackground>
     <div>
       <h3>Title</h3>
@@ -82,7 +82,7 @@ const Post = (props) => (
       <p>12 Downvotes</p>
     </div>
   </PostBackground>
-)
+);
 
 const PostContainer = styled("div")`
   background-color: white;
@@ -93,34 +93,14 @@ const PostContainer = styled("div")`
   padding: 20px;
 `;
 
-const SubmitButton = styled("button")`
-  display: flex;
-  background-color: #ffe457;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 100px;
-  height: 50px;
-  border-radius: 50px;
-  font-size: 16px;
-  font-family: "Open Sans";
-  font-weight: bold;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const SubmitQuestion = styled("div")`
   background-color: white;
   border-radius: 20px;
   width: 100%;
-  height: 75px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  height: 50px;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 `;
 
 const QuestionsContainer = styled("div")`
@@ -142,23 +122,22 @@ export default class ForumPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postInput: '',
+      postInput: "",
       posts: []
-    }
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  
+
   handleChange(event) {
-    this.setState({postInput: event.target.value});
+    this.setState({ postInput: event.target.value });
   }
 
   handleSubmit(event) {
     if (this.props.user) {
       createPost(this.props.user, "Forum Post", this.state.postInput);
       console.log("Created post!");
-    }
-    else alert('You must be logged in to submit a post!');
+    } else alert("You must be logged in to submit a post!");
     event.preventDefault();
   }
 
@@ -183,14 +162,32 @@ export default class ForumPage extends React.Component {
           </SchoolContainer>
           <QuestionsContainer>
             <SubmitQuestion>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                Post:
-                <input type="text" value={this.state.value} onChange={this.handleChange} />
-              </label>
-              <input type="submit" value="Submit"/>
+              <form onSubmit={this.handleSubmit}>
+                <label style={{ paddingRight: "10px" }}>Ask a Question</label>
+                <input
+                  type="text"
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  style={{
+                    width: "75%",
+                    lineHeight: "2em",
+                    fontSize: "16px",
+                    paddingLeft: "5x"
+                  }}
+                />
+                <input
+                  type="submit"
+                  value="Submit"
+                  style={{
+                    backgroundColor: "#ffe457",
+                    fontFamily: "Open Sans",
+                    fontSize: "15px",
+                    borderRadius: "20px",
+                    width: "100px",
+                    height: "50px"
+                  }}
+                />
               </form>
-              <SubmitButton>Submit</SubmitButton>
             </SubmitQuestion>
             <PostContainer>
               <Post />
