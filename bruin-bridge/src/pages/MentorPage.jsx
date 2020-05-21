@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import EditableLabel from "react-inline-editing";
 
 export default class MentorPage extends React.Component {
   render() {
@@ -12,7 +11,7 @@ export default class MentorPage extends React.Component {
           height: "100vh"
         }}
       >
-        <h1>This is the mentor page haha</h1>
+        <h1>Mentor page</h1>
         <h2>Name: </h2>
         <h2>Major: </h2>
         <h2>Graduation Year: </h2>

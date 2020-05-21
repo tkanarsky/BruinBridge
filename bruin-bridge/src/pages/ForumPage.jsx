@@ -138,6 +138,25 @@ const AllContainer = styled("div")`
 `;
 
 export default class ForumPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      postInput: '',
+      posts: []
+    }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  
+  handleChange(event) {
+    this.setState({postInput: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('A post was submitted: ' + this.state.postInput);
+    event.preventDefault();
+  }
+
   render() {
     return (
       <div
@@ -159,13 +178,18 @@ export default class ForumPage extends React.Component {
           </SchoolContainer>
           <QuestionsContainer>
             <SubmitQuestion>
-              *TODO: Insert text field here*
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                Post:
+                <input type="text" value={this.state.value} onChange={this.handleChange} />
+              </label>
+              <input type="submit" value="Submit"/>
+              </form>
               <SubmitButton>Submit</SubmitButton>
             </SubmitQuestion>
             <PostContainer>
               <Post />
-              <Post />
-              <Post />
+              <h1>{this.state.postInput}</h1>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
