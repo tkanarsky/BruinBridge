@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { createPost } from "../firebase.js";
+import ForumPost from "../components/ForumPost";
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -62,28 +63,6 @@ const Fact = styled("div")`
   font-size: 18px;
   white-space: nowrap;
 `;
-
-const PostBackground = styled("div")`
-  background-color: #fff7cc;
-  width: 100%;
-  height: 140px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-`;
-
-const Post = props => (
-  <PostBackground>
-    <div>
-      <h3>Title</h3>
-      <p>Description</p>
-      <p>42 Upvotes</p>
-      <p>12 Downvotes</p>
-    </div>
-  </PostBackground>
-);
-
 const PostContainer = styled("div")`
   background-color: white;
   border-radius: 25px;
@@ -223,7 +202,7 @@ export default class ForumPage extends React.Component {
               </form>
             </SubmitQuestion>
             <PostContainer>
-              <Post />
+              <ForumPost></ForumPost>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
