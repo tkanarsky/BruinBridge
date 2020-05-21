@@ -160,10 +160,18 @@ export default class ForumPage extends React.Component {
   }
 
   handleSubmit(event) {
+    if (this.state.title === ''){
+      alert('Must have post title');
+      return;
+    }
+    if (this.state.postInput === ''){
+      alert('Must not submit blank question');
+      return;
+    }
     if (this.props.user) {
       createPost(this.props.user, "Forum Post", this.state.postInput);
       console.log("Created post!");
-      alert(this.state.title + " Post: " + this.state.postInput);
+      alert(this.state.title + ' Post: ' + this.state.postInput); //testing purposes can delete later
       this.setState({title: '', postInput: '',});
     }
     else alert('You must be logged in to submit a post!');
@@ -206,8 +214,6 @@ export default class ForumPage extends React.Component {
             </SubmitQuestion>
             <PostContainer>
               <Post />
-              <h1>{this.state.title}</h1>
-              <h2>{this.state.postInput}</h2>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
