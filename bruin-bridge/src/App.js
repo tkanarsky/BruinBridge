@@ -5,7 +5,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import { auth, provider, database, userExists } from "./firebase.js";
+import { auth, provider, database, userExists, createUser} from "./firebase.js";
 import "./App.css";
 
 class App extends React.Component {
@@ -16,28 +16,15 @@ class App extends React.Component {
     };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-    this.createNewUser = this.createNewUser.bind(this);
   }
 
   login() {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       //this.setState({ user });
-      if (!userExists(user.uid)) {
-        this.createNewUser(this.state.user);
-      }
-    });
-  }
-
-  createNewUser(user) {
-    if (user == null) return;
-    database.ref("users/" + user.uid).set({
-      name: user.displayName,
-      email: user.email,
-      major: "",
-      year: "",
-      bio: "",
-      karma: 0
+      userExists(user.uid, (value) => {
+        createUser(user.uid, user.displayName, user.email);
+      });
     });
   }
 

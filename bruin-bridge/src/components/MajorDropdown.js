@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { changeMajor, database } from "../firebase";
+import { updateUser, database } from "../firebase";
 import { majorList } from "../pages/majors";
 
 export default class MajorDropdown extends React.Component {
@@ -18,7 +18,7 @@ export default class MajorDropdown extends React.Component {
 
   handleChange = selectedOption => {
     this.setState({ selectedOption });
-    changeMajor(this.props.id, selectedOption["value"]);
+    updateUser(this.props.id, {major: selectedOption["value"]});
   };
 
   render() {
