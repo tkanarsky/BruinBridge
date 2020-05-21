@@ -17,6 +17,7 @@ const Container = styled("div")`
   margin-left: 2%;
   margin-right: 2%;
   padding-top: 50px;
+  padding-bottom: 50px;
 `;
 
 const BoldInfo = styled("div")`
@@ -76,6 +77,7 @@ export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userRef: null, // reference to user in the database
       major: null,
       // MAJOR TO BE AN OBJECT {label: "...", value: "..."}
       // THIS IS NEEDED FOR DROPDOWN SELECT TO WORK!!!!
@@ -89,12 +91,19 @@ export default class ProfilePage extends React.Component {
     this.handleMajor = this.handleMajor.bind(this);
     this.onSaveYear = this.onSaveYear.bind(this);
     this.onSaveBio = this.onSaveBio.bind(this);
+    this.loadData = this.loadData.bind(this);
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
     const { user } = this.props;
-    if (user) {
+    console.log("load");
+    if (user && !this.state.userRef) {
       let userRef = database.ref("users/" + user.uid);
+      this.setState({ userRef: userRef });
       let majorRef = userRef.child("major");
       majorRef.on("value", snapshot => {
         let m = [];
@@ -103,7 +112,6 @@ export default class ProfilePage extends React.Component {
           value: snapshot.val()
         });
         this.setState({ major: m });
-        console.log(m);
       });
       let bioRef = userRef.child("/bio");
       bioRef.on("value", snapshot => {
@@ -115,31 +123,6 @@ export default class ProfilePage extends React.Component {
       });
     }
   }
-
-  // componentWillUnmount() {
-  //   const { user } = this.props;
-  //   if (user) {
-  //     let userRef = database.ref("users/" + user.uid);
-  //     let majorRef = userRef.child("major");
-  //     majorRef.on("value", snapshot => {
-  //       let m = [];
-  //       m.push({
-  //         label: snapshot.val(),
-  //         value: snapshot.val()
-  //       });
-  //       this.setState({ major: m });
-  //       console.log(m);
-  //     });
-  //     let bioRef = userRef.child("/bio");
-  //     bioRef.on("value", snapshot => {
-  //       this.setState({ bio: snapshot.val() });
-  //     });
-  //     let yearRef = userRef.child("/year");
-  //     yearRef.on("value", snapshot => {
-  //       this.setState({ year: snapshot.val() });
-  //     });
-  //   }
-  // }
 
   handleMajor(m) {
     this.setState({ major: m });
@@ -158,6 +141,9 @@ export default class ProfilePage extends React.Component {
   }
 
   render() {
+    if (this.props.user && !this.state.userRef) {
+      this.loadData();
+    }
     return (
       <div
         style={{
@@ -166,64 +152,70 @@ export default class ProfilePage extends React.Component {
           height: "100vh"
         }}
       >
-        {this.props.user && this.state.major ? (
-          <Container>
-            <PicContainer>
-              <img
-                src={this.props.user.photoURL}
-                className={css`
-                  border-radius: 50%;
-                  height: 200px;
-                  width: 200px;
-                `}
-              />
-              <BoldInfo>{this.props.user.displayName}</BoldInfo>
-            </PicContainer>
-            <InfoContainer>
-              <strong>Major: &#8287;</strong>
-              <MajorDropdown
-                id={this.props.user.uid}
-                curMajor={this.state.major}
-                handle={this.handleMajor}
-              ></MajorDropdown>
-              <Pair>
-                <strong>Graduation Year: &#8287;</strong>
-                <EdiText
-                  type="textarea"
-                  saveButtonContent="Apply"
-                  cancelButtonContent={<strong>Cancel</strong>}
-                  editButtonContent="Edit"
-                  value={this.state.year}
-                  onSave={this.onSaveYear}
-                />
-              </Pair>
-              <Pair>
-                <strong>Bio: &#8287;</strong>
-                <EdiText
-                  type="textarea"
-                  saveButtonContent="Apply"
-                  cancelButtonContent={<strong>Cancel</strong>}
-                  editButtonContent="Edit"
-                  value={this.state.bio}
-                  onSave={this.onSaveBio}
-                />
-              </Pair>
-              <Pair>
-                {" "}
-                <strong>Karma: </strong>
-                {this.state.karma}
-              </Pair>
-              <Pair>
-                <strong>Interests: &#8287;</strong>
-              </Pair>
-              <InterestsDropdown></InterestsDropdown>
-              <InterestsDropdown></InterestsDropdown>
-              <InterestsDropdown></InterestsDropdown>
-            </InfoContainer>
-          </Container>
-        ) : (
-          <div>Login to view your profile!</div>
-        )}
+        {(() => {
+          if (this.props.user && this.state.major) {
+            return (
+              <Container>
+                <PicContainer>
+                  <img
+                    src={this.props.user.photoURL}
+                    className={css`
+                      border-radius: 50%;
+                      height: 200px;
+                      width: 200px;
+                    `}
+                  />
+                  <BoldInfo>{this.props.user.displayName}</BoldInfo>
+                </PicContainer>
+                <InfoContainer>
+                  <strong>Major: &#8287;</strong>
+                  <MajorDropdown
+                    id={this.props.user.uid}
+                    curMajor={this.state.major}
+                    handle={this.handleMajor}
+                  ></MajorDropdown>
+                  <Pair>
+                    <strong>Graduation Year: &#8287;</strong>
+                    <EdiText
+                      type="textarea"
+                      saveButtonContent="Apply"
+                      cancelButtonContent={<strong>Cancel</strong>}
+                      editButtonContent="Edit"
+                      value={this.state.year}
+                      onSave={this.onSaveYear}
+                    />
+                  </Pair>
+                  <Pair>
+                    <strong>Bio: &#8287;</strong>
+                    <EdiText
+                      type="textarea"
+                      saveButtonContent="Apply"
+                      cancelButtonContent={<strong>Cancel</strong>}
+                      editButtonContent="Edit"
+                      value={this.state.bio}
+                      onSave={this.onSaveBio}
+                    />
+                  </Pair>
+                  <Pair>
+                    {" "}
+                    <strong>Karma: </strong>
+                    {this.state.karma}
+                  </Pair>
+                  <Pair>
+                    <strong>Interests: &#8287;</strong>
+                  </Pair>
+                  <InterestsDropdown></InterestsDropdown>
+                  <InterestsDropdown></InterestsDropdown>
+                  <InterestsDropdown></InterestsDropdown>
+                </InfoContainer>
+              </Container>
+            );
+          } else if (this.props.user && !this.state.major) {
+            return <Container>Loading...</Container>;
+          } else {
+            return <Container>Login to see your profile!</Container>;
+          }
+        })()}
       </div>
     );
   }
