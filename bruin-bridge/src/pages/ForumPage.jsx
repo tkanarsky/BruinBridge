@@ -96,7 +96,7 @@ const PostContainer = styled("div")`
 const SubmitQuestion = styled("div")`
   background-color: white;
   border-radius: 20px;
-  width: 100%;
+  width: 97%;
   height: 50px;
   padding-left: 20px;
   padding-top: 20px;
@@ -123,20 +123,36 @@ export default class ForumPage extends React.Component {
     super(props);
     this.state = {
       postInput: "",
+      title: "",
       posts: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTitle = this.handleTitle.bind(this);
   }
 
   handleChange(event) {
     this.setState({ postInput: event.target.value });
   }
 
+  handleTitle(event) {
+    this.setState({ title: event.target.value });
+  }
+
   handleSubmit(event) {
+    if (this.state.title === "") {
+      alert("Must have post title");
+      return;
+    }
+    if (this.state.postInput === "") {
+      alert("Must not submit blank question");
+      return;
+    }
     if (this.props.user) {
       createPost(this.props.user, "Forum Post", this.state.postInput);
       console.log("Created post!");
+      alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      this.setState({ title: "", postInput: "" });
     } else alert("You must be logged in to submit a post!");
     event.preventDefault();
   }
@@ -163,18 +179,35 @@ export default class ForumPage extends React.Component {
           <QuestionsContainer>
             <SubmitQuestion>
               <form onSubmit={this.handleSubmit}>
-                <label style={{ paddingRight: "10px" }}>Ask a Question</label>
-                <input
-                  type="text"
-                  value={this.state.value}
-                  onChange={this.handleChange}
-                  style={{
-                    width: "75%",
-                    lineHeight: "2em",
-                    fontSize: "16px",
-                    paddingLeft: "5x"
-                  }}
-                />
+                <label>
+                  Title:
+                  <input
+                    type="text"
+                    value
+                    value={this.state.title}
+                    onChange={this.handleTitle}
+                    style={{
+                      lineHeight: "2em",
+                      fontSize: "16px",
+                      paddingLeft: "5x",
+                      width: "20%"
+                    }}
+                  />
+                </label>
+                <label style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+                  Description:
+                  <input
+                    type="text"
+                    value={this.state.postInput}
+                    onChange={this.handleChange}
+                    style={{
+                      lineHeight: "2em",
+                      fontSize: "16px",
+                      paddingLeft: "5x",
+                      width: "50%"
+                    }}
+                  />
+                </label>
                 <input
                   type="submit"
                   value="Submit"
@@ -191,7 +224,6 @@ export default class ForumPage extends React.Component {
             </SubmitQuestion>
             <PostContainer>
               <Post />
-              <h1>{this.state.postInput}</h1>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
