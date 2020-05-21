@@ -60,7 +60,9 @@ class App extends React.Component {
               ></LandingPage>
             </Route>
             <Route exact path="/forum">
-              <ForumPage></ForumPage>
+              <ForumPage
+              user={this.state.user}>
+              </ForumPage>
             </Route>
             <Route exact path="/mentor">
               <MentorPage></MentorPage>
