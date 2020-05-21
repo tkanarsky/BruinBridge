@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { createPost } from "../firebase.js"
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -142,18 +143,30 @@ export default class ForumPage extends React.Component {
     super(props);
     this.state = {
       postInput: '',
+      title: '',
       posts: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTitle = this.handleTitle.bind(this);
   }
   
   handleChange(event) {
     this.setState({postInput: event.target.value});
   }
 
+  handleTitle(event) {
+    this.setState({title: event.target.value});
+  }
+
   handleSubmit(event) {
-    alert('A post was submitted: ' + this.state.postInput);
+    if (this.props.user) {
+      createPost(this.props.user, "Forum Post", this.state.postInput);
+      console.log("Created post!");
+      alert(this.state.title + " Post: " + this.state.postInput);
+      this.setState({title: '', postInput: '',});
+    }
+    else alert('You must be logged in to submit a post!');
     event.preventDefault();
   }
 
@@ -180,8 +193,12 @@ export default class ForumPage extends React.Component {
             <SubmitQuestion>
             <form onSubmit={this.handleSubmit}>
               <label>
+                Title:
+                <input type="text" value value={this.state.title} onChange={this.handleTitle}/>
+              </label>
+              <label>
                 Post:
-                <input type="text" value={this.state.value} onChange={this.handleChange} />
+                <input type="text" value={this.state.postInput} onChange={this.handleChange} />
               </label>
               <input type="submit" value="Submit"/>
               </form>
@@ -189,7 +206,8 @@ export default class ForumPage extends React.Component {
             </SubmitQuestion>
             <PostContainer>
               <Post />
-              <h1>{this.state.postInput}</h1>
+              <h1>{this.state.title}</h1>
+              <h2>{this.state.postInput}</h2>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
