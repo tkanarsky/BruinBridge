@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { createPost } from "../firebase.js"
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -153,7 +154,11 @@ export default class ForumPage extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('A post was submitted: ' + this.state.postInput);
+    if (this.props.user) {
+      createPost(this.props.user, "Forum Post", this.state.postInput);
+      console.log("Created post!");
+    }
+    else alert('You must be logged in to submit a post!');
     event.preventDefault();
   }
 
