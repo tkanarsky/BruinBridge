@@ -141,7 +141,8 @@ export default class ForumPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postInput: ''
+      postInput: '',
+      posts: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -152,7 +153,7 @@ export default class ForumPage extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.postInput);
+    alert('A post was submitted: ' + this.state.postInput);
     event.preventDefault();
   }
 
@@ -189,8 +190,6 @@ export default class ForumPage extends React.Component {
             <PostContainer>
               <Post />
               <h1>{this.state.postInput}</h1>
-              <Post />
-              <Post />
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
