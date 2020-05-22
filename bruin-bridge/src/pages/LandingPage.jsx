@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import firebase, { auth, provider } from "../firebase.js";
 
 const Button = styled("button")`
   display: flex;
