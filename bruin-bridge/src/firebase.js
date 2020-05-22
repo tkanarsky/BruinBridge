@@ -12,21 +12,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const auth = firebase.auth();
-export const database = firebase.database();
+export const database = firebase.firestore();
 export default firebase;
 
-const userRef = database.ref("users/");
-const postRef = database.ref("posts/");
+const userDb = database.collection("users");
+const postDb = database.collection("posts");
 
 export function userExists(id, callback) {
-  userRef.once("value").then((snapshot) => {
-    callback(snapshot.hasChild(id));
+  userDb.doc(id).get().then((doc) => {
+    callback(doc.exists);
   });
 }
 
 export function createUser(id, name, email) {
   if (!id || !name || !email) return;
-  userRef.child(id).set(
+  userDb.doc(id).set(
     {
       name: name,
       email: email,
@@ -40,9 +40,9 @@ export function createUser(id, name, email) {
 }
 
 export function getUser(id, callback) {
-  userRef.once("value").then((snapshot) => {
-    if (snapshot.hasChild(id)) {
-      callback(snapshot.child(id).toJSON());
+  userDb.doc(id).get().then((doc) => {
+    if (doc.exists) {
+      callback(doc.data());
     } else {
       callback(null);
     }
@@ -50,30 +50,31 @@ export function getUser(id, callback) {
 }
 
 export function updateUser(id, data) {
-    userRef.child(id).update(data);
+    userDb.doc(id).update(data);
 }
 
 export function deleteUser(id) {
-    userRef.child(id).remove();
+    userDb.child(id).delete();
 }
 
-export function createPost(user, title, text) {
+export function createPost(user, title, text, idCallback) {
   if (!user || !title || !text || !user.uid) return false;
-  let curPostRef = postRef.push();
-  curPostRef.set({
+  postDb.add({
     title: title,
     body: text,
     author_id: user.uid,
     author_name: user.displayName,
     upvotes: 0,
-    edited: false
+    edited: false,
+    timestamp: Date.now()
+  }).then((newPostRef) => {
+    idCallback(newPostRef.id);
   });
-  return curPostRef.key;
 } 
 
 export function postExists(key, callback) {
-  postRef.once("value").then((snapshot) => {
-    callback(snapshot.hasChild(key));
+  postDb.doc(key).get().then((doc) => {
+    callback(doc.exists);
   })
 }
 
@@ -82,7 +83,40 @@ export function editPost(key, data) {
   postExists(key, (value) => {
     if (!value) return false;
       data.updated = true;
-      postRef.child(key).update(data);
+      postDb.doc(key).update(data);
+  });
+}
+
+export function getPosts(params, callback) {
+  var query = postDb;
+  if (params.sort) {
+    switch(params.sort) {
+      case 'bottom': 
+        query = query.orderBy("upvotes", "asc");
+        break;
+      case 'top':
+        query = query.orderBy("upvotes", "desc");
+        break;
+      case 'old':
+        query = query.orderBy("timestamp", "asc");
+        break;
+      case 'new':
+        query = query.orderBy("timestamp", "desc");
+        break;
+      default:
+        query = query.orderBy("upvotes", "desc");
+      break;
+    }
+  }
+  if (params.limit) {
+    query = query.limit(params.limit);
+  }
+  query.get().then((snapshot) => {
+    let posts = [];
+    snapshot.forEach((doc) =>{
+      posts.push(doc.data());
+    });
+    callback(posts);
   });
 }
 

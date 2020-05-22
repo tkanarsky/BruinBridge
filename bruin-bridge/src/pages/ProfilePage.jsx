@@ -5,7 +5,7 @@ import { interestsList } from "./interests";
 import EditableLabel from "react-inline-editing";
 import Select from "react-select";
 import MajorDropdown from "../components/MajorDropdown";
-import { database } from "../firebase";
+import { updateUser, getUser } from "../firebase";
 import EdiText from "react-editext";
 
 const Container = styled("div")`
@@ -77,7 +77,6 @@ export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userRef: null, // reference to user in the database
       major: null,
       // MAJOR TO BE AN OBJECT {label: "...", value: "..."}
       // THIS IS NEEDED FOR DROPDOWN SELECT TO WORK!!!!
@@ -86,7 +85,7 @@ export default class ProfilePage extends React.Component {
       karma: 0,
       interest1: null,
       interest2: null,
-      interest3: null
+      interest3: null,
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.onSaveYear = this.onSaveYear.bind(this);
@@ -94,32 +93,20 @@ export default class ProfilePage extends React.Component {
     this.loadData = this.loadData.bind(this);
   }
 
-  componentDidMount() {
-    this.loadData();
-  }
-
   loadData() {
     const { user } = this.props;
     console.log("load");
-    if (user && !this.state.userRef) {
-      let userRef = database.ref("users/" + user.uid);
-      this.setState({ userRef: userRef });
-      let majorRef = userRef.child("major");
-      majorRef.on("value", snapshot => {
-        let m = [];
-        m.push({
-          label: snapshot.val(),
-          value: snapshot.val()
+    if (user) {
+      getUser(user.uid, (userData) => {
+        this.setState({
+          major: [{
+            label: userData.major,
+            value: userData.major
+          }],
+          bio: userData.bio,
+          year: userData.year,
+          dataLoaded: true
         });
-        this.setState({ major: m });
-      });
-      let bioRef = userRef.child("/bio");
-      bioRef.on("value", snapshot => {
-        this.setState({ bio: snapshot.val() });
-      });
-      let yearRef = userRef.child("/year");
-      yearRef.on("value", snapshot => {
-        this.setState({ year: snapshot.val() });
       });
     }
   }
@@ -130,18 +117,16 @@ export default class ProfilePage extends React.Component {
 
   onSaveYear(newYear) {
     this.setState({ year: newYear });
-    var ref = database.ref("users/" + this.props.user.uid);
-    ref.update({ year: newYear });
+    updateUser(this.props.user.uid, {year: newYear});
   }
 
   onSaveBio(newBio) {
     this.setState({ bio: newBio });
-    var ref = database.ref("users/" + this.props.user.uid);
-    ref.update({ bio: newBio });
+    updateUser(this.props.user.uid, {bio: newBio});
   }
 
   render() {
-    if (this.props.user && !this.state.userRef) {
+    if (!this.state.dataLoaded) {
       this.loadData();
     }
     return (

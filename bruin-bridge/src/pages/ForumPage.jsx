@@ -155,7 +155,7 @@ export default class ForumPage extends React.Component {
 
   handleSubmit(event) {
     if (this.props.user) {
-      createPost(this.props.user, "Forum Post", this.state.postInput);
+      createPost(this.props.user, "Forum Post", this.state.postInput, () => {});
       console.log("Created post!");
     }
     else alert('You must be logged in to submit a post!');
