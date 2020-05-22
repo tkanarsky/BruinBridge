@@ -17,6 +17,7 @@ export default firebase;
 
 const userDb = database.collection("users");
 const postDb = database.collection("posts");
+const commentDb = database.collection("comments");
 
 export function userExists(id, callback) {
   userDb.doc(id).get().then((doc) => {
@@ -24,12 +25,13 @@ export function userExists(id, callback) {
   });
 }
 
-export function createUser(id, name, email) {
-  if (!id || !name || !email) return;
-  userDb.doc(id).set(
+export function createUser(user) {
+  if (!user) return;
+  userDb.doc(user.uid).set(
     {
-      name: name,
-      email: email,
+      name: user.displayName,
+      email: user.email,
+      avatar: user.photoURL,
       major: "",
       year: "",
       bio: "",
@@ -64,11 +66,13 @@ export function createPost(user, title, text, idCallback) {
     body: text,
     author_id: user.uid,
     author_name: user.displayName,
+    author_avatar: user.photoURL,
     upvotes: 0,
     edited: false,
     timestamp: Date.now(),
     upvoting_users: [],
-    downvoting_users: []
+    downvoting_users: [],
+    replies: []
   }).then((newPostRef) => {
     idCallback(newPostRef.id);
   });
@@ -84,7 +88,7 @@ export function updatePost(key, data) {
   if (!key || !data || (!data.title && !data.body)) return false;
   postExists(key, (value) => {
     if (!value) return false;
-      data.updated = true;
+      data.edited = true;
       postDb.doc(key).update(data);
   });
 }
@@ -205,3 +209,48 @@ export function removeVote(userId, postId) {
     });
   });
 }
+
+export function commentExists(commentId, callback) {
+  commentDb.doc(commentId).get().then((doc) => {
+    callback(doc.exists);
+  });
+}
+
+export function createComment(user, postId, text, idCallback) {
+  if (!user || !postId || !text) return;
+  commentDb.add({
+    body: text,
+    parent: postId,
+    author_id: user.uid,
+    author_name: user.displayName,
+    author_avatar: user.photoURL,
+    upvotes: 0,
+    edited: false,
+    timestamp: Date.now(),
+    upvoting_users: [],
+    downvoting_users: [],
+  }).then((newCommentRef) => {
+    getPost(postId, (data) => {
+      let replyList = data.replies;
+      replyList.push(newCommentRef.id);
+      updatePost(postId, {replies: replyList});
+    })
+    idCallback(newCommentRef.id);
+  });
+};
+
+export function updateComment(commentId, data) {
+  if (!commentId || !data || !data.body) return false;
+  commentExists(commentId, (value) => {
+    if (!value) return false;
+    data.edited = true;
+    commentDb.doc(commentId).update(data);
+  });
+}
+
+// export function getComments(postId, data) {
+//   postExists(postId, (value) => {
+//     if (!value) return false;
+//     let 
+//   })
+// }
