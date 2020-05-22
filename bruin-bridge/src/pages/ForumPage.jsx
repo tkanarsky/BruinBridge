@@ -70,6 +70,7 @@ const PostContainer = styled("div")`
   height: 80%;
   margin-top: 25px;
   padding: 20px;
+  overflow: scroll;
 `;
 
 const SubmitQuestion = styled("div")`

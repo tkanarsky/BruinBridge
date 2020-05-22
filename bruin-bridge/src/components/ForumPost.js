@@ -1,5 +1,5 @@
 import React from "react";
-import { updateUser, database } from "../firebase";
+import { getPosts } from "../firebase";
 import styled from "styled-components";
 import { css } from "emotion";
 import { TiThumbsUp, TiThumbsDown } from "react-icons/ti";
@@ -16,13 +16,6 @@ const PostBackground = styled("div")`
   margin-top: 20px;
 `;
 
-const Votes = styled("div")`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const Profile = styled("div")`
   display: flex;
   justify-content: center;
@@ -30,6 +23,13 @@ const Profile = styled("div")`
   align-items: center;
   padding-left: 20px;
   padding-right: 20px;
+  width: 15%;
+`;
+const Votes = styled("div")`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Name = styled("div")`
@@ -51,74 +51,56 @@ const QuestionContainer = styled("div")`
   flex-direction: column;
 `;
 
-class Post extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    //   const {upvotes, downvotes, profilepic, name, question, description} = this.props;
-    return (
-      <PostBackground>
-        <Votes>
-          <TiThumbsUp size={40}></TiThumbsUp>
-          upvotes prop here
-          <TiThumbsDown size={40}></TiThumbsDown>
-          downvotes prop here
-        </Votes>
-        <Profile>
-          <img
-            src="https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            className={css`
-              border-radius: 50%;
-              height: 65px;
-              width: 65px;
-            `}
-          />
-          <Name>name prop here</Name>
-        </Profile>
-        <QuestionContainer>
-          <QuestionStyle>put question prop here</QuestionStyle>
-          <DescriptionStyle>put description here</DescriptionStyle>
-        </QuestionContainer>
-      </PostBackground>
-    );
-  }
-}
-
 export default class ForumPost extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      posts: null
-    };
-  }
+  state = {
+    posts: null
+  };
 
-  //   componentDidMount() {
-  //     if (!posts) {
-  //       this.loadPosts();
-  //     }
-  //   }
-
-  loadPosts() {
-    // call firebase function to get posts data
-    //this.setState({posts: })
+  renderPosts(allPosts) {
+    return allPosts.map((post, i) => {
+      return (
+        <PostBackground>
+          <Votes>
+            <TiThumbsUp size={40}></TiThumbsUp>
+            {post.upvotes}
+            <TiThumbsDown size={40}></TiThumbsDown>
+          </Votes>
+          <Profile>
+            <img
+              src="https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+              className={css`
+                border-radius: 50%;
+                height: 65px;
+                width: 65px;
+              `}
+            />
+            <Name>{post.author_name}</Name>
+          </Profile>
+          <QuestionContainer>
+            <QuestionStyle>{post.title}</QuestionStyle>
+            <DescriptionStyle>{post.body}</DescriptionStyle>
+          </QuestionContainer>
+        </PostBackground>
+      );
+    });
   }
 
   render() {
-    // const { posts } = this.state;
-    // if (!post) { this.loadPosts()}
-    // return posts.map((item, index) => {
-
-    // });
-
-    // pass in props from each post object to each post component
-    // remove this:
+    if (!this.state.posts)
+      getPosts({ sort: "top", limit: 10 }, allPosts => {
+        this.setState({ posts: allPosts });
+      });
     return (
-      <div>
-        <Post></Post>
-        <Post></Post>
-        <Post></Post>
-      </div>
+      <>
+        {(() => {
+          if (this.state.posts) {
+            console.log("got here");
+            return this.renderPosts(this.state.posts);
+          } else {
+            return <div>Loading...</div>;
+          }
+        })()}
+      </>
     );
   }
 }
