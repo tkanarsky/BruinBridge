@@ -70,6 +70,7 @@ const PostContainer = styled("div")`
   height: 80%;
   margin-top: 25px;
   padding: 20px;
+  overflow: scroll;
 `;
 
 const SubmitQuestion = styled("div")`
@@ -128,7 +129,7 @@ export default class ForumPage extends React.Component {
       return;
     }
     if (this.props.user) {
-      createPost(this.props.user, "Forum Post", this.state.postInput, () => {});
+      createPost(this.props.user, "Forum Post", this.state.postInput);
       console.log("Created post!");
       alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
       this.setState({ title: "", postInput: "" });
