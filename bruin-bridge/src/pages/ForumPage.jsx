@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { createPost } from "../firebase.js"
+import { createPost } from "../firebase.js";
+import ForumPost from "../components/ForumPost";
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -62,28 +63,6 @@ const Fact = styled("div")`
   font-size: 18px;
   white-space: nowrap;
 `;
-
-const PostBackground = styled("div")`
-  background-color: #fffecf;
-  width: 100%;
-  height: 140px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-`;
-
-const Post = (props) => (
-  <PostBackground>
-    <div>
-      <h3>Title</h3>
-      <p>Description</p>
-      <p>42 Upvotes</p>
-      <p>12 Downvotes</p>
-    </div>
-  </PostBackground>
-)
-
 const PostContainer = styled("div")`
   background-color: white;
   border-radius: 25px;
@@ -93,34 +72,14 @@ const PostContainer = styled("div")`
   padding: 20px;
 `;
 
-const SubmitButton = styled("button")`
-  display: flex;
-  background-color: #ffe457;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 100px;
-  height: 50px;
-  border-radius: 50px;
-  font-size: 16px;
-  font-family: "Open Sans";
-  font-weight: bold;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const SubmitQuestion = styled("div")`
   background-color: white;
   border-radius: 20px;
-  width: 100%;
-  height: 75px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  width: 97%;
+  height: 50px;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 `;
 
 const QuestionsContainer = styled("div")`
@@ -142,39 +101,38 @@ export default class ForumPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postInput: '',
-      title: '',
+      postInput: "",
+      title: "",
       posts: []
-    }
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
   }
-  
+
   handleChange(event) {
-    this.setState({postInput: event.target.value});
+    this.setState({ postInput: event.target.value });
   }
 
   handleTitle(event) {
-    this.setState({title: event.target.value});
+    this.setState({ title: event.target.value });
   }
 
   handleSubmit(event) {
-    if (this.state.title === ''){
-      alert('Must have post title');
+    if (this.state.title === "") {
+      alert("Must have post title");
       return;
     }
-    if (this.state.postInput === ''){
-      alert('Must not submit blank question');
+    if (this.state.postInput === "") {
+      alert("Must not submit blank question");
       return;
     }
     if (this.props.user) {
       createPost(this.props.user, "Forum Post", this.state.postInput, () => {});
       console.log("Created post!");
-      alert(this.state.title + ' Post: ' + this.state.postInput); //testing purposes can delete later
-      this.setState({title: '', postInput: '',});
-    }
-    else alert('You must be logged in to submit a post!');
+      alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      this.setState({ title: "", postInput: "" });
+    } else alert("You must be logged in to submit a post!");
     event.preventDefault();
   }
 
@@ -199,21 +157,52 @@ export default class ForumPage extends React.Component {
           </SchoolContainer>
           <QuestionsContainer>
             <SubmitQuestion>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                Title:
-                <input type="text" value value={this.state.title} onChange={this.handleTitle}/>
-              </label>
-              <label>
-                Post:
-                <input type="text" value={this.state.postInput} onChange={this.handleChange} />
-              </label>
-              <input type="submit" value="Submit"/>
+              <form onSubmit={this.handleSubmit}>
+                <label>
+                  Title:
+                  <input
+                    type="text"
+                    value
+                    value={this.state.title}
+                    onChange={this.handleTitle}
+                    style={{
+                      lineHeight: "2em",
+                      fontSize: "16px",
+                      paddingLeft: "5x",
+                      width: "20%"
+                    }}
+                  />
+                </label>
+                <label style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+                  Description:
+                  <input
+                    type="text"
+                    value={this.state.postInput}
+                    onChange={this.handleChange}
+                    style={{
+                      lineHeight: "2em",
+                      fontSize: "16px",
+                      paddingLeft: "5x",
+                      width: "50%"
+                    }}
+                  />
+                </label>
+                <input
+                  type="submit"
+                  value="Submit"
+                  style={{
+                    backgroundColor: "#ffe457",
+                    fontFamily: "Open Sans",
+                    fontSize: "15px",
+                    borderRadius: "20px",
+                    width: "100px",
+                    height: "50px"
+                  }}
+                />
               </form>
-              <SubmitButton>Submit</SubmitButton>
             </SubmitQuestion>
             <PostContainer>
-              <Post />
+              <ForumPost></ForumPost>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
