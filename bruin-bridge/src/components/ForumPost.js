@@ -67,7 +67,7 @@ export default class ForumPost extends React.Component {
           </Votes>
           <Profile>
             <img
-              src="https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+              src={post.author_avatar}
               className={css`
                 border-radius: 50%;
                 height: 65px;
