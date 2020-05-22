@@ -129,7 +129,7 @@ export default class ForumPage extends React.Component {
       return;
     }
     if (this.props.user) {
-      createPost(this.props.user, "Forum Post", this.state.postInput);
+      createPost(this.props.user, this.state.title, this.state.postInput, (postId) => {});
       console.log("Created post!");
       alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
       this.setState({ title: "", postInput: "" });

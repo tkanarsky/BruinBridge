@@ -23,7 +23,7 @@ class App extends React.Component {
       const user = result.user;
       //this.setState({ user });
       userExists(user.uid, (value) => {
-        createUser(user.uid, user.displayName, user.email);
+        createUser(user);
       });
     });
   }
