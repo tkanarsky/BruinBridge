@@ -66,7 +66,9 @@ export function createPost(user, title, text, idCallback) {
     author_name: user.displayName,
     upvotes: 0,
     edited: false,
-    timestamp: Date.now()
+    timestamp: Date.now(),
+    upvoting_users: [],
+    downvoting_users: []
   }).then((newPostRef) => {
     idCallback(newPostRef.id);
   });
@@ -78,12 +80,23 @@ export function postExists(key, callback) {
   })
 }
 
-export function editPost(key, data) {
+export function updatePost(key, data) {
   if (!key || !data || (!data.title && !data.body)) return false;
   postExists(key, (value) => {
     if (!value) return false;
       data.updated = true;
       postDb.doc(key).update(data);
+  });
+}
+
+
+export function getPost(id, callback) {
+  postDb.doc(id).get().then((doc) => {
+    if (doc.exists) {
+      callback(doc.data());
+    } else {
+      callback(null);
+    }
   });
 }
 
@@ -114,9 +127,81 @@ export function getPosts(params, callback) {
   query.get().then((snapshot) => {
     let posts = [];
     snapshot.forEach((doc) =>{
-      posts.push(doc.data());
+      let docData = doc.data();
+      docData.post_id = doc.id;
+      posts.push(docData);
     });
     callback(posts);
   });
 }
 
+export function upvotePost(userId, postId) {
+  postExists(postId, (exists) => {
+    if (!exists) return;
+    getPost(postId, (postData) => {
+      if (postData.upvoting_users.includes(userId)) return;
+      else if (postData.downvoting_users.includes(userId)) {
+        let idIndex = postData.downvoting_users.indexOf(userId);
+        postData.downvoting_users.splice(idIndex, 1);
+        postData.upvotes += 2;
+        getUser(postData.author_id, (userData) => {
+          updateUser(postData.author_id, {karma: userData.karma += 2});
+        });
+      } else {
+        postData.upvotes += 1;
+        getUser(postData.author_id, (userData) => {
+          updateUser(postData.author_id, {karma: userData.karma += 1});
+        });
+      }
+      postData.upvoting_users.push(userId);
+      updatePost(postId, postData);
+    });
+  });
+}
+
+export function downvotePost(userId, postId) {
+  postExists(postId, (exists) => {
+    if (!exists) return;
+    getPost(postId, (postData) => {
+      if (postData.downvoting_users.includes(userId)) return;
+      else if (postData.upvoting_users.includes(userId)) {
+        let idIndex = postData.upvoting_users.indexOf(userId);
+        postData.upvoting_users.splice(idIndex, 1);
+        postData.upvotes -= 2;
+        getUser(postData.author_id, (userData) => {
+          updateUser(postData.author_id, {karma: userData.karma -= 2});
+        });
+      } else {
+        postData.upvotes -= 1;
+        getUser(postData.author_id, (userData) => {
+          updateUser(postData.author_id, {karma: userData.karma -= 1});
+        });
+      }
+      postData.downvoting_users.push(userId);
+      updatePost(postId, postData);
+    });
+  });
+}
+
+export function removeVote(userId, postId) {
+  postExists(postId, (exists) => {
+    if (!exists) return;
+    getPost(postId, (postData) => {
+      if (postData.downvoting_users.includes(userId)) {
+        let idIndex = postData.downvoting_users.indexOf(userId);
+        postData.downvoting_users.splice(idIndex, 1);
+        postData.upvotes += 1;
+        getUser(postData.author_id, (userData) => {
+          updateUser(postData.author_id, {karma: userData.karma += 1});
+        });
+      } else if (postData.upvoting_users.includes(userId)) {
+        let idIndex = postData.upvoting_users.indexOf(userId);
+        postData.upvoting_users.splice(idIndex, 1);
+        postData.upvotes -= 1;
+        getUser(postData.author_id, (userData) => {
+          updateUser(postData.author_id, {karma: userData.karma -= 1});
+        });
+      }
+    });
+  });
+}
