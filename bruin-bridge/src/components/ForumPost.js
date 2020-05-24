@@ -10,6 +10,7 @@ import {
   AccordionItemButton,
   AccordionItemPanel
 } from "react-accessible-accordion";
+import Comments from "./Comments";
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
@@ -62,8 +63,6 @@ class Post extends React.Component {
     super(props);
   }
 
-  handlePostClick() {}
-
   render() {
     const { upvotes, authorPic, authorName, title, body } = this.props;
     return (
@@ -114,7 +113,10 @@ export default class ForumPost extends React.Component {
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
-            <p>Insert comments here</p>
+            <Comments></Comments>
+            {
+              // pass in prop to Comments ^^
+            }
           </AccordionItemPanel>
         </AccordionItem>
 
