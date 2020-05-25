@@ -129,7 +129,12 @@ export default class ForumPage extends React.Component {
       return;
     }
     if (this.props.user) {
-      createPost(this.props.user, this.state.title, this.state.postInput, (postId) => {});
+      createPost(
+        this.props.user,
+        this.state.title,
+        this.state.postInput,
+        postId => {}
+      );
       console.log("Created post!");
       alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
       this.setState({ title: "", postInput: "" });
@@ -203,7 +208,7 @@ export default class ForumPage extends React.Component {
               </form>
             </SubmitQuestion>
             <PostContainer>
-              <ForumPost></ForumPost>
+              <ForumPost user={this.props.user}></ForumPost>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>

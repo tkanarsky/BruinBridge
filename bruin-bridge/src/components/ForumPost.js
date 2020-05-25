@@ -1,5 +1,5 @@
 import React from "react";
-import { getPosts } from "../firebase";
+import { getPosts, upvotePost } from "../firebase";
 import styled from "styled-components";
 import { css } from "emotion";
 import { TiThumbsUp, TiThumbsDown, TiSupport } from "react-icons/ti";
@@ -61,14 +61,36 @@ const QuestionContainer = styled("div")`
 class Post extends React.Component {
   constructor(props) {
     super(props);
+    // this.state = {
+    //   upvotes = this.props.upvotes
+    // }
+    this.handleUpvote = this.handleUpvote.bind(this);
+  }
+
+  handleUpvote() {
+    let user = this.props.user;
+    let userID = user.uid;
+    upvotePost(userID, this.props.postID);
+    // this.setState
+    // ASK TIM FOR A FUNCTION THAT CHECKS IF CURRENT USER ID HAS ALREADY UPVOTED THE POST
+    console.log("UPVOTED");
   }
 
   render() {
-    const { upvotes, authorPic, authorName, title, body } = this.props;
+    const {
+      postID,
+      upvotes,
+      authorPic,
+      authorName,
+      user,
+      title,
+      body
+    } = this.props;
+    // const {upvotes} = this.state;
     return (
       <PostBackground>
         <Votes>
-          <TiThumbsUp size={40}></TiThumbsUp>
+          <TiThumbsUp size={40} onClick={this.handleUpvote}></TiThumbsUp>
           {upvotes}
           <TiThumbsDown size={40}></TiThumbsDown>
         </Votes>
@@ -93,6 +115,9 @@ class Post extends React.Component {
 }
 
 export default class ForumPost extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
     posts: null
   };
@@ -104,9 +129,11 @@ export default class ForumPost extends React.Component {
           <AccordionItemHeading>
             <AccordionItemButton>
               <Post
-                upvotes={post.upvtes}
+                postID={post.post_id}
+                upvotes={post.upvotes}
                 authorPic={post.author_avatar}
                 authorName={post.author_name}
+                user={this.props.user}
                 title={post.title}
                 body={post.body}
               ></Post>
@@ -119,29 +146,6 @@ export default class ForumPost extends React.Component {
             }
           </AccordionItemPanel>
         </AccordionItem>
-
-        // <PostBackground>
-        //   <Votes>
-        //     <TiThumbsUp size={40}></TiThumbsUp>
-        //     {post.upvotes}
-        //     <TiThumbsDown size={40}></TiThumbsDown>
-        //   </Votes>
-        //   <Profile>
-        //     <img
-        //       src={post.author_avatar}
-        //       className={css`
-        //         border-radius: 50%;
-        //         height: 65px;
-        //         width: 65px;
-        //       `}
-        //     />
-        //     <Name>{post.author_name}</Name>
-        //   </Profile>
-        //   <QuestionContainer>
-        //     <QuestionStyle>{post.title}</QuestionStyle>
-        //     <DescriptionStyle>{post.body}</DescriptionStyle>
-        //   </QuestionContainer>
-        // </PostBackground>
       );
     });
   }
