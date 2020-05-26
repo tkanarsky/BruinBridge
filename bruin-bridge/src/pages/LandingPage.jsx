@@ -11,7 +11,7 @@ const Button = styled("button")`
   height: 50px;
   border-radius: 50px;
   font-size: 20px;
-  font-family: "Open Sans";
+  font-family: 'Balsamiq Sans', "Open Sans", sans-serif;
   font-weight: bold;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@ const ButtonContainer = styled("div")`
 `;
 
 const Caption = styled("div")`
-  font-family: "Open Sans";
+  font-family: 'Balsamiq Sans', "Open Sans", sans-serif;
   font-size: 25px;
   text-align: center;
   padding-top: 40px;
@@ -69,8 +69,9 @@ const Caption = styled("div")`
 
 const Img = styled("div")`
   background-image: url("https://lh3.googleusercontent.com/04HhWSw7Ml6nwcG3wDTCN66CTEP8WZQ7j71CFI4GC7UdKM9_yGnvyumwUb5uEXPigIlU959cregu-Gkk4XvxC8_fCf5btewzt1nXO-myC43FkbOvVFu9DYloNfdk5fzMu8wYCkKvYQ");
-  background-size: 100%;
+  background-size: 80%;
   background-repeat: no-repeat;
+  background-position: center;
   display: flex;
   width: 50%;
 `;
@@ -79,6 +80,8 @@ const RightContainer = styled("div")`
   display: flex;
   flex-direction: column;
   width: 50%;
+  padding-left: 50px;
+  padding-right: 50px;
   justify-content: center;
   align-content: center;
 `;
