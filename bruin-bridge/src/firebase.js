@@ -248,9 +248,26 @@ export function updateComment(commentId, data) {
   });
 }
 
-// export function getComments(postId, data) {
-//   postExists(postId, (value) => {
-//     if (!value) return false;
-//     let 
-//   })
-// }
+export function getComment(id, callback) {
+  commentDb.doc(id).get().then((doc) => {
+    if (doc.exists) {
+      callback(doc.data());
+    } else {
+      callback(null);
+    }
+  });
+}
+
+export function getComments(postId, callback) {
+  postExists(postId, (value) => {
+    if (!value) return false;
+    commentDb.where("parent", "==", postId)
+    .get().then((snapshot) => {
+      let comments = [];
+      snapshot.forEach((comment) => {
+        comments.push(comment);
+      });
+      callback(comments);
+    });
+  });
+}
