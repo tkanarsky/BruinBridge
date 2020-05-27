@@ -2,8 +2,15 @@ import React from "react";
 import { getPosts } from "../firebase";
 import styled from "styled-components";
 import { css } from "emotion";
-import { TiThumbsUp, TiThumbsDown } from "react-icons/ti";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { TiThumbsUp, TiThumbsDown, TiSupport } from "react-icons/ti";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionItemHeading,
+  AccordionItemButton,
+  AccordionItemPanel
+} from "react-accessible-accordion";
+import Comments from "./Comments";
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
@@ -51,6 +58,40 @@ const QuestionContainer = styled("div")`
   flex-direction: column;
 `;
 
+class Post extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { upvotes, authorPic, authorName, title, body } = this.props;
+    return (
+      <PostBackground>
+        <Votes>
+          <TiThumbsUp size={40}></TiThumbsUp>
+          {upvotes}
+          <TiThumbsDown size={40}></TiThumbsDown>
+        </Votes>
+        <Profile>
+          <img
+            src={authorPic}
+            className={css`
+              border-radius: 50%;
+              height: 65px;
+              width: 65px;
+            `}
+          />
+          <Name>{authorName}</Name>
+        </Profile>
+        <QuestionContainer>
+          <QuestionStyle>{title}</QuestionStyle>
+          <DescriptionStyle>{body}</DescriptionStyle>
+        </QuestionContainer>
+      </PostBackground>
+    );
+  }
+}
+
 export default class ForumPost extends React.Component {
   state = {
     posts: null
@@ -59,43 +100,67 @@ export default class ForumPost extends React.Component {
   renderPosts(allPosts) {
     return allPosts.map((post, i) => {
       return (
-        <PostBackground>
-          <Votes>
-            <TiThumbsUp size={40}></TiThumbsUp>
-            {post.upvotes}
-            <TiThumbsDown size={40}></TiThumbsDown>
-          </Votes>
-          <Profile>
-            <img
-              src={post.author_avatar}
-              className={css`
-                border-radius: 50%;
-                height: 65px;
-                width: 65px;
-              `}
-            />
-            <Name>{post.author_name}</Name>
-          </Profile>
-          <QuestionContainer>
-            <QuestionStyle>{post.title}</QuestionStyle>
-            <DescriptionStyle>{post.body}</DescriptionStyle>
-          </QuestionContainer>
-        </PostBackground>
+        <AccordionItem>
+          <AccordionItemHeading>
+            <AccordionItemButton>
+              <Post
+                upvotes={post.upvtes}
+                authorPic={post.author_avatar}
+                authorName={post.author_name}
+                title={post.title}
+                body={post.body}
+              ></Post>
+            </AccordionItemButton>
+          </AccordionItemHeading>
+          <AccordionItemPanel>
+            <Comments></Comments>
+            {
+              // pass in prop to Comments ^^
+            }
+          </AccordionItemPanel>
+        </AccordionItem>
+
+        // <PostBackground>
+        //   <Votes>
+        //     <TiThumbsUp size={40}></TiThumbsUp>
+        //     {post.upvotes}
+        //     <TiThumbsDown size={40}></TiThumbsDown>
+        //   </Votes>
+        //   <Profile>
+        //     <img
+        //       src={post.author_avatar}
+        //       className={css`
+        //         border-radius: 50%;
+        //         height: 65px;
+        //         width: 65px;
+        //       `}
+        //     />
+        //     <Name>{post.author_name}</Name>
+        //   </Profile>
+        //   <QuestionContainer>
+        //     <QuestionStyle>{post.title}</QuestionStyle>
+        //     <DescriptionStyle>{post.body}</DescriptionStyle>
+        //   </QuestionContainer>
+        // </PostBackground>
       );
     });
   }
 
   render() {
     if (!this.state.posts)
-      getPosts({ sort: "top", limit: 10 }, allPosts => {
+      getPosts({ sort: "top", limit: 100 }, allPosts => {
         this.setState({ posts: allPosts });
       });
     return (
       <>
         {(() => {
           if (this.state.posts) {
-            console.log("got here");
-            return this.renderPosts(this.state.posts);
+            return (
+              <Accordion allowMultipleExpanded={true}>
+                {" "}
+                {this.renderPosts(this.state.posts)}
+              </Accordion>
+            );
           } else {
             return <div>Loading...</div>;
           }
