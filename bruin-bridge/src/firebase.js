@@ -25,7 +25,7 @@ export function userExists(id, callback) {
   });
 }
 
-export function createUser(user) {
+export function createUser(user, mentorStatus) {
   if (!user) return;
   userDb.doc(user.uid).set(
     {
@@ -35,7 +35,9 @@ export function createUser(user) {
       major: "",
       year: "",
       bio: "",
-      karma: 0
+      karma: 0,
+      is_mentor: mentorStatus,
+      partner: null
     }
   );
   return true;
