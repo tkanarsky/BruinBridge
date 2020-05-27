@@ -5,8 +5,15 @@ import ProfilePage from "./pages/ProfilePage";
 import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import { auth, provider, database, userExists, createUser} from "./firebase.js";
+import {
+  auth,
+  provider,
+  database,
+  userExists,
+  createUser
+} from "./firebase.js";
 import "./App.css";
+import { isParenthesizedExpression } from "@babel/types";
 
 class App extends React.Component {
   constructor() {
@@ -22,7 +29,7 @@ class App extends React.Component {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       //this.setState({ user });
-      userExists(user.uid, (value) => {
+      userExists(user.uid, value => {
         createUser(user);
       });
     });
@@ -60,12 +67,10 @@ class App extends React.Component {
               ></LandingPage>
             </Route>
             <Route exact path="/forum">
-              <ForumPage
-              user={this.state.user}>
-              </ForumPage>
+              <ForumPage user={this.state.user}></ForumPage>
             </Route>
             <Route exact path="/mentor">
-              <MentorPage></MentorPage>
+              <MentorPage user={this.state.user}></MentorPage>
             </Route>
             <Route exact path="/profile">
               <ProfilePage user={this.state.user}></ProfilePage>
