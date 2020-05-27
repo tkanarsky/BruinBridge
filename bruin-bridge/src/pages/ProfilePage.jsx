@@ -1,10 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { css } from "emotion";
-import { interestsList } from "./interests";
-import EditableLabel from "react-inline-editing";
-import Select from "react-select";
 import MajorDropdown from "../components/MajorDropdown";
+import InterestsDropdown from "../components/InterestsDropdown";
 import { updateUser, getUser } from "../firebase";
 import EdiText from "react-editext";
 
@@ -50,28 +48,6 @@ const Pair = styled("div")`
   padding-top: 15px;
 `;
 
-class InterestsDropdown extends React.Component {
-  state = {
-    selectedOption: null
-  };
-  handleChange = selectedOption => {
-    this.setState({ selectedOption }, () =>
-      console.log(`Option selected:`, this.state.selectedOption)
-    );
-  };
-  render() {
-    const { selectedOption } = this.state;
-
-    return (
-      <Select
-        value={selectedOption}
-        onChange={this.handleChange}
-        options={interestsList}
-      />
-    );
-  }
-}
-
 // this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
   constructor(props) {
@@ -85,9 +61,12 @@ export default class ProfilePage extends React.Component {
       karma: 0,
       interest1: null,
       interest2: null,
-      interest3: null,
+      interest3: null
     };
     this.handleMajor = this.handleMajor.bind(this);
+    this.handleInterest1 = this.handleInterest1.bind(this);
+    this.handleInterest2 = this.handleInterest2.bind(this);
+    this.handleInterest3 = this.handleInterest3.bind(this);
     this.onSaveYear = this.onSaveYear.bind(this);
     this.onSaveBio = this.onSaveBio.bind(this);
     this.loadData = this.loadData.bind(this);
@@ -97,14 +76,34 @@ export default class ProfilePage extends React.Component {
     const { user } = this.props;
     console.log("load");
     if (user) {
-      getUser(user.uid, (userData) => {
+      getUser(user.uid, userData => {
         this.setState({
-          major: [{
-            label: userData.major,
-            value: userData.major
-          }],
+          major: [
+            {
+              label: userData.major,
+              value: userData.major
+            }
+          ],
           bio: userData.bio,
           year: userData.year,
+          interest1: [
+            {
+              label: userData.interest1,
+              value: userData.interest1
+            }
+          ],
+          interest2: [
+            {
+              label: userData.interest2,
+              value: userData.interest2
+            }
+          ],
+          interest3: [
+            {
+              label: userData.interest3,
+              value: userData.interest3
+            }
+          ],
           dataLoaded: true
         });
       });
@@ -115,14 +114,24 @@ export default class ProfilePage extends React.Component {
     this.setState({ major: m });
   }
 
+  handleInterest1(i) {
+    this.setState({ interest1: i });
+  }
+  handleInterest2(i) {
+    this.setState({ interest2: i });
+  }
+  handleInterest3(i) {
+    this.setState({ interest3: i });
+  }
+
   onSaveYear(newYear) {
     this.setState({ year: newYear });
-    updateUser(this.props.user.uid, {year: newYear});
+    updateUser(this.props.user.uid, { year: newYear });
   }
 
   onSaveBio(newBio) {
     this.setState({ bio: newBio });
-    updateUser(this.props.user.uid, {bio: newBio});
+    updateUser(this.props.user.uid, { bio: newBio });
   }
 
   render() {
@@ -138,7 +147,7 @@ export default class ProfilePage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.major) {
+          if (this.props.user && this.state.major && this.state.interest1) {
             return (
               <Container>
                 <PicContainer>
@@ -189,9 +198,13 @@ export default class ProfilePage extends React.Component {
                   <Pair>
                     <strong>Interests: &#8287;</strong>
                   </Pair>
-                  <InterestsDropdown></InterestsDropdown>
-                  <InterestsDropdown></InterestsDropdown>
-                  <InterestsDropdown></InterestsDropdown>
+                  <InterestsDropdown
+                    id={this.props.user.uid}
+                    curInt1={this.state.interest1}
+                    curInt2={this.state.interest2}
+                    curInt3={this.state.interest3}
+                    handle={this.handleInterest}
+                  ></InterestsDropdown>
                 </InfoContainer>
               </Container>
             );
