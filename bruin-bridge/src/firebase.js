@@ -25,7 +25,7 @@ export function userExists(id, callback) {
   });
 }
 
-export function createUser(user) {
+export function createUser(user, mentorStatus) {
   if (!user) return;
   userDb.doc(user.uid).set(
     {
@@ -35,7 +35,9 @@ export function createUser(user) {
       major: "",
       year: "",
       bio: "",
-      karma: 0
+      karma: 0,
+      is_mentor: mentorStatus,
+      partner: null
     }
   );
   return true;
@@ -106,24 +108,22 @@ export function getPost(id, callback) {
 
 export function getPosts(params, callback) {
   var query = postDb;
-  if (params.sort) {
-    switch(params.sort) {
-      case 'bottom': 
-        query = query.orderBy("upvotes", "asc");
-        break;
-      case 'top':
-        query = query.orderBy("upvotes", "desc");
-        break;
-      case 'old':
-        query = query.orderBy("timestamp", "asc");
-        break;
-      case 'new':
-        query = query.orderBy("timestamp", "desc");
-        break;
-      default:
-        query = query.orderBy("upvotes", "desc");
+  switch(params.sort) {
+    case 'bottom': 
+      query = query.orderBy("upvotes", "asc");
       break;
-    }
+    case 'top':
+      query = query.orderBy("upvotes", "desc");
+      break;
+    case 'old':
+      query = query.orderBy("timestamp", "asc");
+      break;
+    case 'new':
+      query = query.orderBy("timestamp", "desc");
+      break;
+    default:
+      query = query.orderBy("upvotes", "desc");
+    break;
   }
   if (params.limit) {
     query = query.limit(params.limit);
@@ -139,11 +139,17 @@ export function getPosts(params, callback) {
   });
 }
 
-export function upvotePost(userId, postId) {
+export function upvotePost(userId, postId, successCallback) {
   postExists(postId, (exists) => {
-    if (!exists) return;
+    if (!exists) {
+      successCallback(false);
+      return;
+    };
     getPost(postId, (postData) => {
-      if (postData.upvoting_users.includes(userId)) return;
+      if (postData.upvoting_users.includes(userId)) {
+        successCallback(false);
+        return;
+      }
       else if (postData.downvoting_users.includes(userId)) {
         let idIndex = postData.downvoting_users.indexOf(userId);
         postData.downvoting_users.splice(idIndex, 1);
@@ -159,15 +165,22 @@ export function upvotePost(userId, postId) {
       }
       postData.upvoting_users.push(userId);
       updatePost(postId, postData);
+      successCallback(true);
     });
   });
 }
 
-export function downvotePost(userId, postId) {
+export function downvotePost(userId, postId, successCallback) {
   postExists(postId, (exists) => {
-    if (!exists) return;
+    if (!exists) {
+      successCallback(false);
+      return;
+    };
     getPost(postId, (postData) => {
-      if (postData.downvoting_users.includes(userId)) return;
+      if (postData.downvoting_users.includes(userId)) {
+        successCallback(false);
+        return;
+      }
       else if (postData.upvoting_users.includes(userId)) {
         let idIndex = postData.upvoting_users.indexOf(userId);
         postData.upvoting_users.splice(idIndex, 1);
@@ -183,13 +196,16 @@ export function downvotePost(userId, postId) {
       }
       postData.downvoting_users.push(userId);
       updatePost(postId, postData);
+      successCallback(true);
     });
   });
 }
 
-export function removeVote(userId, postId) {
+export function removeVote(userId, postId, successCallback) {
   postExists(postId, (exists) => {
-    if (!exists) return;
+    if (!exists) {
+      successCallback(false);
+    };
     getPost(postId, (postData) => {
       if (postData.downvoting_users.includes(userId)) {
         let idIndex = postData.downvoting_users.indexOf(userId);
@@ -198,6 +214,7 @@ export function removeVote(userId, postId) {
         getUser(postData.author_id, (userData) => {
           updateUser(postData.author_id, {karma: userData.karma += 1});
         });
+        successCallback(true);
       } else if (postData.upvoting_users.includes(userId)) {
         let idIndex = postData.upvoting_users.indexOf(userId);
         postData.upvoting_users.splice(idIndex, 1);
@@ -205,6 +222,9 @@ export function removeVote(userId, postId) {
         getUser(postData.author_id, (userData) => {
           updateUser(postData.author_id, {karma: userData.karma -= 1});
         });
+        successCallback(true);
+      } else {
+        successCallback(false);
       }
     });
   });
@@ -248,9 +268,26 @@ export function updateComment(commentId, data) {
   });
 }
 
-// export function getComments(postId, data) {
-//   postExists(postId, (value) => {
-//     if (!value) return false;
-//     let 
-//   })
-// }
+export function getComment(id, callback) {
+  commentDb.doc(id).get().then((doc) => {
+    if (doc.exists) {
+      callback(doc.data());
+    } else {
+      callback(null);
+    }
+  });
+}
+
+export function getComments(postId, callback) {
+  postExists(postId, (value) => {
+    if (!value) return false;
+    commentDb.where("parent", "==", postId)
+    .get().then((snapshot) => {
+      let comments = [];
+      snapshot.forEach((comment) => {
+        comments.push(comment.data());
+      });
+      callback(comments);
+    });
+  });
+}

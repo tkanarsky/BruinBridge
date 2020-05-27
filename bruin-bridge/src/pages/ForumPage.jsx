@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { createPost } from "../firebase.js";
-import ForumPost from "../components/ForumPost";
+import ForumPosts from "../components/ForumPosts";
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -208,7 +208,7 @@ export default class ForumPage extends React.Component {
               </form>
             </SubmitQuestion>
             <PostContainer>
-              <ForumPost user={this.props.user}></ForumPost>
+              <ForumPosts user={this.props.user}></ForumPosts>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>

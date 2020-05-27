@@ -85,7 +85,7 @@ export default class ProfilePage extends React.Component {
       karma: 0,
       interest1: null,
       interest2: null,
-      interest3: null,
+      interest3: null
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.onSaveYear = this.onSaveYear.bind(this);
@@ -97,12 +97,12 @@ export default class ProfilePage extends React.Component {
     const { user } = this.props;
     console.log("load");
     if (user) {
-      getUser(user.uid, (userData) => {
+      getUser(user.uid, userData => {
         this.setState({
-          major: [{
+          major: {
             label: userData.major,
             value: userData.major
-          }],
+          },
           bio: userData.bio,
           year: userData.year,
           dataLoaded: true
@@ -117,12 +117,12 @@ export default class ProfilePage extends React.Component {
 
   onSaveYear(newYear) {
     this.setState({ year: newYear });
-    updateUser(this.props.user.uid, {year: newYear});
+    updateUser(this.props.user.uid, { year: newYear });
   }
 
   onSaveBio(newBio) {
     this.setState({ bio: newBio });
-    updateUser(this.props.user.uid, {bio: newBio});
+    updateUser(this.props.user.uid, { bio: newBio });
   }
 
   render() {
