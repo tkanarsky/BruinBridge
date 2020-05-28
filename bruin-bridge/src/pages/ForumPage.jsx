@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { createPost } from "../firebase.js";
-import ForumPost from "../components/ForumPost";
+import ForumPosts from "../components/ForumPosts";
 
 const SchoolContainer = styled("div")`
   width: 20%;
@@ -129,7 +129,12 @@ export default class ForumPage extends React.Component {
       return;
     }
     if (this.props.user) {
-      createPost(this.props.user, this.state.title, this.state.postInput, (postId) => {});
+      createPost(
+        this.props.user,
+        this.state.title,
+        this.state.postInput,
+        postId => {}
+      );
       console.log("Created post!");
       alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
       this.setState({ title: "", postInput: "" });
@@ -203,7 +208,7 @@ export default class ForumPage extends React.Component {
               </form>
             </SubmitQuestion>
             <PostContainer>
-              <ForumPost></ForumPost>
+              <ForumPosts user={this.props.user}></ForumPosts>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>

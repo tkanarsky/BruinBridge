@@ -78,12 +78,10 @@ export default class ProfilePage extends React.Component {
     if (user) {
       getUser(user.uid, userData => {
         this.setState({
-          major: [
-            {
-              label: userData.major,
-              value: userData.major
-            }
-          ],
+          major: {
+            label: userData.major,
+            value: userData.major
+          },
           bio: userData.bio,
           year: userData.year,
           interest1: [

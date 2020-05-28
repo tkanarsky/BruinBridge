@@ -13,6 +13,7 @@ import {
   createUser
 } from "./firebase.js";
 import "./App.css";
+import { isParenthesizedExpression } from "@babel/types";
 
 class App extends React.Component {
   constructor() {
@@ -89,7 +90,7 @@ class App extends React.Component {
               <ForumPage user={this.state.user}></ForumPage>
             </Route>
             <Route exact path="/mentor">
-              <MentorPage></MentorPage>
+              <MentorPage user={this.state.user}></MentorPage>
             </Route>
             <Route exact path="/profile">
               <ProfilePage user={this.state.user}></ProfilePage>
