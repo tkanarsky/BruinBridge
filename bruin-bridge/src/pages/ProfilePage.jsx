@@ -48,14 +48,11 @@ const Pair = styled("div")`
   padding-top: 15px;
 `;
 
-// this.props.userInfo is an array of all the data of the user
 export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       major: null,
-      // MAJOR TO BE AN OBJECT {label: "...", value: "..."}
-      // THIS IS NEEDED FOR DROPDOWN SELECT TO WORK!!!!
       year: null,
       bio: null,
       karma: 0,
@@ -151,6 +148,7 @@ export default class ProfilePage extends React.Component {
                 <PicContainer>
                   <img
                     src={this.props.user.photoURL}
+                    alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
                     className={css`
                       border-radius: 50%;
                       height: 200px;

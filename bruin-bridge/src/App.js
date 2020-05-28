@@ -4,16 +4,9 @@ import ForumPage from "./pages/ForumPage";
 import ProfilePage from "./pages/ProfilePage";
 import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import {
-  auth,
-  provider,
-  database,
-  userExists,
-  createUser
-} from "./firebase.js";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { auth, provider, userExists, createUser } from "./firebase.js";
 import "./App.css";
-import { isParenthesizedExpression } from "@babel/types";
 
 class App extends React.Component {
   constructor() {
@@ -25,16 +18,6 @@ class App extends React.Component {
     this.loginAsMentee = this.loginAsMentee.bind(this);
     this.logout = this.logout.bind(this);
   }
-
-  // login() {
-  //   auth.signInWithPopup(provider).then(result => {
-  //     const user = result.user;
-  //     //this.setState({ user });
-  //     userExists(user.uid, value => {
-  //       createUser(user, true); //TODO: Change this status!!
-  //     });
-  //   });
-  // }
 
   loginAsMentor() {
     auth.signInWithPopup(provider).then(result => {
@@ -73,8 +56,6 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {/* {!this.state.user && <p>Loading...</p>}
-        {this.state.user && ( */}
         <Router>
           <NavBar />
           <Switch>

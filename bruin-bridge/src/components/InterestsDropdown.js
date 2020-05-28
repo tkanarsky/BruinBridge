@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { updateUser, database } from "../firebase";
+import { updateUser } from "../firebase";
 import { interestsList } from "../constants/interests";
 
 export default class InterestsDropdown extends React.Component {
@@ -23,10 +23,9 @@ export default class InterestsDropdown extends React.Component {
 
   loadInterests() {
     if (!this.state.loaded) {
-      const { id, curInt1, curInt2, curInt3, handle } = this.props;
-      let c1 = curInt1[0];
-      let c2 = curInt2[0];
-      let c3 = curInt3[0];
+      let c1 = this.props.curInt1[0];
+      let c2 = this.props.curInt2[0];
+      let c3 = this.props.curInt3[0];
       this.setState({ selectedOption1: c1 });
       this.setState({ selectedOption2: c2 });
       this.setState({ selectedOption3: c3 });
@@ -36,8 +35,8 @@ export default class InterestsDropdown extends React.Component {
 
   handleChange1 = selectedOption => {
     if (
-      selectedOption["value"] != this.state.selectedOption2["value"] &&
-      selectedOption["value"] != this.state.selectedOption3["value"]
+      selectedOption["value"] !== this.state.selectedOption2["value"] &&
+      selectedOption["value"] !== this.state.selectedOption3["value"]
     ) {
       this.setState({ selectedOption1: selectedOption });
       updateUser(this.props.id, { interest1: selectedOption["value"] });
@@ -48,8 +47,8 @@ export default class InterestsDropdown extends React.Component {
 
   handleChange2 = selectedOption => {
     if (
-      selectedOption["value"] != this.state.selectedOption1["value"] &&
-      selectedOption["value"] != this.state.selectedOption3["value"]
+      selectedOption["value"] !== this.state.selectedOption1["value"] &&
+      selectedOption["value"] !== this.state.selectedOption3["value"]
     ) {
       this.setState({ selectedOption2: selectedOption });
       updateUser(this.props.id, { interest2: selectedOption["value"] });
@@ -60,8 +59,8 @@ export default class InterestsDropdown extends React.Component {
 
   handleChange3 = selectedOption => {
     if (
-      selectedOption["value"] != this.state.selectedOption1["value"] &&
-      selectedOption["value"] != this.state.selectedOption2["value"]
+      selectedOption["value"] !== this.state.selectedOption1["value"] &&
+      selectedOption["value"] !== this.state.selectedOption2["value"]
     ) {
       this.setState({ selectedOption3: selectedOption });
       updateUser(this.props.id, { interest3: selectedOption["value"] });

@@ -1,5 +1,5 @@
 import React from "react";
-import { getPosts, upvotePost, getPost, removeVote } from "../firebase";
+import { getPosts } from "../firebase";
 import {
   Accordion,
   AccordionItem,
@@ -8,23 +8,23 @@ import {
   AccordionItemPanel
 } from "react-accessible-accordion";
 import Comments from "./Comments";
-import Post from "./Post";
+import PostCard from "./PostCard";
 
 export default class ForumPost extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      posts: null,
+      comment: ""
+    };
   }
-  state = {
-    posts: null
-  };
-
   renderPosts(allPosts) {
     return allPosts.map((post, i) => {
       return (
         <AccordionItem key={i}>
           <AccordionItemHeading>
             <AccordionItemButton>
-              <Post
+              <PostCard
                 postID={post.post_id}
                 upvotes={post.upvotes}
                 authorPic={post.author_avatar}
@@ -32,14 +32,11 @@ export default class ForumPost extends React.Component {
                 user={this.props.user}
                 title={post.title}
                 body={post.body}
-              ></Post>
+              ></PostCard>
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
-            <Comments></Comments>
-            {
-              // pass in prop to Comments ^^
-            }
+            <Comments user={this.props.user} postID={post.post_id}></Comments>
           </AccordionItemPanel>
         </AccordionItem>
       );
