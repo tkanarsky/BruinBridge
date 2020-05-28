@@ -165,10 +165,9 @@ export default class ForumPage extends React.Component {
             <SubmitQuestion>
               <form onSubmit={this.handleSubmit}>
                 <label>
-                  Title:
+                  Title &#160;
                   <input
                     type="text"
-                    value
                     value={this.state.title}
                     onChange={this.handleTitle}
                     style={{
@@ -180,7 +179,7 @@ export default class ForumPage extends React.Component {
                   />
                 </label>
                 <label style={{ paddingLeft: "20px", paddingRight: "20px" }}>
-                  Description:
+                  Description &#160;
                   <input
                     type="text"
                     value={this.state.postInput}

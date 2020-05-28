@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  getPosts,
-  upvotePost,
-  getPost,
-  removeVote,
-  downvotePost
-} from "../firebase";
+import { upvotePost, getPost, removeVote, downvotePost } from "../firebase";
 import styled from "styled-components";
 import { css } from "emotion";
 import {
@@ -277,17 +271,6 @@ export default class Post extends React.Component {
   }
 
   render() {
-    const {
-      postID,
-      upvotes,
-      authorPic,
-      authorName,
-      user,
-      title,
-      body
-    } = this.props;
-    let uid = user.uid;
-
     return (
       <PostBackground>
         <Votes>
@@ -297,18 +280,19 @@ export default class Post extends React.Component {
         </Votes>
         <Profile>
           <img
-            src={authorPic}
+            src={this.props.authorPic}
+            alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
             className={css`
               border-radius: 50%;
               height: 65px;
               width: 65px;
             `}
           />
-          <Name>{authorName}</Name>
+          <Name>{this.props.authorName}</Name>
         </Profile>
         <QuestionContainer>
-          <QuestionStyle>{title}</QuestionStyle>
-          <DescriptionStyle>{body}</DescriptionStyle>
+          <QuestionStyle>{this.props.title}</QuestionStyle>
+          <DescriptionStyle>{this.props.body}</DescriptionStyle>
         </QuestionContainer>
       </PostBackground>
     );
