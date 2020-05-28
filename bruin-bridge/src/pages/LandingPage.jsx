@@ -106,8 +106,12 @@ export default class LandingPage extends React.Component {
                 <Button onClick={this.props.logout}>Sign Out</Button>
               ) : (
                 <div>
-                  <Button onClick={this.props.login}>Be a Mentor</Button>
-                  <Button onClick={this.props.login}>Find a Mentor</Button>
+                  <Button onClick={this.props.loginAsMentor}>
+                    Be a Mentor
+                  </Button>
+                  <Button onClick={this.props.loginAsMentee}>
+                    Find a Mentor
+                  </Button>
                 </div>
               )}
               <Img></Img>

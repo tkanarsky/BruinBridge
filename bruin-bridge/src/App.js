@@ -21,16 +21,35 @@ class App extends React.Component {
     this.state = {
       user: null
     };
-    this.login = this.login.bind(this);
+    this.loginAsMentor = this.loginAsMentor.bind(this);
+    this.loginAsMentee = this.loginAsMentee.bind(this);
     this.logout = this.logout.bind(this);
   }
 
-  login() {
+  // login() {
+  //   auth.signInWithPopup(provider).then(result => {
+  //     const user = result.user;
+  //     //this.setState({ user });
+  //     userExists(user.uid, value => {
+  //       createUser(user, true); //TODO: Change this status!!
+  //     });
+  //   });
+  // }
+
+  loginAsMentor() {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      //this.setState({ user });
       userExists(user.uid, value => {
-        createUser(user, true); //TODO: Change this status!!
+        createUser(user, true);
+      });
+    });
+  }
+
+  loginAsMentee() {
+    auth.signInWithPopup(provider).then(result => {
+      const user = result.user;
+      userExists(user.uid, value => {
+        createUser(user, false);
       });
     });
   }
@@ -62,7 +81,8 @@ class App extends React.Component {
             <Route exact path="/">
               <LandingPage
                 userInfo={this.state.user}
-                login={this.login}
+                loginAsMentor={this.loginAsMentor}
+                loginAsMentee={this.loginAsMentee}
                 logout={this.logout}
               ></LandingPage>
             </Route>

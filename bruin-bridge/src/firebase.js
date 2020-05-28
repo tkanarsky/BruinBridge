@@ -20,117 +20,131 @@ const postDb = database.collection("posts");
 const commentDb = database.collection("comments");
 
 export function userExists(id, callback) {
-  userDb.doc(id).get().then((doc) => {
-    callback(doc.exists);
-  });
+  userDb
+    .doc(id)
+    .get()
+    .then(doc => {
+      callback(doc.exists);
+    });
 }
 
 export function createUser(user, mentorStatus) {
   if (!user) return;
-  userDb.doc(user.uid).set(
-    {
-      name: user.displayName,
-      email: user.email,
-      avatar: user.photoURL,
-      major: "",
-      year: "",
-      bio: "",
-      karma: 0,
-      is_mentor: mentorStatus,
-      partner: null
-    }
-  );
+  userDb.doc(user.uid).set({
+    name: user.displayName,
+    email: user.email,
+    avatar: user.photoURL,
+    major: "",
+    year: "",
+    bio: "",
+    karma: 0,
+    is_mentor: mentorStatus,
+    partner: null,
+    interest1: null,
+    interest2: null,
+    interest3: null
+  });
   return true;
 }
 
 export function getUser(id, callback) {
-  userDb.doc(id).get().then((doc) => {
-    if (doc.exists) {
-      callback(doc.data());
-    } else {
-      callback(null);
-    }
-  });
+  userDb
+    .doc(id)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        callback(doc.data());
+      } else {
+        callback(null);
+      }
+    });
 }
 
 export function updateUser(id, data) {
-    userDb.doc(id).update(data);
+  userDb.doc(id).update(data);
 }
 
 export function deleteUser(id) {
-    userDb.child(id).delete();
+  userDb.child(id).delete();
 }
 
 export function createPost(user, title, text, idCallback) {
   if (!user || !title || !text || !user.uid) return false;
-  postDb.add({
-    title: title,
-    body: text,
-    author_id: user.uid,
-    author_name: user.displayName,
-    author_avatar: user.photoURL,
-    upvotes: 0,
-    edited: false,
-    timestamp: Date.now(),
-    upvoting_users: [],
-    downvoting_users: [],
-    replies: []
-  }).then((newPostRef) => {
-    idCallback(newPostRef.id);
-  });
-} 
+  postDb
+    .add({
+      title: title,
+      body: text,
+      author_id: user.uid,
+      author_name: user.displayName,
+      author_avatar: user.photoURL,
+      upvotes: 0,
+      edited: false,
+      timestamp: Date.now(),
+      upvoting_users: [],
+      downvoting_users: [],
+      replies: []
+    })
+    .then(newPostRef => {
+      idCallback(newPostRef.id);
+    });
+}
 
 export function postExists(key, callback) {
-  postDb.doc(key).get().then((doc) => {
-    callback(doc.exists);
-  })
+  postDb
+    .doc(key)
+    .get()
+    .then(doc => {
+      callback(doc.exists);
+    });
 }
 
 export function updatePost(key, data) {
   if (!key || !data || (!data.title && !data.body)) return false;
-  postExists(key, (value) => {
+  postExists(key, value => {
     if (!value) return false;
-      data.edited = true;
-      postDb.doc(key).update(data);
+    data.edited = true;
+    postDb.doc(key).update(data);
   });
 }
 
-
 export function getPost(id, callback) {
-  postDb.doc(id).get().then((doc) => {
-    if (doc.exists) {
-      callback(doc.data());
-    } else {
-      callback(null);
-    }
-  });
+  postDb
+    .doc(id)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        callback(doc.data());
+      } else {
+        callback(null);
+      }
+    });
 }
 
 export function getPosts(params, callback) {
   var query = postDb;
-  switch(params.sort) {
-    case 'bottom': 
+  switch (params.sort) {
+    case "bottom":
       query = query.orderBy("upvotes", "asc");
       break;
-    case 'top':
+    case "top":
       query = query.orderBy("upvotes", "desc");
       break;
-    case 'old':
+    case "old":
       query = query.orderBy("timestamp", "asc");
       break;
-    case 'new':
+    case "new":
       query = query.orderBy("timestamp", "desc");
       break;
     default:
       query = query.orderBy("upvotes", "desc");
-    break;
+      break;
   }
   if (params.limit) {
     query = query.limit(params.limit);
   }
-  query.get().then((snapshot) => {
+  query.get().then(snapshot => {
     let posts = [];
-    snapshot.forEach((doc) =>{
+    snapshot.forEach(doc => {
       let docData = doc.data();
       docData.post_id = doc.id;
       posts.push(docData);
@@ -140,27 +154,26 @@ export function getPosts(params, callback) {
 }
 
 export function upvotePost(userId, postId, successCallback) {
-  postExists(postId, (exists) => {
+  postExists(postId, exists => {
     if (!exists) {
       successCallback(false);
       return;
-    };
-    getPost(postId, (postData) => {
+    }
+    getPost(postId, postData => {
       if (postData.upvoting_users.includes(userId)) {
         successCallback(false);
         return;
-      }
-      else if (postData.downvoting_users.includes(userId)) {
+      } else if (postData.downvoting_users.includes(userId)) {
         let idIndex = postData.downvoting_users.indexOf(userId);
         postData.downvoting_users.splice(idIndex, 1);
         postData.upvotes += 2;
-        getUser(postData.author_id, (userData) => {
-          updateUser(postData.author_id, {karma: userData.karma += 2});
+        getUser(postData.author_id, userData => {
+          updateUser(postData.author_id, { karma: (userData.karma += 2) });
         });
       } else {
         postData.upvotes += 1;
-        getUser(postData.author_id, (userData) => {
-          updateUser(postData.author_id, {karma: userData.karma += 1});
+        getUser(postData.author_id, userData => {
+          updateUser(postData.author_id, { karma: (userData.karma += 1) });
         });
       }
       postData.upvoting_users.push(userId);
@@ -171,27 +184,26 @@ export function upvotePost(userId, postId, successCallback) {
 }
 
 export function downvotePost(userId, postId, successCallback) {
-  postExists(postId, (exists) => {
+  postExists(postId, exists => {
     if (!exists) {
       successCallback(false);
       return;
-    };
-    getPost(postId, (postData) => {
+    }
+    getPost(postId, postData => {
       if (postData.downvoting_users.includes(userId)) {
         successCallback(false);
         return;
-      }
-      else if (postData.upvoting_users.includes(userId)) {
+      } else if (postData.upvoting_users.includes(userId)) {
         let idIndex = postData.upvoting_users.indexOf(userId);
         postData.upvoting_users.splice(idIndex, 1);
         postData.upvotes -= 2;
-        getUser(postData.author_id, (userData) => {
-          updateUser(postData.author_id, {karma: userData.karma -= 2});
+        getUser(postData.author_id, userData => {
+          updateUser(postData.author_id, { karma: (userData.karma -= 2) });
         });
       } else {
         postData.upvotes -= 1;
-        getUser(postData.author_id, (userData) => {
-          updateUser(postData.author_id, {karma: userData.karma -= 1});
+        getUser(postData.author_id, userData => {
+          updateUser(postData.author_id, { karma: (userData.karma -= 1) });
         });
       }
       postData.downvoting_users.push(userId);
@@ -202,25 +214,25 @@ export function downvotePost(userId, postId, successCallback) {
 }
 
 export function removeVote(userId, postId, successCallback) {
-  postExists(postId, (exists) => {
+  postExists(postId, exists => {
     if (!exists) {
       successCallback(false);
-    };
-    getPost(postId, (postData) => {
+    }
+    getPost(postId, postData => {
       if (postData.downvoting_users.includes(userId)) {
         let idIndex = postData.downvoting_users.indexOf(userId);
         postData.downvoting_users.splice(idIndex, 1);
         postData.upvotes += 1;
-        getUser(postData.author_id, (userData) => {
-          updateUser(postData.author_id, {karma: userData.karma += 1});
+        getUser(postData.author_id, userData => {
+          updateUser(postData.author_id, { karma: (userData.karma += 1) });
         });
         successCallback(true);
       } else if (postData.upvoting_users.includes(userId)) {
         let idIndex = postData.upvoting_users.indexOf(userId);
         postData.upvoting_users.splice(idIndex, 1);
         postData.upvotes -= 1;
-        getUser(postData.author_id, (userData) => {
-          updateUser(postData.author_id, {karma: userData.karma -= 1});
+        getUser(postData.author_id, userData => {
+          updateUser(postData.author_id, { karma: (userData.karma -= 1) });
         });
         successCallback(true);
       } else {
@@ -231,37 +243,42 @@ export function removeVote(userId, postId, successCallback) {
 }
 
 export function commentExists(commentId, callback) {
-  commentDb.doc(commentId).get().then((doc) => {
-    callback(doc.exists);
-  });
+  commentDb
+    .doc(commentId)
+    .get()
+    .then(doc => {
+      callback(doc.exists);
+    });
 }
 
 export function createComment(user, postId, text, idCallback) {
   if (!user || !postId || !text) return;
-  commentDb.add({
-    body: text,
-    parent: postId,
-    author_id: user.uid,
-    author_name: user.displayName,
-    author_avatar: user.photoURL,
-    upvotes: 0,
-    edited: false,
-    timestamp: Date.now(),
-    upvoting_users: [],
-    downvoting_users: [],
-  }).then((newCommentRef) => {
-    getPost(postId, (data) => {
-      let replyList = data.replies;
-      replyList.push(newCommentRef.id);
-      updatePost(postId, {replies: replyList});
+  commentDb
+    .add({
+      body: text,
+      parent: postId,
+      author_id: user.uid,
+      author_name: user.displayName,
+      author_avatar: user.photoURL,
+      upvotes: 0,
+      edited: false,
+      timestamp: Date.now(),
+      upvoting_users: [],
+      downvoting_users: []
     })
-    idCallback(newCommentRef.id);
-  });
-};
+    .then(newCommentRef => {
+      getPost(postId, data => {
+        let replyList = data.replies;
+        replyList.push(newCommentRef.id);
+        updatePost(postId, { replies: replyList });
+      });
+      idCallback(newCommentRef.id);
+    });
+}
 
 export function updateComment(commentId, data) {
   if (!commentId || !data || !data.body) return false;
-  commentExists(commentId, (value) => {
+  commentExists(commentId, value => {
     if (!value) return false;
     data.edited = true;
     commentDb.doc(commentId).update(data);
@@ -269,25 +286,30 @@ export function updateComment(commentId, data) {
 }
 
 export function getComment(id, callback) {
-  commentDb.doc(id).get().then((doc) => {
-    if (doc.exists) {
-      callback(doc.data());
-    } else {
-      callback(null);
-    }
-  });
+  commentDb
+    .doc(id)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        callback(doc.data());
+      } else {
+        callback(null);
+      }
+    });
 }
 
 export function getComments(postId, callback) {
-  postExists(postId, (value) => {
+  postExists(postId, value => {
     if (!value) return false;
-    commentDb.where("parent", "==", postId)
-    .get().then((snapshot) => {
-      let comments = [];
-      snapshot.forEach((comment) => {
-        comments.push(comment.data());
+    commentDb
+      .where("parent", "==", postId)
+      .get()
+      .then(snapshot => {
+        let comments = [];
+        snapshot.forEach(comment => {
+          comments.push(comment.data());
+        });
+        callback(comments);
       });
-      callback(comments);
-    });
   });
 }
