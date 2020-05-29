@@ -8,7 +8,6 @@ import {
   FaThumbsUp,
   FaThumbsDown
 } from "react-icons/fa";
-import { removePropertiesDeep } from "@babel/types";
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
