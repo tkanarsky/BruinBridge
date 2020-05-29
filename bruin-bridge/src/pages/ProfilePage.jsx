@@ -11,6 +11,8 @@ import EdiText from "react-editext";
 const Container = styled("div")`
   background-color: white;
   width: 95%;
+  position: relative;
+  top: 25px;
   display: flex;
   justify-content: center;
   border-radius: 25px;
@@ -21,7 +23,6 @@ const Container = styled("div")`
 `;
 
 const BoldInfo = styled("div")`
-  font-family: "Open Sans";
   font-size: 26px;
   font-weight: 700;
   display: flex;
@@ -40,6 +41,7 @@ const InfoContainer = styled("div")`
 const PicContainer = styled("div")`
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
 `;
 
@@ -117,12 +119,12 @@ export default class ProfilePage extends React.Component {
 
   onSaveYear(newYear) {
     this.setState({ year: newYear });
-    updateUser(this.props.user.uid, {year: newYear});
+    updateUser(this.props.user.uid, { year: newYear });
   }
 
   onSaveBio(newBio) {
     this.setState({ bio: newBio });
-    updateUser(this.props.user.uid, {bio: newBio});
+    updateUser(this.props.user.uid, { bio: newBio });
   }
 
   render() {

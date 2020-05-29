@@ -24,6 +24,11 @@ const LinkBox = styled("div")`
   margin-left: 30px;
 `;
 
+const ProfileBox = styled(LinkBox)`
+  margin-left: auto;
+  justify-self: flex-end;
+`;
+
 const Container = styled("div")`
   display: flex;
   flex-direction: right;
@@ -31,6 +36,7 @@ const Container = styled("div")`
   width: 100%;
   height: 100%;
 `;
+
 
 // TO-DO: make a const css component to make the "My Profile" Link align to the right of the screen
 
@@ -49,7 +55,7 @@ export default class NavBar extends React.Component {
           <LinkBox><StyledLink to="/">Home</StyledLink></LinkBox>
           <LinkBox><StyledLink to="/forum">Forum</StyledLink></LinkBox>
           <LinkBox><StyledLink to="/mentor">My Mentor</StyledLink></LinkBox>
-          <LinkBox><StyledLink to="profile">My Profile</StyledLink></LinkBox>
+          <ProfileBox><StyledLink to="profile">My Profile</StyledLink></ProfileBox>
         </Container>
       </Element>
     );
