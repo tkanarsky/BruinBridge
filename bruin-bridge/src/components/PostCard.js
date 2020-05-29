@@ -147,6 +147,7 @@ export default class PostCard extends React.Component {
             ></FaRegThumbsDown>
           )
         });
+        console.log(this.state.upvotes);
         console.log("upvoted with downvote");
       }
     });
@@ -171,6 +172,7 @@ export default class PostCard extends React.Component {
             ></FaThumbsDown>
           )
         });
+        console.log(this.state.upvotes);
         console.log("downvoted with upvote");
       }
     });
@@ -215,7 +217,6 @@ export default class PostCard extends React.Component {
                 ></FaRegThumbsDown>
               )
             });
-            this.setState({});
             console.log(this.state.upvotes);
             console.log("removed vote");
           }
@@ -243,6 +244,7 @@ export default class PostCard extends React.Component {
             ></FaThumbsDown>
           )
         });
+        console.log(this.state.votes);
         console.log("downvoted");
       } else {
         removeVote(this.state.userID, this.props.postID, successCallback => {
@@ -262,12 +264,12 @@ export default class PostCard extends React.Component {
                 ></FaRegThumbsDown>
               )
             });
+            console.log(this.state.votes);
             console.log("removed vote");
           }
         });
       }
     });
-    console.log("HI2");
   }
 
   render() {
