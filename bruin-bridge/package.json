@@ -11,6 +11,7 @@
     "react": "^16.13.1",
     "react-accessible-accordion": "^3.0.1",
     "react-dom": "^16.13.1",
+    "react-dropdown-date": "^0.0.18",
     "react-dropdown-select": "^4.4.1",
     "react-editext": "^3.15.1",
     "react-icons": "^3.10.0",

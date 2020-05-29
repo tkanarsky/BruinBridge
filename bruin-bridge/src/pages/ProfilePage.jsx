@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { css } from "emotion";
+import { YearPicker } from "react-dropdown-date";
 import MajorDropdown from "../components/MajorDropdown";
 import InterestsDropdown from "../components/InterestsDropdown";
 import { updateUser, getUser } from "../firebase";
@@ -46,6 +47,7 @@ const PicContainer = styled("div")`
 const Pair = styled("div")`
   display: flex;
   flex-direction: row;
+  align-items: center;
   width: 100%;
   padding-top: 15px;
 `;
@@ -168,13 +170,16 @@ export default class ProfilePage extends React.Component {
                   ></MajorDropdown>
                   <Pair>
                     <strong>Graduation Year: &#8287;</strong>
-                    <EdiText
-                      type="textarea"
-                      saveButtonContent="Apply"
-                      cancelButtonContent={<strong>Cancel</strong>}
-                      editButtonContent="Edit"
-                      value={this.state.year}
-                      onSave={this.onSaveYear}
+                    <YearPicker
+                    defaultValue={2023}
+                    start={2018}
+                    end={2025}
+                    value={this.state.year}
+                    onChange={this.onSaveYear}
+                    id={'year'}
+                    name={'year'}
+                    classes={'classes'}
+                    optionClasses={'option classes'}
                     />
                   </Pair>
                   <Pair>
@@ -190,7 +195,7 @@ export default class ProfilePage extends React.Component {
                   </Pair>
                   <Pair>
                     {" "}
-                    <strong>Karma: </strong>
+                    <strong>Karma: &#8287;</strong>
                     {this.state.karma}
                   </Pair>
                   <Pair>
