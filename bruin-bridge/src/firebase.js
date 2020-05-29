@@ -35,6 +35,7 @@ export function createUser(user, mentorStatus) {
     email: user.email,
     avatar: user.photoURL,
     major: "",
+    school: "",
     year: "",
     bio: "",
     karma: 0,

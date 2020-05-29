@@ -53,6 +53,7 @@ export default class ProfilePage extends React.Component {
     super(props);
     this.state = {
       major: null,
+      school: "no",
       year: null,
       bio: null,
       karma: 0,
@@ -79,6 +80,7 @@ export default class ProfilePage extends React.Component {
             label: userData.major,
             value: userData.major
           },
+          school: userData.school,
           bio: userData.bio,
           year: userData.year,
           interest1: [
@@ -164,6 +166,9 @@ export default class ProfilePage extends React.Component {
                     curMajor={this.state.major}
                     handle={this.handleMajor}
                   ></MajorDropdown>
+                  <Pair>
+                    <h2>{this.state.school}</h2>
+                  </Pair>
                   <Pair>
                     <strong>Graduation Year: &#8287;</strong>
                     <EdiText
