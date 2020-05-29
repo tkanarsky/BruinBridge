@@ -23,7 +23,7 @@ class App extends React.Component {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       userExists(user.uid, value => {
-        createUser(user, true);
+        if (!value) createUser(user, true);
       });
     });
   }
@@ -32,7 +32,7 @@ class App extends React.Component {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       userExists(user.uid, value => {
-        createUser(user, false);
+        if (!value) createUser(user, false);
       });
     });
   }
