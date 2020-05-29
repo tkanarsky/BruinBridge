@@ -93,7 +93,7 @@ export default class PostCard extends React.Component {
   }
 
   loadUser() {
-    if (!this.state.loaded) {
+    if (!this.state.loaded && this.props.user) {
       let u = this.props.user;
       let uid = u.uid;
       let postId = this.props.postID;
@@ -132,10 +132,16 @@ export default class PostCard extends React.Component {
           });
         }
       });
+    } else if (!this.state.loaded && !this.state.user) {
+      this.setState({ loaded: true });
     }
   }
 
   handleUpvoteWithDownvote() {
+    if (!this.props.user) {
+      alert("You must be logged in to upvote or downvote!");
+      return;
+    }
     console.log("processing upvote with downvote");
     upvotePost(this.state.userID, this.props.postID, successCallback => {
       if (this.state.loaded && successCallback) {
@@ -161,6 +167,10 @@ export default class PostCard extends React.Component {
   }
 
   handleDownvoteWithUpvote() {
+    if (!this.props.user) {
+      alert("You must be logged in to upvote or downvote!");
+      return;
+    }
     console.log("processing downvote with upvote");
     downvotePost(this.state.userID, this.props.postID, successCallback => {
       if (this.state.loaded && successCallback) {
@@ -186,6 +196,10 @@ export default class PostCard extends React.Component {
   }
 
   handleUpvote() {
+    if (!this.props.user) {
+      alert("You must be logged in to upvote or downvote!");
+      return;
+    }
     console.log("processing upvote");
     upvotePost(this.state.userID, this.props.postID, successCallback => {
       if (this.state.loaded && successCallback) {
@@ -233,6 +247,10 @@ export default class PostCard extends React.Component {
   }
 
   handleDownvote() {
+    if (!this.props.user) {
+      alert("You must be logged in to upvote or downvote!");
+      return;
+    }
     console.log("processing downvote");
     downvotePost(this.state.userID, this.props.postID, successCallback => {
       if (this.state.loaded && successCallback) {
