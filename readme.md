@@ -1,5 +1,7 @@
 # BruinBridge
 
+[![tkanarsky](https://circleci.com/gh/tkanarsky/BruinBridge.svg?style=shield&circle-token=dcd878801387100caaca2c01bc4bbb10289d8773)](https://app.circleci.com/pipelines/github/tkanarsky/BruinBridge)
+
 Ian Galvez, Timothy Kanarsky, Jeremy Tsujihara, Amy Seo
 
 BruinBridge will be a web app that hopes to bridge the gap between prospective students who are interested in coming to UCLA and current UCLA students. It will give prospective students a chance to better interact with current UCLA students through forums and interviews, and provide opportunities for one-on-one mentoring. Our aim is to give prospective students a more personal and in-depth experience by matching them with a current student.
