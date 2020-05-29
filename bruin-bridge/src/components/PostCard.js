@@ -55,7 +55,7 @@ const QuestionContainer = styled("div")`
   flex-direction: column;
 `;
 
-export default class Post extends React.Component {
+export default class PostCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

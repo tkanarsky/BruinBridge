@@ -79,7 +79,6 @@ class App extends React.Component {
             <div className="fill-window"></div>
           </Switch>
         </Router>
-        )}
       </div>
     );
   }

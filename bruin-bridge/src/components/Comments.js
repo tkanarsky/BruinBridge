@@ -26,6 +26,7 @@ export default class Comments extends React.Component {
         this.state.comment,
         commentId => {}
       );
+      this.setState({ comment: "" });
     } else alert("You must be logged in to submit a comment!");
     event.preventDefault();
   }
