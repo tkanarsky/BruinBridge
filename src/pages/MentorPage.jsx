@@ -48,6 +48,8 @@ const ChatContainer = styled("div")`
 `;
 
 const Container = styled("div")`
+  position: relative;
+  top: 25px;
   display: flex;
   justify-content: center;
 `;

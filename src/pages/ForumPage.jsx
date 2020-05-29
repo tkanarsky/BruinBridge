@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { createPost } from "../firebase.js";
+import { createPost, getPosts } from "../firebase.js";
 import ForumPosts from "../components/ForumPosts";
 
 const SchoolContainer = styled("div")`
@@ -47,19 +47,17 @@ const Button = styled("button")`
   height: 50px;
   border-radius: 50px;
   font-size: 20px;
-  font-family: "Open Sans";
-  font-weight: bold;
+  font-family: 'Balsamiq Sans', "Open Sans", sans-serif;
+  font-weight: 700;
   justify-content: center;
   align-items: center;
   margin: 20px;
-
   &:hover {
     cursor: pointer;
   }
 `;
 
 const Fact = styled("div")`
-  font-family: "Open Sans";
   font-size: 18px;
   white-space: nowrap;
 `;
@@ -78,17 +76,23 @@ const SubmitQuestion = styled("div")`
   border-radius: 20px;
   width: 97%;
   height: 50px;
-  padding-left: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
+`;
+
+const FlexBox = styled("div")`
+  display: flex;
+  flex-direction: row wrap;
+  justify-content: start;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const QuestionsContainer = styled("div")`
   display: flex;
   flex-direction: column;
-  padding-left: 20px;
   width: 90%;
-  padding-right: 20px;
 `;
 
 const AllContainer = styled("div")`
@@ -104,11 +108,17 @@ export default class ForumPage extends React.Component {
     this.state = {
       postInput: "",
       title: "",
-      posts: []
+      posts: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
+  }
+
+  componentDidMount() {
+    getPosts({ sort: "top", limit: 100 }, allPosts => {
+      this.setState({ posts: allPosts });
+    });
   }
 
   handleChange(event) {
@@ -137,7 +147,9 @@ export default class ForumPage extends React.Component {
       );
       console.log("Created post!");
       alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
-      this.setState({ title: "", postInput: "" });
+      getPosts({ sort: "top", limit: 100 }, allPosts => {
+        this.setState({title: "", postInput: "", posts: allPosts});
+      });
     } else alert("You must be logged in to submit a post!");
     event.preventDefault();
   }
@@ -164,50 +176,65 @@ export default class ForumPage extends React.Component {
           <QuestionsContainer>
             <SubmitQuestion>
               <form onSubmit={this.handleSubmit}>
-                <label>
-                  Title &#160;
-                  <input
+                <FlexBox>
+                <label
+                  style={{
+                    paddingRight: "10px",
+                  }}
+                >
+                  Title
+                </label>
+                <input
                     type="text"
                     value={this.state.title}
                     onChange={this.handleTitle}
                     style={{
                       lineHeight: "2em",
                       fontSize: "16px",
-                      paddingLeft: "5x",
-                      width: "20%"
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                      flexGrow: 1
                     }}
-                  />
+                />
+                <label 
+                  style={{
+                    paddingLeft: "25px",
+                    paddingRight: "10px",
+                  }}
+                >
+                Description 
                 </label>
-                <label style={{ paddingLeft: "20px", paddingRight: "20px" }}>
-                  Description &#160;
-                  <input
+                <input
                     type="text"
                     value={this.state.postInput}
                     onChange={this.handleChange}
                     style={{
                       lineHeight: "2em",
                       fontSize: "16px",
-                      paddingLeft: "5x",
-                      width: "50%"
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                      flexGrow: 2
                     }}
                   />
-                </label>
                 <input
                   type="submit"
                   value="Submit"
                   style={{
                     backgroundColor: "#ffe457",
-                    fontFamily: "Open Sans",
+                    fontFamily: 'Balsamiq Sans',
+                    fontWeight: 700,
                     fontSize: "15px",
+                    marginLeft: "25px",
                     borderRadius: "20px",
                     width: "100px",
                     height: "50px"
                   }}
                 />
+                </FlexBox>
               </form>
             </SubmitQuestion>
             <PostContainer>
-              <ForumPosts user={this.props.user}></ForumPosts>
+              <ForumPosts user={this.props.user} posts={this.state.posts}></ForumPosts>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>

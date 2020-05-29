@@ -12,12 +12,16 @@ import {
 const PostBackground = styled("div")`
   background-color: #fff7cc;
   width: 98%;
-  height: 140px;
+  height: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
   justify-content: left;
   padding-left: 20px;
+  padding-right: 20px;
   align-items: center;
   margin-top: 20px;
+  border-radius: 15px;
 `;
 
 const Profile = styled("div")`
@@ -25,6 +29,7 @@ const Profile = styled("div")`
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  align-self: flex-start;
   padding-left: 20px;
   padding-right: 20px;
   width: 15%;
@@ -34,6 +39,7 @@ const Votes = styled("div")`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  align-self: flex-start;
 `;
 
 const Name = styled("div")`
@@ -49,6 +55,7 @@ const QuestionStyle = styled("div")`
 
 const DescriptionStyle = styled("div")`
   font-size: 16px;
+  max-width: 800px;
 `;
 const QuestionContainer = styled("div")`
   display: flex;

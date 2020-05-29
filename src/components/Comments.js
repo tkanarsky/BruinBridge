@@ -7,8 +7,7 @@ export default class Comments extends React.Component {
     super(props);
     this.state = {
       comment: "",
-      comments: [],
-      loaded: false
+      comments: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleComment = this.handleComment.bind(this);
@@ -26,13 +25,21 @@ export default class Comments extends React.Component {
         this.state.comment,
         commentId => {}
       );
-      this.setState({ comment: "" });
+      getComments(this.props.postID, allComments => {
+        this.setState({comment: "", comments: allComments});
+      });
     } else alert("You must be logged in to submit a comment!");
     event.preventDefault();
   }
 
   handleComment(event) {
     this.setState({ comment: event.target.value });
+  }
+
+  componentDidMount() {
+    getComments(this.props.postID, allComments => {
+      this.setState({ comments: allComments});
+    });
   }
 
   renderComments(allComments) {
@@ -47,13 +54,7 @@ export default class Comments extends React.Component {
       );
     });
   }
-
   render() {
-    if (!this.state.loaded) {
-      getComments(this.props.postID, allComments => {
-        this.setState({ comments: allComments, loaded: true });
-      });
-    }
     return (
       <>
         <form onSubmit={this.handleSubmit}>
