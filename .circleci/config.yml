@@ -1,17 +1,40 @@
 version: 2.1
 orbs:
-  node: circleci/node@1.1.6
+  firebase-deploy: azdevs/firebase-deploy@1.0.0
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
+  build:
+    docker:
+      - image: 'circleci/node:lts'
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: cd bruin-bridge; npm install
-            - run: cd bruin-bridge; npm test
+      - restore_cache:
+          key: 'v1-yarn-{{ checksum "yarn.lock" }}'
+      - run: yarn install
+      - save_cache:
+          key: 'v1-yarn-{{ checksum "yarn.lock" }}'
+          paths:
+            - ./node_modules
+      - run: yarn build
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - build
+            - firebase.json
+            - .firebaserc
+            - firestore.rules
+            - firestore.indexes.json
+  deploy:
+    docker:
+      - image: 'circleci/node:lts'
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - firebase-deploy/deploy:
+          token: $FIREBASE_DEPLOY_TOKEN
 workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
