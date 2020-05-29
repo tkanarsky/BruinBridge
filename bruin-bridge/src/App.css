@@ -22,6 +22,12 @@
   }
 } */
 
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@700&display=swap');
+
+.App {
+  font-family: 'Balsamiq Sans';
+}
+
 .fill-window {
   height: 100%;
   position: absolute;
