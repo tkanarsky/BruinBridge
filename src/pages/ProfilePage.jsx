@@ -79,6 +79,7 @@ export default class ProfilePage extends React.Component {
     if (user) {
       getUser(user.uid, userData => {
         this.setState({
+          karma: userData.karma,
           major: {
             label: userData.major,
             value: userData.major
