@@ -36,5 +36,8 @@ workflows:
     jobs:
       - build
       - deploy:
+        branches:
+          only:
+            - master
           requires:
             - build
