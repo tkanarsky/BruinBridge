@@ -317,8 +317,11 @@ export function getComments(postId, callback) {
 
 export function matchMentor(id){
   let score = 0;
-  let match;
+  let match; //= no mentor available, score: 0
+  
   //for mentor in  available mentors
   //+4 for school, +3 for major, +1 each interest
-  //
+  //if mentor has higher score {match = curr;}
+
+  //return match
 }
