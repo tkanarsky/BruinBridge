@@ -217,6 +217,7 @@ export function removeVote(userId, postId, successCallback) {
   postExists(postId, exists => {
     if (!exists) {
       successCallback(false);
+      return;
     }
     getPost(postId, postData => {
       if (postData.downvoting_users.includes(userId)) {
@@ -237,7 +238,9 @@ export function removeVote(userId, postId, successCallback) {
         successCallback(true);
       } else {
         successCallback(false);
+        return;
       }
+      updatePost(postId, postData);
     });
   });
 }
