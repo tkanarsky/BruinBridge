@@ -1,5 +1,4 @@
 import React from "react";
-import { getPosts } from "../firebase";
 import {
   Accordion,
   AccordionItem,
@@ -11,13 +10,6 @@ import Comments from "./Comments";
 import PostCard from "./PostCard";
 
 export default class ForumPost extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      posts: null,
-      comment: ""
-    };
-  }
   renderPosts(allPosts) {
     return allPosts.map((post, i) => {
       return (
@@ -44,18 +36,14 @@ export default class ForumPost extends React.Component {
   }
 
   render() {
-    if (!this.state.posts)
-      getPosts({ sort: "top", limit: 100 }, allPosts => {
-        this.setState({ posts: allPosts });
-      });
     return (
       <>
         {(() => {
-          if (this.state.posts) {
+          if (this.props.posts) {
             return (
               <Accordion allowMultipleExpanded={true}>
                 {" "}
-                {this.renderPosts(this.state.posts)}
+                {this.renderPosts(this.props.posts)}
               </Accordion>
             );
           } else {

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { createPost } from "../firebase.js";
+import { createPost, getPosts } from "../firebase.js";
 import ForumPosts from "../components/ForumPosts";
 
 const SchoolContainer = styled("div")`
@@ -108,11 +108,17 @@ export default class ForumPage extends React.Component {
     this.state = {
       postInput: "",
       title: "",
-      posts: []
+      posts: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
+  }
+
+  componentDidMount() {
+    getPosts({ sort: "top", limit: 100 }, allPosts => {
+      this.setState({ posts: allPosts });
+    });
   }
 
   handleChange(event) {
@@ -141,7 +147,9 @@ export default class ForumPage extends React.Component {
       );
       console.log("Created post!");
       alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
-      this.setState({ title: "", postInput: "" });
+      getPosts({ sort: "top", limit: 100 }, allPosts => {
+        this.setState({title: "", postInput: "", posts: allPosts});
+      });
     } else alert("You must be logged in to submit a post!");
     event.preventDefault();
   }
@@ -226,7 +234,7 @@ export default class ForumPage extends React.Component {
               </form>
             </SubmitQuestion>
             <PostContainer>
-              <ForumPosts user={this.props.user}></ForumPosts>
+              <ForumPosts user={this.props.user} posts={this.state.posts}></ForumPosts>
             </PostContainer>
           </QuestionsContainer>
         </AllContainer>
