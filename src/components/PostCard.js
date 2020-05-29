@@ -8,6 +8,7 @@ import {
   FaThumbsUp,
   FaThumbsDown
 } from "react-icons/fa";
+import { removePropertiesDeep } from "@babel/types";
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
@@ -63,28 +64,27 @@ const QuestionContainer = styled("div")`
 `;
 
 export default class PostCard extends React.Component {
+  _disabled = false;
   constructor(props) {
     super(props);
     this.state = {
       userID: null,
       upvotes: this.props.upvotes,
-      downvoteIcon: (
-        <FaRegThumbsDown
-          size={30}
-          onClick={this.handleDownvote.bind(this)}
-        ></FaRegThumbsDown>
-      ),
       upvoteIcon: (
         <FaRegThumbsUp
           size={30}
           onClick={this.handleUpvote.bind(this)}
         ></FaRegThumbsUp>
       ),
+      downvoteIcon: (
+        <FaRegThumbsDown
+          size={30}
+          onClick={this.handleDownvote.bind(this)}
+        ></FaRegThumbsDown>
+      ),
       loaded: false
     };
 
-    this.handleUpvote = this.handleUpvote.bind(this);
-    this.handleDownvote = this.handleDownvote.bind(this);
     this.loadUser = this.loadUser.bind(this);
   }
 
@@ -142,28 +142,34 @@ export default class PostCard extends React.Component {
       alert("You must be logged in to upvote or downvote!");
       return;
     }
-    console.log("processing upvote with downvote");
-    upvotePost(this.state.userID, this.props.postID, successCallback => {
-      if (this.state.loaded && successCallback) {
-        this.setState({
-          upvotes: this.state.upvotes + 2,
-          upvoteIcon: (
-            <FaThumbsUp
-              size={30}
-              onClick={this.handleUpvote.bind(this)}
-            ></FaThumbsUp>
-          ),
-          downvoteIcon: (
-            <FaRegThumbsDown
-              size={30}
-              onClick={this.handleDownvoteWithUpvote.bind(this)}
-            ></FaRegThumbsDown>
-          )
-        });
-        console.log(this.state.upvotes);
-        console.log("upvoted with downvote");
-      }
-    });
+    if (!this._disabled) {
+      this._disabled = true;
+      console.log("processing upvote with downvote");
+      upvotePost(this.state.userID, this.props.postID, successCallback => {
+        if (this.state.loaded && successCallback) {
+          this.setState(
+            {
+              upvotes: this.state.upvotes + 2,
+              upvoteIcon: (
+                <FaThumbsUp
+                  size={30}
+                  onClick={this.handleUpvote.bind(this)}
+                ></FaThumbsUp>
+              ),
+              downvoteIcon: (
+                <FaRegThumbsDown
+                  size={30}
+                  onClick={this.handleDownvoteWithUpvote.bind(this)}
+                ></FaRegThumbsDown>
+              )
+            },
+            () => {
+              this._disabled = false;
+            }
+          );
+        }
+      });
+    }
   }
 
   handleDownvoteWithUpvote() {
@@ -171,28 +177,36 @@ export default class PostCard extends React.Component {
       alert("You must be logged in to upvote or downvote!");
       return;
     }
-    console.log("processing downvote with upvote");
-    downvotePost(this.state.userID, this.props.postID, successCallback => {
-      if (this.state.loaded && successCallback) {
-        this.setState({
-          upvotes: this.state.upvotes - 2,
-          upvoteIcon: (
-            <FaRegThumbsUp
-              size={30}
-              onClick={this.handleUpvoteWithDownvote.bind(this)}
-            ></FaRegThumbsUp>
-          ),
-          downvoteIcon: (
-            <FaThumbsDown
-              size={30}
-              onClick={this.handleDownvote.bind(this)}
-            ></FaThumbsDown>
-          )
-        });
-        console.log(this.state.upvotes);
-        console.log("downvoted with upvote");
-      }
-    });
+    if (!this._disabled) {
+      this._disabled = true;
+      console.log("processing downvote with upvote");
+      downvotePost(this.state.userID, this.props.postID, successCallback => {
+        if (this.state.loaded && successCallback) {
+          this.setState(
+            {
+              upvotes: this.state.upvotes - 2,
+              upvoteIcon: (
+                <FaRegThumbsUp
+                  size={30}
+                  onClick={this.handleUpvoteWithDownvote.bind(this)}
+                ></FaRegThumbsUp>
+              ),
+              downvoteIcon: (
+                <FaThumbsDown
+                  size={30}
+                  onClick={this.handleDownvote.bind(this)}
+                ></FaThumbsDown>
+              )
+            },
+            () => {
+              this._disabled = false;
+            }
+          );
+          console.log(this.state.upvotes);
+          console.log("downvoted with upvote");
+        }
+      });
+    }
   }
 
   handleUpvote() {
@@ -200,50 +214,63 @@ export default class PostCard extends React.Component {
       alert("You must be logged in to upvote or downvote!");
       return;
     }
-    console.log("processing upvote");
-    upvotePost(this.state.userID, this.props.postID, successCallback => {
-      if (this.state.loaded && successCallback) {
-        this.setState({
-          upvotes: this.state.upvotes + 1,
-          upvoteIcon: (
-            <FaThumbsUp
-              size={30}
-              onClick={this.handleUpvote.bind(this)}
-            ></FaThumbsUp>
-          ),
-          downvoteIcon: (
-            <FaRegThumbsDown
-              size={30}
-              onClick={this.handleDownvoteWithUpvote.bind(this)}
-            ></FaRegThumbsDown>
-          )
-        });
-        console.log(this.state.upvotes);
-        console.log("upvoted");
-      } else {
-        removeVote(this.state.userID, this.props.postID, successCallback => {
-          if (this.state.loaded && successCallback) {
-            this.setState({
-              upvotes: this.state.upvotes - 1,
+    if (!this._disabled) {
+      this._disabled = true;
+      console.log("processing upvote");
+      upvotePost(this.state.userID, this.props.postID, successCallback => {
+        if (this.state.loaded && successCallback) {
+          this.setState(
+            {
+              upvotes: this.state.upvotes + 1,
               upvoteIcon: (
-                <FaRegThumbsUp
+                <FaThumbsUp
                   size={30}
                   onClick={this.handleUpvote.bind(this)}
-                ></FaRegThumbsUp>
+                ></FaThumbsUp>
               ),
               downvoteIcon: (
                 <FaRegThumbsDown
                   size={30}
-                  onClick={this.handleDownvote.bind(this)}
+                  onClick={this.handleDownvoteWithUpvote.bind(this)}
                 ></FaRegThumbsDown>
               )
-            });
-            console.log(this.state.upvotes);
-            console.log("removed vote");
-          }
-        });
-      }
-    });
+            },
+            () => {
+              this._disabled = false;
+            }
+          );
+          console.log(this.state.upvotes);
+          console.log("upvoted");
+        } else {
+          removeVote(this.state.userID, this.props.postID, successCallback => {
+            if (this.state.loaded && successCallback) {
+              this.setState(
+                {
+                  upvotes: this.state.upvotes - 1,
+                  upvoteIcon: (
+                    <FaRegThumbsUp
+                      size={30}
+                      onClick={this.handleUpvote.bind(this)}
+                    ></FaRegThumbsUp>
+                  ),
+                  downvoteIcon: (
+                    <FaRegThumbsDown
+                      size={30}
+                      onClick={this.handleDownvote.bind(this)}
+                    ></FaRegThumbsDown>
+                  )
+                },
+                () => {
+                  this._disabled = false;
+                }
+              );
+              console.log(this.state.upvotes);
+              console.log("removed vote");
+            }
+          });
+        }
+      });
+    }
   }
 
   handleDownvote() {
@@ -251,50 +278,61 @@ export default class PostCard extends React.Component {
       alert("You must be logged in to upvote or downvote!");
       return;
     }
-    console.log("processing downvote");
-    downvotePost(this.state.userID, this.props.postID, successCallback => {
-      if (this.state.loaded && successCallback) {
-        this.setState({
-          upvotes: this.state.upvotes - 1,
-          upvoteIcon: (
-            <FaRegThumbsUp
-              size={30}
-              onClick={this.handleUpvoteWithDownvote.bind(this)}
-            ></FaRegThumbsUp>
-          ),
-          downvoteIcon: (
-            <FaThumbsDown
-              size={30}
-              onClick={this.handleDownvote.bind(this)}
-            ></FaThumbsDown>
-          )
-        });
-        console.log(this.state.votes);
-        console.log("downvoted");
-      } else {
-        removeVote(this.state.userID, this.props.postID, successCallback => {
-          if (this.state.loaded && successCallback) {
-            this.setState({
-              upvotes: this.state.upvotes + 1,
+    if (!this._disabled) {
+      this._disabled = true;
+      console.log("processing downvote");
+      downvotePost(this.state.userID, this.props.postID, successCallback => {
+        if (this.state.loaded && successCallback) {
+          this.setState(
+            {
+              upvotes: this.state.upvotes - 1,
               upvoteIcon: (
                 <FaRegThumbsUp
                   size={30}
-                  onClick={this.handleUpvote.bind(this)}
+                  onClick={this.handleUpvoteWithDownvote.bind(this)}
                 ></FaRegThumbsUp>
               ),
               downvoteIcon: (
-                <FaRegThumbsDown
+                <FaThumbsDown
                   size={30}
                   onClick={this.handleDownvote.bind(this)}
-                ></FaRegThumbsDown>
+                ></FaThumbsDown>
               )
-            });
-            console.log(this.state.votes);
-            console.log("removed vote");
-          }
-        });
-      }
-    });
+            },
+            () => {
+              this._disabled = false;
+            }
+          );
+        } else {
+          removeVote(this.state.userID, this.props.postID, successCallback => {
+            if (this.state.loaded && successCallback) {
+              this.setState(
+                {
+                  upvotes: this.state.upvotes + 1,
+                  upvoteIcon: (
+                    <FaRegThumbsUp
+                      size={30}
+                      onClick={this.handleUpvote.bind(this)}
+                    ></FaRegThumbsUp>
+                  ),
+                  downvoteIcon: (
+                    <FaRegThumbsDown
+                      size={30}
+                      onClick={this.handleDownvote.bind(this)}
+                    ></FaRegThumbsDown>
+                  )
+                },
+                () => {
+                  this._disabled = false;
+                }
+              );
+              console.log(this.state.votes);
+              console.log("removed vote");
+            }
+          });
+        }
+      });
+    }
   }
 
   render() {
