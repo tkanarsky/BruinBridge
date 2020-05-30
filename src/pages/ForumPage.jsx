@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { createPost, getPosts } from "../firebase.js";
+import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
 
 const SchoolContainer = styled("div")`

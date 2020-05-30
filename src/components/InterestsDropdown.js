@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { updateUser } from "../firebase";
+import { updateUser } from "../database/userDatabase.js";
 import { interestsList } from "../constants/interests";
 
 export default class InterestsDropdown extends React.Component {

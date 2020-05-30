@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { updateUser } from "../firebase";
+import { updateUser } from "../database/userDatabase.js";
 import { majorList } from "../constants/majors";
 
 export default class MajorDropdown extends React.Component {
