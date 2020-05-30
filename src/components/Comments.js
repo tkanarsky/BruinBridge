@@ -1,5 +1,5 @@
 import React from "react";
-import { createComment, getComments } from "../firebase";
+import { createComment, getComments } from "../database/commentDatabase.js";
 import CommentCard from "./CommentCard";
 
 export default class Comments extends React.Component {

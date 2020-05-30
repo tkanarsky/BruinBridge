@@ -4,7 +4,7 @@ import { css } from "emotion";
 import { YearPicker } from "react-dropdown-date";
 import MajorDropdown from "../components/MajorDropdown";
 import InterestsDropdown from "../components/InterestsDropdown";
-import { updateUser, getUser } from "../firebase";
+import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
 import { mediaQueries } from "../constants/media";
 const { mobile, notMobile } = mediaQueries;
