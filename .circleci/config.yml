@@ -1,0 +1,80 @@
+version: 2.1
+orbs:
+  firebase-deploy: azdevs/firebase-deploy@1.0.0
+jobs:
+  test:
+    docker:
+      - image: 'circleci/node:lts'
+    steps:
+      - checkout
+      - restore_cache:
+          key: 'v3-yarn-{{ checksum "package.json" }}'
+      - run: yarn install
+      - save_cache:
+          key: 'v3-yarn-{{ checksum "package.json" }}'
+          paths:
+            - ./node_modules
+      - run: yarn test
+
+  build-production:
+    docker:
+      - image: 'circleci/node:lts'
+    steps:
+      - checkout
+      - restore_cache:
+          key: 'v3-yarn-{{ checksum "package.json" }}'
+      - run: yarn install
+      - save_cache:
+          key: 'v3-yarn-{{ checksum "package.json" }}'
+          paths:
+            - ./node_modules
+      - run: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+            - firebase.json
+            - .firebaserc
+            - firestore.rules
+            - firestore.indexes.json
+  deploy:
+    docker:
+      - image: 'circleci/node:lts'
+    steps:
+      - attach_workspace:
+          at: .
+      - firebase-deploy/deploy:
+          token: $FIREBASE_DEPLOY_TOKEN
+workflows:
+  build-and-deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
+      - wait-for-approval:
+          type: approval
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - build-production:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+          requires:
+            - wait-for-approval
+      - deploy:
+          requires:
+            - build-production
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+        
+        
+        
