@@ -10,7 +10,7 @@ BruinBridge is a web app that hopes to bridge the gap between prospective UCLA s
 
 ## How to Run the App Locally
 1. Clone our repository to your local machine
-    git clone https://github.com/tkanarsky/BruinBridge.git
+    **git clone https://github.com/tkanarsky/BruinBridge.git**
 2. In the project directory, install all the dependencies by running: **yarn**
 3. In the project directory, you can run: **yarn start**
 
