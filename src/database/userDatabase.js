@@ -18,10 +18,12 @@ export function userExists(id, callback) {
       email: user.email,
       avatar: user.photoURL,
       major: "",
+      school: "",
       year: "",
       bio: "",
       karma: 0,
       is_mentor: mentorStatus,
+      mentorid: null,
       partner: null,
       interest1: null,
       interest2: null,
@@ -51,3 +53,27 @@ export function userExists(id, callback) {
     userDb.child(id).delete();
   }
   
+  export function match(id) {
+    class match{
+      constructor(id, score){
+        this.id = id;
+        this.score = id;
+      }
+    }
+
+    let m = match(0, 0);
+
+    //for mentor in available mentors
+      let curr = match(0, 0)
+      curr.this.score += 4;
+
+      curr.this.score += 3;
+
+      curr.this.score += 1;
+      if (curr.this.score >= m.this.score){
+       m = curr;
+      }
+
+    updateUser(this.props.id, { mentorid: m.this.id });
+
+  }
