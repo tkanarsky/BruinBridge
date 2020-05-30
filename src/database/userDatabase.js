@@ -65,11 +65,16 @@ export function userExists(id, callback) {
 
     //for mentor in available mentors
       let curr = match(0, 0)
+      
+      //if schools match
       curr.this.score += 4;
 
+      //if majors match
       curr.this.score += 3;
 
+      //if interest match
       curr.this.score += 1;
+      
       if (curr.this.score >= m.this.score){
        m = curr;
       }
