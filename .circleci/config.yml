@@ -57,10 +57,14 @@ workflows:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
       - build-production:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
           requires:
             - wait-for-approval
       - deploy:
@@ -69,6 +73,8 @@ workflows:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
         
         
         
