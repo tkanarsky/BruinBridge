@@ -53,7 +53,10 @@ workflows:
             branches:
               only: master
       - wait-for-approval:
-          type: approval    
+          type: approval
+          filters:
+            tags:
+              only: /.*/
       - build-production:
           filters:
             tags:
