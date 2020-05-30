@@ -6,7 +6,7 @@ import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { auth, provider } from "./database/firebase.js";
-import { createUser, userExists } from "./database/userDatabase.js"
+import { createUser, userExists, getMentors } from "./database/userDatabase.js";
 import "./App.css";
 
 class App extends React.Component {
