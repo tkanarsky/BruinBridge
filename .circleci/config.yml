@@ -51,16 +51,30 @@ workflows:
       - test:
           filters:
             branches:
-              ignore: master    
+              only: master
+      - wait-for-approval:
+          type: approval
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
       - build-production:
           filters:
+            tags:
+              only: /.*/
             branches:
-              only: master
+              ignore: /.*/
+          requires:
+            - wait-for-approval
       - deploy:
           requires:
             - build-production
           filters:
+            tags:
+              only: /.*/
             branches:
-              only: master
+              ignore: /.*/
+        
         
         
