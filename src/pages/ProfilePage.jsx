@@ -4,8 +4,10 @@ import { css } from "emotion";
 import { YearPicker } from "react-dropdown-date";
 import MajorDropdown from "../components/MajorDropdown";
 import InterestsDropdown from "../components/InterestsDropdown";
-import { updateUser, getUser } from "../firebase";
+import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
+import { mediaQueries } from "../constants/media";
+const { mobile, notMobile } = mediaQueries;
 
 const Container = styled("div")`
   background-color: white;
@@ -19,6 +21,10 @@ const Container = styled("div")`
   margin-right: 2%;
   padding-top: 50px;
   padding-bottom: 50px;
+  ${mobile} {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const BoldInfo = styled("div")`
@@ -34,7 +40,7 @@ const InfoContainer = styled("div")`
   flex-direction: column;
   padding-left: 30px;
   padding-top: 30px;
-  width: 40%;
+  width: 50%;
 `;
 
 const PicContainer = styled("div")`
@@ -48,8 +54,13 @@ const Pair = styled("div")`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
+  /* width: 100%; */
   padding-top: 15px;
+  flex-wrap: flex-wrap;
+  ${mobile} {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 `;
 
 export default class ProfilePage extends React.Component {
@@ -160,6 +171,10 @@ export default class ProfilePage extends React.Component {
                       border-radius: 50%;
                       height: 200px;
                       width: 200px;
+                      ${mobile} {
+                        width: 100px;
+                        height: 100px;
+                      }
                     `}
                   />
                   <BoldInfo>{this.props.user.displayName}</BoldInfo>
@@ -177,15 +192,15 @@ export default class ProfilePage extends React.Component {
                   <Pair>
                     <strong>Graduation Year: &#8287;</strong>
                     <YearPicker
-                    defaultValue={2023}
-                    start={2018}
-                    end={2025}
-                    value={this.state.year}
-                    onChange={this.onSaveYear}
-                    id={'year'}
-                    name={'year'}
-                    classes={'classes'}
-                    optionClasses={'option classes'}
+                      defaultValue={2023}
+                      start={2018}
+                      end={2025}
+                      value={this.state.year}
+                      onChange={this.onSaveYear}
+                      id={"year"}
+                      name={"year"}
+                      classes={"classes"}
+                      optionClasses={"option classes"}
                     />
                   </Pair>
                   <Pair>

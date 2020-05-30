@@ -1,5 +1,5 @@
 import React from "react";
-import { upvotePost, getPost, removeVote, downvotePost } from "../firebase";
+import { upvotePost, getPost, removeVote, downvotePost } from "../database/postDatabase.js";
 import styled from "styled-components";
 import { css } from "emotion";
 import {
