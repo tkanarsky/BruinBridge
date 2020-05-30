@@ -94,13 +94,6 @@ const FactHolder = styled("div")`
   flex-direction: column;
 `;
 
-const SchoolAndButton = styled("div")`
-  display: flex;
-  flex-direction: column;
-  ${mobile} {
-    flex-direction: row;
-  }
-`;
 const PostContainer = styled("div")`
   background-color: white;
   border-radius: 25px;
