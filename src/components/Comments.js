@@ -13,6 +13,14 @@ export default class Comments extends React.Component {
     this.handleComment = this.handleComment.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.postID !== this.props.postID) {
+      getComments(this.props.postID, allComments => {
+        this.setState({ comment: "", comments: allComments });
+      });
+    }
+  }
+
   handleSubmit(event) {
     if (this.state.comment === "") {
       alert("Please enter a comment!");
@@ -26,7 +34,7 @@ export default class Comments extends React.Component {
         commentId => {}
       );
       getComments(this.props.postID, allComments => {
-        this.setState({comment: "", comments: allComments});
+        this.setState({ comment: "", comments: allComments });
       });
     } else alert("You must be logged in to submit a comment!");
     event.preventDefault();
@@ -38,7 +46,7 @@ export default class Comments extends React.Component {
 
   componentDidMount() {
     getComments(this.props.postID, allComments => {
-      this.setState({ comments: allComments});
+      this.setState({ comments: allComments });
     });
   }
 

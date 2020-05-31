@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
 import { mediaQueries } from "../constants/media";
+import { IoIosRocket } from "react-icons/io";
+import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 const { mobile, notMobile } = mediaQueries;
 
 const SchoolContainer = styled("div")`
@@ -151,22 +153,50 @@ const AllContainer = styled("div")`
   }
 `;
 
+const Filters = styled("div")`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  padding: 8px 20px 0px 20px;
+`;
+
+const FilterButton = styled("button")`
+  background-color: #e5e5e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  font-size: 18px;
+  width: 100px;
+  height: 40px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export default class ForumPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       postInput: "",
       title: "",
-      posts: null
+      posts: null,
+      postOrder: "top"
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
+    this.loadPosts = this.loadPosts.bind(this);
   }
 
   componentDidMount() {
-    getPosts({ sort: "top", limit: 100 }, allPosts => {
-      this.setState({ posts: allPosts });
+    this.loadPosts(this.state.postOrder);
+  }
+
+  loadPosts(order) {
+    this.setState({ postOrder: order });
+    getPosts({ sort: order, limit: 100 }, allPosts => {
+      this.setState({ posts: allPosts }, () => this.forceUpdate());
     });
   }
 
@@ -285,6 +315,20 @@ export default class ForumPage extends React.Component {
               </form>
             </SubmitQuestion>
             <PostContainer>
+              <Filters>
+                <FilterButton onClick={() => this.loadPosts("top")}>
+                  <IoIosRocket />
+                  &nbsp; Top
+                </FilterButton>
+                <FilterButton onClick={() => this.loadPosts("new")}>
+                  <FaSortAmountUpAlt />
+                  &nbsp; New
+                </FilterButton>
+                <FilterButton onClick={() => this.loadPosts("old")}>
+                  <FaSortAmountDown />
+                  &nbsp; Old
+                </FilterButton>
+              </Filters>
               <ForumPosts
                 user={this.props.user}
                 posts={this.state.posts}
