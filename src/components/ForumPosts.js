@@ -41,7 +41,7 @@ export default class ForumPost extends React.Component {
         {(() => {
           if (this.props.posts) {
             return (
-              <Accordion allowMultipleExpanded={true}>
+              <Accordion allowMultipleExpanded={true} allowZeroExpanded={true}>
                 {" "}
                 {this.renderPosts(this.props.posts)}
               </Accordion>
