@@ -1,7 +1,6 @@
 import { firestore } from "./firebase.js";
 
 const userDb = firestore.collection("users");
-const mentorDb = firestore.collection("mentors");
 
 export function userExists(id, callback) {
   userDb
@@ -21,33 +20,36 @@ export function createUser(user, mentorStatus) {
     major: "",
     year: "",
     bio: "",
+    school: "",
     karma: 0,
     is_mentor: mentorStatus,
+    is_available_mentor: mentorStatus,
     partner: null,
     interest1: null,
     interest2: null,
     interest3: null
   });
-  if (mentorStatus) {
-    mentorDb.doc(user.uid).set({});
-  }
   return true;
 }
 
 export function getMentors(callback) {
-  mentorDb.get().then(snapshot => {
+  userDb
+  .where("is_mentor", "==", true)
+  .where("is_available_mentor", "==", true)
+  .get().then(snapshot => {
     let availableMentors = [];
     snapshot.forEach(mentor => {
-      availableMentors.push(mentor.id);
+      let mentorData = mentor.data();
+      mentorData.uid = mentor.id;
+      availableMentors.push(mentorData);
     });
     callback(availableMentors);
   });
 }
 
 export function matchMentor(mentorID, menteeID) {
-  updateUser(mentorID, { partner: menteeID });
+  updateUser(mentorID, { partner: menteeID, is_available_mentor: false });
   updateUser(menteeID, { partner: mentorID });
-  mentorDb.doc(mentorID).delete();
 }
 
 export function getUser(id, callback) {
@@ -72,35 +74,36 @@ export function deleteUser(id) {
 }
 
 export function matching(id) {
-  class match{
-    constructor(id, score){
-      this.id = id;
-      this.score = id;
-    }
-  }
-  getUser(id, userDb => {
-    const school = userDb.school;
-    const major = userDb.major;
-    let m = match(0, 0);
+  getUser(id, (userData) => {
+    const menteeSchool = userData.school;
+    const menteeMajor = userDb.major;
 
-    getMentors(availableMentors => {
-      for (const mentor in availableMentors){
-        let curr = match(mentor, 0)
-  
-        getUser(mentor, userDb => {
-          if (school === userDb.school){
-            curr.this.score += 4;
-          }
-          if (major === userDb.major){
-            curr.this.score += 3;
-          }
-        });
-  
-        if (curr.this.score >= m.this.score){
-          m = curr;
-         }
+    let bestMentorId = null;
+    let bestMentorScore = 0;
+
+    getMentors((availableMentors) => {
+      availableMentors.forEach((mentor) => { 
+        console.log("Evaluating mentor " + mentor.name);
+        let currMentorId = mentor.uid;
+        console.log("Their UID is " + mentor.uid);
+        let currMentorScore = 0;
+
+        if (mentor.school === menteeSchool) {
+          currMentorScore += 4;
+        }
+        if (mentor.major === menteeMajor) {
+          currMentorScore += 3;
+        }
+        console.log("They scored " + currMentorScore);
+        if (currMentorScore >= bestMentorScore){
+          bestMentorScore = currMentorScore;
+          bestMentorId = currMentorId;
+        }
+      });
+      if (bestMentorId) {
+        console.log("Matching mentor with " + bestMentorId);
+        matchMentor(bestMentorId, id);
       }
-      matchMentor(m.this.id, id);
     });
   });
 }
