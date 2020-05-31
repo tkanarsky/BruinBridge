@@ -58,7 +58,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          <NavBar />
+          <NavBar user={this.state.user} logout={this.logout}/>
           <Switch>
             <Route exact path="/">
               <LandingPage
