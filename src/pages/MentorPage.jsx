@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { getUser } from "../database/userDatabase";
 
 const Button = styled("button")`
   display: flex;
@@ -57,19 +58,50 @@ export default class MentorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mentorRef: null,
-      mentorPic: null,
-      mname: "Bob",
-      mmajor: "Computer Science",
-      myear: "2022",
-      mbio: "I love UCLA!",
-      minterest1: "Gaming",
-      minterest2: "Music",
-      minterest3: "Art"
+      mRef: null,
+      mPic: null,
+      mname: null,
+      mmajor: null,
+      myear: null,
+      mbio: null,
+      mkarma: null,
+      minterest1: null,
+      minterest2: null,
+      minterest3: null
     };
+    this.loadData = this.loadData.bind(this);
+  }
+
+  loadData() {
+    const { user } = this.props;
+    console.log("load");
+    if (user){
+      getUser(user.uid, userData => {
+        let pair = userData.partner;
+        if (pair){
+        getUser(pair, userData => {
+          this.setState({
+            mRef: pair,
+            mPic: userData.avatar,
+            mname: userData.name,
+            mmajor: userData.major,
+            myear: userData.year,
+            mbio: userData.bio,
+            mkarma: userData.karma,
+            minterest1: userData.interest1,
+            minterest2: userData.interest2,
+            minterest3: userData.interest3,
+          });
+        });
+      }
+      });
+    }
   }
 
   render() {
+    if (!this.state.dataLoaded) {
+      this.loadData();
+    }
     return (
       <div
         style={{
@@ -91,7 +123,7 @@ export default class MentorPage extends React.Component {
                   Interests: {this.state.minterest1}, {this.state.minterest2},{" "}
                   {this.state.minterest3}
                 </h2>
-                <Button /*onClick={this.props.login}*/>Chat With Mentor</Button>
+                <Button>Chat With Mentor</Button>
               </MentorContainer>
             );
           } else if (
