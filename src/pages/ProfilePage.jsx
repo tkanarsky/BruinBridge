@@ -73,7 +73,8 @@ export default class ProfilePage extends React.Component {
       karma: 0,
       interest1: null,
       interest2: null,
-      interest3: null
+      interest3: null,
+      dataLoaded: false
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.handleInterest1 = this.handleInterest1.bind(this);
@@ -86,7 +87,6 @@ export default class ProfilePage extends React.Component {
 
   loadData() {
     const { user } = this.props;
-    console.log("load");
     if (user) {
       getUser(user.uid, userData => {
         this.setState({

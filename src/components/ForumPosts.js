@@ -10,8 +10,24 @@ import Comments from "./Comments";
 import PostCard from "./PostCard";
 
 export default class ForumPost extends React.Component {
-  renderPosts(allPosts) {
-    return allPosts.map((post, i) => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: this.props.posts,
+      loaded: false
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ posts: this.props.posts });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.posts !== this.props.posts)
+      this.setState({ posts: this.props.posts });
+  }
+  renderPosts() {
+    return this.state.posts.map((post, i) => {
       return (
         <AccordionItem key={i}>
           <AccordionItemHeading>
@@ -39,11 +55,11 @@ export default class ForumPost extends React.Component {
     return (
       <>
         {(() => {
-          if (this.props.posts) {
+          if (this.state.posts) {
             return (
-              <Accordion allowMultipleExpanded={true}>
+              <Accordion allowMultipleExpanded={true} allowZeroExpanded={true}>
                 {" "}
-                {this.renderPosts(this.props.posts)}
+                {this.renderPosts()}
               </Accordion>
             );
           } else {

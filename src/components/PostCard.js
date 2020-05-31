@@ -96,8 +96,13 @@ export default class PostCard extends React.Component {
     if (!this.state.loaded) this.loadUser();
   }
 
-  componentDidUpdate() {
-    this.loadUser();
+  componentDidUpdate(prevProps) {
+    if (prevProps.postID !== this.props.postID) {
+      console.log("updating post card");
+      // this.setState({ loaded: false }, () => {
+      //   this.loadUser();
+      // });
+    }
   }
 
   loadUser() {
