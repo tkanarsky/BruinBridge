@@ -5,6 +5,8 @@ import ProfilePage from "./pages/ProfilePage";
 import MentorPage from "./pages/MentorPage";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ReactRouterGlobalHistory } from "react-router-global-history"
+import getHistory from "react-router-global-history";
 import { auth, provider } from "./database/firebase.js";
 import { createUser, userExists, getMentors } from "./database/userDatabase.js";
 import "./App.css";
@@ -29,7 +31,12 @@ class App extends React.Component {
         return;
       }
       userExists(user.uid, value => {
-        if (!value) createUser(user, true);
+        if (!value) {
+          createUser(user, true);
+          getHistory().push("/profile");
+        } else {
+          getHistory().push("/forum");
+        }
       });
     });
   }
@@ -38,7 +45,12 @@ class App extends React.Component {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       userExists(user.uid, value => {
-        if (!value) createUser(user, false);
+        if (!value) {
+          createUser(user, false);
+          getHistory().push("/profile");
+        } else {
+          getHistory().push("/forum");
+        }
       });
     });
   }
@@ -48,6 +60,7 @@ class App extends React.Component {
       this.setState({
         user: null
       });
+      getHistory().push("/");
     });
   }
 
@@ -63,7 +76,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          <NavBar />
+          <ReactRouterGlobalHistory />
+          <NavBar user={this.state.user} logout={this.logout}/>
           <Switch>
             <Route exact path="/">
               <LandingPage

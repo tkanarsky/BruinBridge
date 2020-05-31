@@ -16,7 +16,20 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const LinkBox = styled("div")`
+const ClickableText = styled("a")`
+  position: relative;
+  cursor: pointer;
+  font-size: 18px;
+  font-family: 'Balsamiq Sans', "Open Sans", sans-serif;
+  text-decoration: none;
+  color: black;
+  transition: 0.25s all ease;
+  &:hover {
+    font-size: 22px;
+  }
+`
+
+const LHSBox = styled("div")`
   height: 100%;
   text-align: center;
   margin: 15px;
@@ -24,9 +37,14 @@ const LinkBox = styled("div")`
   margin-left: 30px;
 `;
 
-const ProfileBox = styled(LinkBox)`
+const DummyFiller = styled("div")`
   margin-left: auto;
+  margin-right: auto;
+`;
+const RHSBox = styled(LHSBox)`
   justify-self: flex-end;
+  margin-left: 30px;
+  margin-right: 30px;
 `;
 
 const Container = styled("div")`
@@ -52,10 +70,17 @@ export default class NavBar extends React.Component {
         `}
       >
         <Container>
-          <LinkBox><StyledLink to="/">Home</StyledLink></LinkBox>
-          <LinkBox><StyledLink to="/forum">Forum</StyledLink></LinkBox>
-          <LinkBox><StyledLink to="/mentor">My Mentor</StyledLink></LinkBox>
-          <ProfileBox><StyledLink to="profile">My Profile</StyledLink></ProfileBox>
+          <LHSBox><StyledLink to="/">Home</StyledLink></LHSBox>
+          <LHSBox><StyledLink to="/forum">Forum</StyledLink></LHSBox>
+          {this.props.user && 
+          <LHSBox><StyledLink to="/mentor">My Mentor</StyledLink></LHSBox>
+          }
+          <DummyFiller />
+          {this.props.user && [
+          <RHSBox><StyledLink to="profile">My Profile</StyledLink></RHSBox>,
+          <RHSBox><ClickableText onClick={this.props.logout}>Sign Out</ClickableText></RHSBox>
+          ]
+          }
         </Container>
       </Element>
     );
