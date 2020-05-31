@@ -123,7 +123,7 @@ export default class MentorPage extends React.Component {
                   Interests: {this.state.minterest1}, {this.state.minterest2},{" "}
                   {this.state.minterest3}
                 </h2>
-                <Button /*onClick={this.props.login}*/>Chat With Mentor</Button>
+                <Button>Chat With Mentor</Button>
               </MentorContainer>
             );
           } else if (
