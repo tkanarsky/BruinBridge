@@ -78,36 +78,29 @@ export function matching(id) {
       this.score = id;
     }
   }
-
-  let school = "";
-  let major = "";
-
   getUser(id, userDb => {
-    school = userDb.school;
-    major = userDb.major
+    const school = userDb.school;
+    const major = userDb.major;
+    let m = match(0, 0);
+
+    getMentors(availableMentors => {
+      for (const mentor in availableMentors){
+        let curr = match(mentor, 0)
+  
+        getUser(mentor, userDb => {
+          if (school === userDb.school){
+            curr.this.score += 4;
+          }
+          if (major === userDb.major){
+            curr.this.score += 3;
+          }
+        });
+  
+        if (curr.this.score >= m.this.score){
+          m = curr;
+         }
+      }
+      matchMentor(m.this.id, id);
+    });
   });
-
-  let m = match(0, 0);
-
-  getMentors(availableMentors => {
-    for (const mentor in availableMentors){
-      let curr = match(mentor, 0)
-
-      getUser(mentor, userDb => {
-        if (school === userDb.school){
-          curr.this.score += 4;
-        }
-        if (major === userDb.major){
-          curr.this.score += 3;
-        }
-      });
-
-      if (curr.this.score >= m.this.score){
-        m = curr;
-       }
-    }
-  });
-
-    matchMentor(m.this.id, id);
-
 }
