@@ -81,6 +81,9 @@ export function matching(id) {
   getUser(id, userDb => {
     const school = userDb.school;
     const major = userDb.major;
+    const interest1 = userDb.interest1;
+    const interest2 = userDb.interest2;
+    const interest3 = userDb.interest3;
     let m = match(0, 0);
 
     getMentors(availableMentors => {
@@ -93,6 +96,15 @@ export function matching(id) {
           }
           if (major === userDb.major){
             curr.this.score += 3;
+          }
+          if (interest1 === userDb.interest1 || interest1 === userDb.interest2 ||interest1 === userDb.interest3){
+            curr.this.score += 1;
+          }
+          if (interest2 === userDb.interest1 || interest2 === userDb.interest2 ||interest2 === userDb.interest3){
+            curr.this.score += 1;
+          }
+          if (interest3 === userDb.interest1 || interest3 === userDb.interest2 ||interest3 === userDb.interest3){
+            curr.this.score += 1;
           }
         });
   
