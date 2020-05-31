@@ -29,28 +29,37 @@ const PostBackground = styled("div")`
   border-radius: 15px;
 `;
 
-const Profile = styled("div")`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  align-self: flex-start;
-  padding-left: 20px;
-  padding-right: 20px;
-  width: 15%;
-`;
 const Votes = styled("div")`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   align-self: flex-start;
+  padding-right: 25px;
+`;
+
+const Profile = styled("div")`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  align-self: flex-start;
+  padding-left: 5px;
+  padding-right: 5px;
 `;
 
 const Name = styled("div")`
+  display: flex;
+  align-items: center;
   font-weight: 700;
-  padding-top: 10px;
-  font-size: 14px;
+  font-size: 18px;
+  padding-left: 5px;
+`;
+
+const ProfileContainer = styled("div")`
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
 `;
 
 const QuestionStyle = styled("div")`
@@ -61,6 +70,10 @@ const QuestionStyle = styled("div")`
 const DescriptionStyle = styled("div")`
   font-size: 16px;
   max-width: 800px;
+`;
+
+const CommentButtonStyle = styled("div")`
+  
 `;
 const QuestionContainer = styled("div")`
   display: flex;
@@ -351,19 +364,21 @@ export default class PostCard extends React.Component {
           {this.state.upvotes}
           {this.state.downvoteIcon}
         </Votes>
-        <Profile>
-          <img
-            src={this.props.authorPic}
-            alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
-            className={css`
-              border-radius: 50%;
-              height: 65px;
-              width: 65px;
-            `}
-          />
-          <Name>{this.props.authorName}</Name>
-        </Profile>
         <QuestionContainer>
+          <ProfileContainer>
+            <Profile>
+              <img
+                src={this.props.authorPic}
+                alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                className={css`
+                  border-radius: 50%;
+                  height: 40px;
+                  width: 40px;
+                `}
+              />
+            </Profile>  
+            <Name>{this.props.authorName} posted 6 hours ago</Name> 
+          </ProfileContainer>  
           <QuestionStyle>{this.props.title}</QuestionStyle>
           <DescriptionStyle>{this.props.body}</DescriptionStyle>
         </QuestionContainer>
