@@ -60,13 +60,14 @@ export default class MentorPage extends React.Component {
     this.state = {
       mRef: null,
       mPic: null,
-      mname: "Bob",
-      mmajor: "Computer Science",
-      myear: "2022",
-      mbio: "I love UCLA!",
-      minterest1: "Gaming",
-      minterest2: "Music",
-      minterest3: "Art"
+      mname: null,
+      mmajor: null,
+      myear: null,
+      mbio: null,
+      mkarma: null,
+      minterest1: null,
+      minterest2: null,
+      minterest3: null
     };
   }
 
@@ -84,6 +85,7 @@ export default class MentorPage extends React.Component {
             mmajor: userData.major,
             myear: userData.year,
             mbio: userData.bio,
+            mkarma: userData.karma,
             minterest1: userData.interest1,
             minterest2: userData.interest2,
             minterest3: userData.interest3,
