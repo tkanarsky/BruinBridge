@@ -70,3 +70,37 @@ export function updateUser(id, data) {
 export function deleteUser(id) {
   userDb.child(id).delete();
 }
+
+export function matching(id) {
+  class match{
+    constructor(id, score){
+      this.id = id;
+      this.score = id;
+    }
+  }
+  getUser(id, userDb => {
+    const school = userDb.school;
+    const major = userDb.major;
+    let m = match(0, 0);
+
+    getMentors(availableMentors => {
+      for (const mentor in availableMentors){
+        let curr = match(mentor, 0)
+  
+        getUser(mentor, userDb => {
+          if (school === userDb.school){
+            curr.this.score += 4;
+          }
+          if (major === userDb.major){
+            curr.this.score += 3;
+          }
+        });
+  
+        if (curr.this.score >= m.this.score){
+          m = curr;
+         }
+      }
+      matchMentor(m.this.id, id);
+    });
+  });
+}
