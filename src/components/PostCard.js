@@ -1,5 +1,10 @@
 import React from "react";
-import { upvotePost, getPost, removeVote, downvotePost } from "../database/postDatabase.js";
+import {
+  upvotePost,
+  getPost,
+  removeVote,
+  downvotePost
+} from "../database/postDatabase.js";
 import styled from "styled-components";
 import { css } from "emotion";
 import {
@@ -89,6 +94,10 @@ export default class PostCard extends React.Component {
 
   componentDidMount() {
     if (!this.state.loaded) this.loadUser();
+  }
+
+  componentDidUpdate() {
+    this.loadUser();
   }
 
   loadUser() {
