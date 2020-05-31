@@ -69,6 +69,7 @@ export default class MentorPage extends React.Component {
       minterest2: null,
       minterest3: null
     };
+    this.loadData = this.loadData.bind(this);
   }
 
   loadData() {
@@ -77,6 +78,7 @@ export default class MentorPage extends React.Component {
     if (user){
       getUser(user.uid, userData => {
         let pair = userData.partner;
+        if (pair){
         getUser(pair, userData => {
           this.setState({
             mRef: pair,
@@ -91,11 +93,15 @@ export default class MentorPage extends React.Component {
             minterest3: userData.interest3,
           });
         });
+      }
       });
     }
   }
 
   render() {
+    if (!this.state.dataLoaded) {
+      this.loadData();
+    }
     return (
       <div
         style={{
