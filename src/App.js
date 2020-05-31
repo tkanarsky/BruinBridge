@@ -26,8 +26,12 @@ class App extends React.Component {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       if (user.email.slice(-10) !== "g.ucla.edu") {
-        this.logout();
         alert("You must sign in with your UCLA email to be a mentor!");
+        auth.signOut().then(() => {
+          this.setState({
+            user: null
+          });
+        });
         return;
       }
       userExists(user.uid, value => {
