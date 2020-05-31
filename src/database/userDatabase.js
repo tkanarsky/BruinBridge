@@ -44,6 +44,12 @@ export function getMentors(callback) {
   });
 }
 
+export function matchMentor(mentorID, menteeID) {
+  updateUser(mentorID, { partner: menteeID });
+  updateUser(menteeID, { partner: mentorID });
+  mentorDb.doc(mentorID).delete();
+}
+
 export function getUser(id, callback) {
   userDb
     .doc(id)
