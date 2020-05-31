@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { getUser } from "../database/userDatabase";
 
 const Button = styled("button")`
   display: flex;
@@ -57,8 +58,8 @@ export default class MentorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mentorRef: null,
-      mentorPic: null,
+      mRef: null,
+      mPic: null,
       mname: "Bob",
       mmajor: "Computer Science",
       myear: "2022",
@@ -67,6 +68,29 @@ export default class MentorPage extends React.Component {
       minterest2: "Music",
       minterest3: "Art"
     };
+  }
+
+  loadData() {
+    const { user } = this.props;
+    console.log("load");
+    if (user){
+      getUser(user.uid, userData => {
+        let pair = userData.partner;
+        getUser(pair, userData => {
+          this.setState({
+            mRef: pair,
+            mPic: userData.avatar,
+            mname: userData.name,
+            mmajor: userData.major,
+            myear: userData.year,
+            mbio: userData.bio,
+            minterest1: userData.interest1,
+            minterest2: userData.interest2,
+            minterest3: userData.interest3,
+          });
+        });
+      });
+    }
   }
 
   render() {
