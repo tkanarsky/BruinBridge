@@ -76,7 +76,8 @@ export default class MentorPage extends React.Component {
     super(props);
     this.state = {
       mStatus: null,
-      mRef: null,
+      mentor_id: null,
+      mentee_id: null,
       mPic: null,
       mname: null,
       mmajor: null,
@@ -125,8 +126,9 @@ export default class MentorPage extends React.Component {
         if (pair) {
           getUser(pair, userData => {
             this.setState({
-              mStatus: userData.isMentor,
-              mRef: pair,
+              mStatus: userData.is_mentor,
+              mentor_id: pair,
+              mentee_id: user.uid,
               mPic: userData.avatar,
               mname: userData.name,
               mmajor: userData.major,
@@ -174,11 +176,16 @@ export default class MentorPage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.mRef && this.state.mStatus) {
+          if (this.props.user && this.state.mentor_id && this.state.mPic) {
             return (
               <Container>
                 <MentorContainer>
-                  <h1>My Mentee:</h1>
+                  {!this.state.mStatus &&
+                    <h1>My Mentee:</h1>
+                  }
+                  {this.state.mStatus &&
+                    <h1>My Mentor:</h1>
+                  }
                   <img
                     src={this.state.mPic}
                     className={css`
@@ -213,48 +220,9 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (this.props.user && this.state.mRef && !this.state.mStatus) {
-            return (
-              <Container>
-                <MentorContainer>
-                  <h1>My Mentor:</h1>
-                  <img
-                    src={this.state.mPic}
-                    className={css`
-                      border-radius: 50%;
-                      height: 200px;
-                      width: 200px;
-                    `}
-                  />
-                  <h2>Name: {this.state.mname}</h2>
-                  <h2>Major: {this.state.mmajor}</h2>
-                  <h2>Graduation Year: {this.state.myear}</h2>
-                  <h2>Bio: {this.state.mbio}</h2>
-                  <h2>
-                    Interests: {this.state.minterest1}, {this.state.minterest2},{" "}
-                    {this.state.minterest3}
-                  </h2>
-                </MentorContainer>
-                <ChatContainer>
-                  <Type>
-                    <TypeBar
-                      placeholder="Type a message..."
-                      value={this.state.curMessage}
-                      onChange={this.handleTyping}
-                      onKeyPress={event => {
-                        if (event.key === "Enter") {
-                          this.handleSubmit();
-                        }
-                      }}
-                    ></TypeBar>
-                    <FiArrowUpCircle onClick={this.handleSubmit} size={30} />
-                  </Type>
-                </ChatContainer>
-              </Container>
-            );
-          } else if (this.props.user && this.state.mRef && !this.state.mPic) {
+          } else if (this.props.user && this.state.mentor_id && !this.state.mPic) {
             return <ChatContainer>Loading...</ChatContainer>;
-          } else if (this.props.user && !this.state.mRef) {
+          } else if (this.props.user && !this.state.mentor_id) {
             return (
               <Container>
                 <ChatContainer>

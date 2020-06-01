@@ -15,7 +15,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: null
+      user: null,
+      isMentor: null
     };
     this.loginAsMentor = this.loginAsMentor.bind(this);
     this.loginAsMentee = this.loginAsMentee.bind(this);
@@ -41,6 +42,7 @@ class App extends React.Component {
         } else {
           getHistory().push("/forum");
         }
+        this.setState({isMentor: true})
       });
     });
   }
@@ -55,6 +57,7 @@ class App extends React.Component {
         } else {
           getHistory().push("/forum");
         }
+        this.setState({isMentor: false});
       });
     });
   }
@@ -81,7 +84,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <ReactRouterGlobalHistory />
-          <NavBar user={this.state.user} logout={this.logout}/>
+          <NavBar user={this.state.user} logout={this.logout} isMentor={this.state.isMentor}/>
           <Switch>
             <Route exact path="/">
               <LandingPage

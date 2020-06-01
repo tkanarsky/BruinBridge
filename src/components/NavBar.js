@@ -72,8 +72,11 @@ export default class NavBar extends React.Component {
         <Container>
           <LHSBox><StyledLink to="/">Home</StyledLink></LHSBox>
           <LHSBox><StyledLink to="/forum">Forum</StyledLink></LHSBox>
-          {this.props.user && 
+          {this.props.user && !this.props.isMentor &&
           <LHSBox><StyledLink to="/mentor">My Mentor</StyledLink></LHSBox>
+          }
+          {this.props.user && this.props.isMentor && 
+          <LHSBox><StyledLink to="/mentor">My Mentee</StyledLink></LHSBox>
           }
           <DummyFiller />
           {this.props.user && 
