@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getUser } from "../database/userDatabase";
+import { matching } from "../database/userDatabase";
 import { css } from "emotion";
 import { FiArrowUpCircle } from "react-icons/fi";
 
@@ -90,8 +91,29 @@ export default class MentorPage extends React.Component {
       curMessage: ""
     };
     this.loadData = this.loadData.bind(this);
+    this.match = this.match.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTyping = this.handleTyping.bind(this);
+  }
+
+  match() {
+    const { user } = this.props;
+    getUser(user.uid, userData => {
+      if (!userData.interest1 && !userData.interest2 && !userData.interest3){
+        alert("Error: Must fill out interests");
+        return;
+      }
+      if (!userData.major){
+        alert("Error: Must fill out major");
+        return;
+      }
+      if (userData.is_mentor){
+        alert("Error: Must be mentee");
+        return;
+      }
+      matching(user.uid);
+      this.loadData();
+    });
   }
 
   loadData() {
@@ -123,7 +145,7 @@ export default class MentorPage extends React.Component {
   }
 
   handleSubmit() {
-    if (this.state.curMessage.length == 0) {
+    if (this.state.curMessage.length === 0) {
       alert("You cannot send an empty message!");
       return;
     } else {
@@ -136,6 +158,8 @@ export default class MentorPage extends React.Component {
   handleTyping(event) {
     this.setState({ curMessage: event.target.value });
   }
+
+
 
   render() {
     if (!this.state.dataLoaded) {
@@ -236,19 +260,11 @@ export default class MentorPage extends React.Component {
                 <ChatContainer>
                   You haven't signed up for a mentor! Click the button below to
                   be matched with a current UCLA student!
-                  <Button>Find a Mentor</Button>
+                  <Button onClick={this.match}>Find a Mentor</Button>
                 </ChatContainer>
               </Container>
             );
-          } else if (!this.props.user) {
-            return (
-              <Container>
-                <ChatContainer>
-                  You must login to be matched with a mentor!
-                </ChatContainer>
-              </Container>
-            );
-          }
+          } 
         })()}
       </div>
     );
