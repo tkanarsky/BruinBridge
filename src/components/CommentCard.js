@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "emotion";
 import styled from "styled-components";
+import { Fade } from "react-reveal";
 
 const CommentsContainer = styled("div")`
   display: flex;
@@ -46,23 +47,25 @@ const All = styled("div")`
 export default class CommentCard extends React.Component {
   render() {
     return (
-      <All>
-        <CommentsContainer>
-          <Profile>
-            <img
-              src={this.props.authorPic}
-              alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
-              className={css`
-                border-radius: 50%;
-                height: 45px;
-                width: 45px;
-              `}
-            />
-            <Name>{this.props.authorName}</Name>
-          </Profile>
-          <CommentBody>{this.props.text}</CommentBody>
-        </CommentsContainer>
-      </All>
+        <Fade down distance={"15px"} duration={500}>
+        <All> 
+          <CommentsContainer>
+            <Profile>
+              <img
+                src={this.props.authorPic}
+                alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                className={css`
+                  border-radius: 50%;
+                  height: 45px;
+                  width: 45px;
+                `}
+              />
+              <Name>{this.props.authorName}</Name>
+            </Profile>
+            <CommentBody>{this.props.text}</CommentBody>
+          </CommentsContainer>
+        </All>
+        </Fade>
     );
   }
 }
