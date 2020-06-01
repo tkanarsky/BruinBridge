@@ -8,15 +8,14 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ReactRouterGlobalHistory } from "react-router-global-history"
 import getHistory from "react-router-global-history";
 import { auth, provider } from "./database/firebase.js";
-import { createUser, userExists } from "./database/userDatabase.js";
+import { createUser, userExists, getUser } from "./database/userDatabase.js";
 import "./App.css";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: null,
-      isMentor: null
+      user: null
     };
     this.loginAsMentor = this.loginAsMentor.bind(this);
     this.loginAsMentee = this.loginAsMentee.bind(this);
@@ -42,7 +41,6 @@ class App extends React.Component {
         } else {
           getHistory().push("/forum");
         }
-        this.setState({isMentor: true})
       });
     });
   }
@@ -57,7 +55,6 @@ class App extends React.Component {
         } else {
           getHistory().push("/forum");
         }
-        this.setState({isMentor: false});
       });
     });
   }
@@ -74,7 +71,10 @@ class App extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ user });
+        getUser(user.uid, (userData) => {
+          user.mentorStatus = userData.is_mentor;
+          this.setState({user});
+        });
       }
     });
   }
@@ -84,7 +84,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <ReactRouterGlobalHistory />
-          <NavBar user={this.state.user} logout={this.logout} isMentor={this.state.isMentor}/>
+          <NavBar user={this.state.user} logout={this.logout}/>
           <Switch>
             <Route exact path="/">
               <LandingPage

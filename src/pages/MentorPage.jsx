@@ -180,10 +180,10 @@ export default class MentorPage extends React.Component {
             return (
               <Container>
                 <MentorContainer>
-                  {!this.state.mStatus &&
+                  {this.props.user.mentorStatus &&
                     <h1>My Mentee:</h1>
                   }
-                  {this.state.mStatus &&
+                  {!this.props.user.mentorStatus &&
                     <h1>My Mentor:</h1>
                   }
                   <img
