@@ -1,7 +1,6 @@
 import { firestore } from "./firebase.js";
 
 const userDb = firestore.collection("users");
-const mentorDb = firestore.collection("mentors");
 
 export function userExists(id, callback) {
   userDb
@@ -21,16 +20,15 @@ export function createUser(user, mentorStatus) {
     major: "",
     year: "",
     bio: "",
+    school: "",
     karma: 0,
     is_mentor: mentorStatus,
+    is_available_mentor: mentorStatus,
     partner: null,
     interest1: null,
     interest2: null,
     interest3: null
   });
-  if (mentorStatus) {
-    mentorDb.doc(user.uid).set({});
-  }
   return true;
 }
 
@@ -50,9 +48,8 @@ export function getMentors(callback) {
 }
 
 export function matchMentor(mentorID, menteeID) {
-  updateUser(mentorID, { partner: menteeID });
+  updateUser(mentorID, { partner: menteeID, is_available_mentor: false });
   updateUser(menteeID, { partner: mentorID });
-  mentorDb.doc(mentorID).delete();
 }
 
 export function getUser(id, callback) {
