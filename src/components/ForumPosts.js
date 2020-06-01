@@ -21,6 +21,7 @@ export default class ForumPost extends React.Component {
                 upvotes={post.upvotes}
                 authorPic={post.author_avatar}
                 authorName={post.author_name}
+                timestamp={post.timestamp}
                 user={this.props.user}
                 title={post.title}
                 body={post.body}

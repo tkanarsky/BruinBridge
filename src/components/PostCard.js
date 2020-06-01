@@ -63,7 +63,7 @@ const ProfileContainer = styled("div")`
 `;
 
 const QuestionStyle = styled("div")`
-  font-size: 24px;
+  font-size: 28px;
   padding-bottom: 10px;
 `;
 
@@ -103,6 +103,7 @@ export default class PostCard extends React.Component {
     };
 
     this.loadUser = this.loadUser.bind(this);
+    this.timeSince = this.timeSince.bind(this);
   }
 
   componentDidMount() {
@@ -356,6 +357,27 @@ export default class PostCard extends React.Component {
     }
   }
 
+  timeSince(timestamp) {
+    let now = new Date();
+    let secondsPast = (now.getTime() - timestamp) / 1000;
+    if (secondsPast < 60) {
+      return parseInt(secondsPast) + 's ago';
+    }
+    if (secondsPast < 3600) {
+      return parseInt(secondsPast / 60) + 'm ago';
+    }
+    if (secondsPast <= 86400) {
+      return parseInt(secondsPast / 3600) + 'h ago';
+    }
+    if (secondsPast > 86400) {
+      let d = new Date(timestamp);
+      let day = d.getDate();
+      let month = d.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ", "");
+      let year = d.getFullYear() == now.getFullYear() ? "" : " " + d.getFullYear();
+      return day + " " + month + year;
+    }
+  }
+
   render() {
     return (
       <PostBackground>
@@ -377,7 +399,7 @@ export default class PostCard extends React.Component {
                 `}
               />
             </Profile>  
-            <Name>{this.props.authorName} posted 6 hours ago</Name> 
+            <Name>{this.props.authorName} posted {this.timeSince(this.props.timestamp)}</Name> 
           </ProfileContainer>  
           <QuestionStyle>{this.props.title}</QuestionStyle>
           <DescriptionStyle>{this.props.body}</DescriptionStyle>
