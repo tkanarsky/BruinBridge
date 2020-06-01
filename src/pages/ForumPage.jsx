@@ -169,6 +169,8 @@ const FilterButton = styled("button")`
   font-size: 18px;
   width: 100px;
   height: 40px;
+  margin-left: 15px;
+  margin-right: 15px;
   &:hover {
     cursor: pointer;
   }
@@ -225,10 +227,8 @@ export default class ForumPage extends React.Component {
         postId => {}
       );
       console.log("Created post!");
-      alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
-      getPosts({ sort: "top", limit: 100 }, allPosts => {
-        this.setState({ title: "", postInput: "", posts: allPosts });
-      });
+      // alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      this.loadPosts(this.state.postOrder);
     } else alert("You must be logged in to submit a post!");
     event.preventDefault();
   }
