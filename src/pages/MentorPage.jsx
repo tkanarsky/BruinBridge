@@ -174,7 +174,7 @@ export default class MentorPage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.mRef && !this.state.mStatus) {
+          if (this.props.user && this.state.mRef && this.state.mStatus) {
             return (
               <Container>
                 <MentorContainer>
@@ -213,7 +213,7 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (this.props.user && this.state.mRef && this.state.mStatus) {
+          } else if (this.props.user && this.state.mRef && !this.state.mStatus) {
             return (
               <Container>
                 <MentorContainer>
