@@ -123,8 +123,9 @@ export default class ProfilePage extends React.Component {
     }
   }
 
-  handleMajor(m) {
-    this.setState({ major: m });
+  handleMajor(major, school) {
+    this.setState({ major: major, school: school });
+    updateUser(this.props.user.uid, {major: major, school: school});
   }
 
   handleInterest1(i) {
