@@ -77,12 +77,20 @@ export default class MentorPage extends React.Component {
   match() {
     const { user } = this.props;
     getUser(user.uid, userData => {
+      if (!userData.interest1 && !userData.interest2 && !userData.interest3){
+        alert("Error: Must fill out interests");
+        return;
+      }
+      if (!userData.major){
+        alert("Error: Must fill out major");
+        return;
+      }
       if (userData.is_mentor){
         alert("Error: Must be mentee");
         return;
       }
-      alert("hello");
       matching(user.uid);
+      this.setState({mRef: 4})
       this.loadData();
     });
   }
@@ -127,7 +135,7 @@ export default class MentorPage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.mentorRef) {
+          if (this.props.user && this.state.mRef) {
             return (
               <MentorContainer>
                 <h1>Mentor page</h1>
@@ -148,7 +156,7 @@ export default class MentorPage extends React.Component {
             !this.state.mentorPic
           ) {
             return <ChatContainer>Loading...</ChatContainer>;
-          } else if (this.props.user && !this.state.mentorRef) {
+          } else if (this.props.user && !this.state.mRef) {
             return (
               <Container>
                 <ChatContainer>

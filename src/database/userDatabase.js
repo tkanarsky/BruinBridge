@@ -114,6 +114,9 @@ export function matching(id) {
         console.log("Matching mentor with " + bestMentorId);
         matchMentor(bestMentorId, id);
       }
+      else{
+        alert("No Mentor available");
+      }
     });
   });
 }
