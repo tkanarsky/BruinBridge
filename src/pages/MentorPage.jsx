@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getUser } from "../database/userDatabase";
+import { matching } from "../database/userDatabase";
 
 const Button = styled("button")`
   display: flex;
@@ -70,6 +71,20 @@ export default class MentorPage extends React.Component {
       minterest3: null
     };
     this.loadData = this.loadData.bind(this);
+    this.match = this.match.bind(this);
+  }
+
+  match() {
+    const { user } = this.props;
+    getUser(user.uid, userData => {
+      if (userData.is_mentor){
+        alert("Error: Must be mentee");
+        return;
+      }
+      alert("hello");
+      matching(user.uid);
+      this.loadData();
+    });
   }
 
   loadData() {
@@ -97,6 +112,7 @@ export default class MentorPage extends React.Component {
       });
     }
   }
+
 
   render() {
     if (!this.state.dataLoaded) {
@@ -139,6 +155,7 @@ export default class MentorPage extends React.Component {
                   You haven't signed up for a mentor! Click the button below to
                   be matched with a current UCLA student!
                 </ChatContainer>
+                <Button onClick = {this.match}>Match</Button>
               </Container>
             );
           }
