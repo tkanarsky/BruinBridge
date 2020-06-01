@@ -35,10 +35,15 @@ export function createUser(user, mentorStatus) {
 }
 
 export function getMentors(callback) {
-  mentorDb.get().then(snapshot => {
+  userDb
+  .where("is_mentor", "==", true)
+  .where("is_available_mentor", "==", true)
+  .get().then(snapshot => {
     let availableMentors = [];
     snapshot.forEach(mentor => {
-      availableMentors.push(mentor.id);
+      let mentorData = mentor.data();
+      mentorData.uid = mentor.id;
+      availableMentors.push(mentorData);
     });
     callback(availableMentors);
   });

@@ -72,6 +72,7 @@ export default class PostCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      postID: this.props.postID,
       userID: null,
       upvotes: this.props.upvotes,
       upvoteIcon: (
@@ -97,8 +98,19 @@ export default class PostCard extends React.Component {
   }
 
   componentDidUpdate() {
-    this.loadUser();
+    if (!this.state.loaded) this.loadUser();
   }
+ 
+  static getDerivedStateFromProps(nextProps, prevState){
+    if(nextProps.postID !== prevState.postID){ // If we reorder the posts in the 
+      return {
+        postID: nextProps.postID,
+        upvotes: nextProps.upvotes,
+        loaded: false
+      };
+   }
+   else return null;
+ }
 
   loadUser() {
     if (!this.state.loaded && this.props.user) {
