@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ReactRouterGlobalHistory } from "react-router-global-history"
 import getHistory from "react-router-global-history";
 import { auth, provider } from "./database/firebase.js";
-import { createUser, userExists } from "./database/userDatabase.js";
+import { createUser, userExists, getUser, updateUser } from "./database/userDatabase.js";
 import "./App.css";
 
 class App extends React.Component {
@@ -39,6 +39,12 @@ class App extends React.Component {
           createUser(user, true);
           getHistory().push("/profile");
         } else {
+          getUser(user.uid, (userData) => { // In case a user has updated their profile name or photo
+            if (user.displayName !== userData.name ||
+                user.photoURL !== userData.avatar) {
+              updateUser(user.uid, {avatar:  user.photoURL, name: user.displayName});
+            }
+          });
           getHistory().push("/forum");
         }
       });

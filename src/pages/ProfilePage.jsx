@@ -123,8 +123,9 @@ export default class ProfilePage extends React.Component {
     }
   }
 
-  handleMajor(m) {
-    this.setState({ major: m });
+  handleMajor(major, school) {
+    this.setState({ major: major, school: school });
+    updateUser(this.props.user.uid, {major: major, school: school});
   }
 
   handleInterest1(i) {
@@ -178,6 +179,11 @@ export default class ProfilePage extends React.Component {
                     `}
                   />
                   <BoldInfo>{this.props.user.displayName}</BoldInfo>
+                  <Pair>
+                    {" "}
+                    <strong>Karma: &#8287;</strong>
+                    {this.state.karma}
+                  </Pair>
                 </PicContainer>
                 <InfoContainer>
                   <strong>Major: &#8287;</strong>
@@ -213,11 +219,6 @@ export default class ProfilePage extends React.Component {
                       value={this.state.bio}
                       onSave={this.onSaveBio}
                     />
-                  </Pair>
-                  <Pair>
-                    {" "}
-                    <strong>Karma: &#8287;</strong>
-                    {this.state.karma}
                   </Pair>
                   <Pair>
                     <strong>Interests: &#8287;</strong>

@@ -13,6 +13,7 @@ import {
   FaThumbsUp,
   FaThumbsDown
 } from "react-icons/fa";
+import { Fade } from "react-reveal";
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
@@ -357,7 +358,8 @@ export default class PostCard extends React.Component {
 
   render() {
     return (
-      <PostBackground>
+      <Fade duration={500} appear spy={this.state.postID}>
+        <PostBackground>
         <Votes>
           {this.state.upvoteIcon}
           {this.state.upvotes}
@@ -380,6 +382,7 @@ export default class PostCard extends React.Component {
           <DescriptionStyle>{this.props.body}</DescriptionStyle>
         </QuestionContainer>
       </PostBackground>
+      </Fade>
     );
   }
 }
