@@ -4,6 +4,7 @@ import { getUser } from "../database/userDatabase";
 import { matching } from "../database/userDatabase";
 import { css } from "emotion";
 import { FiArrowUpCircle } from "react-icons/fi";
+import { sendMessage } from "../database/chatDatabase";
 
 const Button = styled("button")`
   display: flex;
@@ -50,6 +51,33 @@ const ChatContainer = styled("div")`
   flex-direction: column;
   justify-content: flex-end;
 `;
+
+const ConversationContainer = styled("div")`
+  height: 100%;
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+`;
+
+const ChatBubble = styled("div")`
+  height: auto;
+  width: auto;
+  padding: 15px;
+  background-color: #fff7cc;
+  border-radius: 15px;
+  margin-bottom: 15px;
+`;
+
+const MyChatBubble = styled(ChatBubble)`
+  align-self: flex-end;
+`;
+
+const OtherChatBubble = styled(ChatBubble)`
+  align-self: flex-start;
+`;
+
 
 const Container = styled("div")`
   position: relative;
@@ -152,6 +180,7 @@ export default class MentorPage extends React.Component {
       return;
     } else {
       // TODO: HANDLE SUBMITTING A MESSAGE HERE
+      sendMessage(this.props.user, this.state.mentor_id, this.state.mentee_id, this.state.curMessage);
       console.log("submitted message");
     }
     this.setState({ curMessage: "" });
@@ -204,6 +233,10 @@ export default class MentorPage extends React.Component {
                   </h2>
                 </MentorContainer>
                 <ChatContainer>
+                  <ConversationContainer>
+                    <MyChatBubble>demo message 1!</MyChatBubble>
+                    <OtherChatBubble>demo message 2!</OtherChatBubble>
+                  </ConversationContainer>
                   <Type>
                     <TypeBar
                       placeholder="Type a message..."
