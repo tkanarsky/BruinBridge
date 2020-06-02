@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Element } from "react-scroll";
 import { css } from "emotion";
+import { getUser } from "../database/userDatabase";
 
 const StyledLink = styled(Link)`
   position: relative;
@@ -59,7 +60,37 @@ const Container = styled("div")`
 // TO-DO: make a const css component to make the "My Profile" Link align to the right of the screen
 
 export default class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+      m: "",
+    }
+    this.loadUser = this.loadUser.bind(this);
+  };
+  
+loadUser(){
+  if (this.props.user) {
+    let u = this.props.user;
+    let uid = u.uid;
+    if (uid){
+    getUser(uid, userData => {
+      if (userData.is_mentor){
+        this.setState({m: "My Mentee"});
+      }
+      else {
+        this.setState({m: "My Mentor"});
+      }
+    });
+    this.setState({ loaded: true });
+  }
+  }
+}
+
   render() {
+    if (!this.state.loaded) {
+      this.loadUser();
+    }
     return (
       <Element
         name="navbar"
@@ -72,8 +103,8 @@ export default class NavBar extends React.Component {
         <Container>
           <LHSBox><StyledLink to="/">Home</StyledLink></LHSBox>
           <LHSBox><StyledLink to="/forum">Forum</StyledLink></LHSBox>
-          {this.props.user && !this.props.user.mentorStatus &&
-          <LHSBox><StyledLink to="/mentor">My Mentor</StyledLink></LHSBox>
+          {this.props.user &&
+          <LHSBox><StyledLink to="/mentor">{this.state.m}</StyledLink></LHSBox>
           }
           {this.props.user && this.props.user.mentorStatus && 
           <LHSBox><StyledLink to="/mentor">My Mentee</StyledLink></LHSBox>
@@ -84,6 +115,12 @@ export default class NavBar extends React.Component {
           }
           {this.props.user && 
           <RHSBox><ClickableText onClick={this.props.logout}>Sign Out</ClickableText></RHSBox>
+          }
+          {!this.props.user && 
+          <RHSBox><ClickableText onClick={this.props.loginAsMentor}>Be a Mentor</ClickableText></RHSBox>
+          }
+          {!this.props.user && 
+          <RHSBox><ClickableText onClick={this.props.loginAsMentee}>Find a Mentor</ClickableText></RHSBox>
           }
         </Container>
       </Element>
