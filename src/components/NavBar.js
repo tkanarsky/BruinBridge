@@ -73,6 +73,7 @@ loadUser(){
   if (this.props.user) {
     let u = this.props.user;
     let uid = u.uid;
+    if (uid){
     getUser(uid, userData => {
       if (userData.is_mentor){
         this.setState({m: "My Mentee"});
@@ -82,6 +83,7 @@ loadUser(){
       }
     });
     this.setState({ loaded: true });
+  }
   }
 }
 

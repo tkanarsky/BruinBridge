@@ -254,7 +254,7 @@ export default class MentorPage extends React.Component {
             );
           } else if (this.props.user && this.state.mRef && !this.state.mPic) {
             return <ChatContainer>Loading...</ChatContainer>;
-          } else if (this.props.user && !this.state.mRef && !this.state.mStatus) {
+          } else if (this.props.user && !this.state.mRef && this.state.mStatus) {
             return (
               <Container>
                 <ChatContainer>
@@ -265,7 +265,7 @@ export default class MentorPage extends React.Component {
               </Container>
             );
           } 
-          else if (this.props.user && !this.state.mRef && this.state.mStatus) {
+          else if (this.props.user && !this.state.mRef && !this.state.mStatus) {
             return (
               <Container>
                 <ChatContainer>
