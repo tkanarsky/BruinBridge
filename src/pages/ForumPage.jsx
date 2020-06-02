@@ -246,7 +246,6 @@ export default class ForumPage extends React.Component {
           <SchoolContainer>
             <UCLAimg></UCLAimg>
             <UCLAname></UCLAname>
-            <Button>Find a Mentor</Button>
             <FactHolder>
               <Fact>#1 Public University!</Fact>
               <Fact>#1 College Dining Hall Food!</Fact>
