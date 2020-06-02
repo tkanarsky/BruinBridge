@@ -4,6 +4,11 @@ import { getUser } from "../database/userDatabase";
 import { matching } from "../database/userDatabase";
 import { css } from "emotion";
 import { FiArrowUpCircle } from "react-icons/fi";
+import {
+  sendMessage,
+  getMessages,
+  subscribeToChat
+} from "../database/chatDatabase";
 
 const Button = styled("button")`
   display: flex;
@@ -75,6 +80,8 @@ export default class MentorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mentorID: null,
+      menteeID: null,
       mStatus: null,
       mRef: null,
       mPic: null,
@@ -94,20 +101,23 @@ export default class MentorPage extends React.Component {
     this.match = this.match.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTyping = this.handleTyping.bind(this);
+    this.setMentorMenteeIDs = this.setMentorMenteeIDs.bind(this);
   }
+
+  componentDidMount() {}
 
   match() {
     const { user } = this.props;
     getUser(user.uid, userData => {
-      if (!userData.interest1 && !userData.interest2 && !userData.interest3){
+      if (!userData.interest1 && !userData.interest2 && !userData.interest3) {
         alert("Error: Must fill out interests");
         return;
       }
-      if (!userData.major){
+      if (!userData.major) {
         alert("Error: Must fill out major");
         return;
       }
-      if (userData.is_mentor){
+      if (userData.is_mentor) {
         alert("Error: Must be mentee");
         return;
       }
@@ -124,22 +134,39 @@ export default class MentorPage extends React.Component {
         let pair = userData.partner;
         if (pair) {
           getUser(pair, userData => {
-            this.setState({
-              mStatus: userData.isMentor,
-              mRef: pair,
-              mPic: userData.avatar,
-              mname: userData.name,
-              mmajor: userData.major,
-              myear: userData.year,
-              mbio: userData.bio,
-              mkarma: userData.karma,
-              minterest1: userData.interest1,
-              minterest2: userData.interest2,
-              minterest3: userData.interest3,
-              dataLoaded: true
-            });
+            this.setState(
+              {
+                mStatus: userData.isMentor,
+                mRef: pair,
+                mPic: userData.avatar,
+                mname: userData.name,
+                mmajor: userData.major,
+                myear: userData.year,
+                mbio: userData.bio,
+                mkarma: userData.karma,
+                minterest1: userData.interest1,
+                minterest2: userData.interest2,
+                minterest3: userData.interest3,
+                dataLoaded: true
+              },
+              () => this.setMentorMenteeIDs(this.state.mStatus)
+            );
           });
         }
+      });
+    }
+  }
+
+  setMentorMenteeIDs(partnerIsMentor) {
+    if (!partnerIsMentor) {
+      this.setState({
+        mentorID: this.props.user.uid,
+        menteeID: this.state.mRef
+      });
+    } else {
+      this.setState({
+        mentorID: this.state.mRef,
+        menteeID: this.props.user.uid
       });
     }
   }
@@ -149,7 +176,12 @@ export default class MentorPage extends React.Component {
       alert("You cannot send an empty message!");
       return;
     } else {
-      // TODO: HANDLE SUBMITTING A MESSAGE HERE
+      sendMessage(
+        this.props.user.uid,
+        this.state.mentorID,
+        this.state.menteeID,
+        this.state.curMessage
+      );
       console.log("submitted message");
     }
     this.setState({ curMessage: "" });
@@ -158,8 +190,6 @@ export default class MentorPage extends React.Component {
   handleTyping(event) {
     this.setState({ curMessage: event.target.value });
   }
-
-
 
   render() {
     if (!this.state.dataLoaded) {
@@ -174,11 +204,11 @@ export default class MentorPage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.mRef && this.state.mStatus) {
+          if (this.props.user && this.state.mRef && !this.state.mStatus) {
             return (
               <Container>
                 <MentorContainer>
-                  <h1>My Mentee:</h1>
+                  <h1>My Mentor:</h1>
                   <img
                     src={this.state.mPic}
                     className={css`
@@ -213,11 +243,11 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (this.props.user && this.state.mRef && !this.state.mStatus) {
+          } else if (this.props.user && this.state.mRef && this.state.mStatus) {
             return (
               <Container>
                 <MentorContainer>
-                  <h1>My Mentor:</h1>
+                  <h1>My Mentee:</h1>
                   <img
                     src={this.state.mPic}
                     className={css`
@@ -264,7 +294,15 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } 
+          } else if (!this.props.user) {
+            return (
+              <Container>
+                <ChatContainer>
+                  Log in to find your mentor or be a mentor!
+                </ChatContainer>
+              </Container>
+            );
+          }
         })()}
       </div>
     );
