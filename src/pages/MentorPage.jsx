@@ -173,7 +173,7 @@ export default class MentorPage extends React.Component {
           getUser(partner, userData => {
             this.setState(
               {
-                mStatus: userData.isMentor,
+                mStatus: userData.is_mentor,
                 mRef: partner,
                 mPic: userData.avatar,
                 mname: userData.name,
@@ -270,7 +270,7 @@ export default class MentorPage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.mRef && !this.state.mStatus) {
+          if (this.props.user && this.state.mRef && this.state.mStatus) {
             return (
               <Container>
                 <MentorContainer>
@@ -312,7 +312,11 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (this.props.user && this.state.mRef && this.state.mStatus) {
+          } else if (
+            this.props.user &&
+            this.state.mRef &&
+            !this.state.mStatus
+          ) {
             return (
               <Container>
                 <MentorContainer>
@@ -360,7 +364,11 @@ export default class MentorPage extends React.Component {
             !this.state.mPic
           ) {
             return <ChatContainer>Loading...</ChatContainer>;
-          } else if (this.props.user && !this.state.mRef && this.state.mStatus) {
+          } else if (
+            this.props.user &&
+            !this.state.mRef &&
+            this.state.mStatus
+          ) {
             return (
               <Container>
                 You haven't signed up for a mentor! Click the button below to be
@@ -368,16 +376,17 @@ export default class MentorPage extends React.Component {
                 <Button onClick={this.match}>Find a Mentor</Button>
               </Container>
             );
-          } 
-          else if (this.props.user && !this.state.mRef && !this.state.mStatus) {
+          } else if (
+            this.props.user &&
+            !this.state.mRef &&
+            !this.state.mStatus
+          ) {
             return (
               <Container>
-                <ChatContainer>
-                  Wait To be matched with a mentee!
-                </ChatContainer>
+                <ChatContainer>Wait To be matched with a mentee!</ChatContainer>
               </Container>
             );
-          } 
+          }
         })()}
       </div>
     );
