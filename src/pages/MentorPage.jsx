@@ -254,13 +254,22 @@ export default class MentorPage extends React.Component {
             );
           } else if (this.props.user && this.state.mRef && !this.state.mPic) {
             return <ChatContainer>Loading...</ChatContainer>;
-          } else if (this.props.user && !this.state.mRef) {
+          } else if (this.props.user && !this.state.mRef && this.state.mStatus) {
             return (
               <Container>
                 <ChatContainer>
                   You haven't signed up for a mentor! Click the button below to
                   be matched with a current UCLA student!
                   <Button onClick={this.match}>Find a Mentor</Button>
+                </ChatContainer>
+              </Container>
+            );
+          } 
+          else if (this.props.user && !this.state.mRef && !this.state.mStatus) {
+            return (
+              <Container>
+                <ChatContainer>
+                  Wait To be matched with a mentee!
                 </ChatContainer>
               </Container>
             );
