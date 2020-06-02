@@ -185,10 +185,31 @@ export default class MentorPage extends React.Component {
                 dataLoaded: true
               },
               () => this.setMentorMenteeIDs(this.state.mStatus)
+              // need mStatus so we can display "my mentor" or "my mentee" accordingly
             );
           });
         }
       });
+    }
+  }
+
+  setMentorMenteeIDs(partnerIsMentor) {
+    if (!partnerIsMentor) {
+      this.setState(
+        {
+          mentorID: this.props.user.uid,
+          menteeID: this.state.mRef
+        },
+        () => this.loadMessages()
+      );
+    } else {
+      this.setState(
+        {
+          mentorID: this.state.mRef,
+          menteeID: this.props.user.uid
+        },
+        () => this.loadMessages()
+      );
     }
   }
 
@@ -213,26 +234,6 @@ export default class MentorPage extends React.Component {
           return <OtherChatBubble key={i}>{msg.text}</OtherChatBubble>;
         }
       });
-    }
-  }
-
-  setMentorMenteeIDs(partnerIsMentor) {
-    if (!partnerIsMentor) {
-      this.setState(
-        {
-          mentorID: this.props.user.uid,
-          menteeID: this.state.mRef
-        },
-        () => this.loadMessages()
-      );
-    } else {
-      this.setState(
-        {
-          mentorID: this.state.mRef,
-          menteeID: this.props.user.uid
-        },
-        () => this.loadMessages()
-      );
     }
   }
 
@@ -275,6 +276,7 @@ export default class MentorPage extends React.Component {
                   <h1>My Mentor:</h1>
                   <img
                     src={this.state.mPic}
+                    alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
                     className={css`
                       border-radius: 50%;
                       height: 200px;
@@ -310,17 +312,14 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (
-            this.props.user &&
-            this.state.mRef &&
-            !this.state.mStatus
-          ) {
+          } else if (this.props.user & this.state.mRef && !this.state.mStatus) {
             return (
               <Container>
                 <MentorContainer>
                   <h1>My Mentee:</h1>
                   <img
                     src={this.state.mPic}
+                    alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
                     className={css`
                       border-radius: 50%;
                       height: 200px;
