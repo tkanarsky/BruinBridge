@@ -106,6 +106,9 @@ loadUser(){
           {this.props.user &&
           <LHSBox><StyledLink to="/mentor">{this.state.m}</StyledLink></LHSBox>
           }
+          {this.props.user && this.props.user.mentorStatus && 
+          <LHSBox><StyledLink to="/mentor">My Mentee</StyledLink></LHSBox>
+          }
           <DummyFiller />
           {this.props.user && 
           <RHSBox><StyledLink to="profile">My Profile</StyledLink></RHSBox>
