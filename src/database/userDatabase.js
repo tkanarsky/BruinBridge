@@ -1,4 +1,5 @@
 import { firestore } from "./firebase.js";
+import { establishChat } from "./chatDatabase.js"
 
 const userDb = firestore.collection("users");
 
@@ -115,6 +116,7 @@ export function matching(id) {
       if (bestMentorId) {
         console.log("Matching mentor with " + bestMentorId);
         matchMentor(bestMentorId, id);
+        establishChat(bestMentorId, id);
       }
       else{
         alert("No Mentor available");

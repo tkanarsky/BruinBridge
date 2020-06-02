@@ -47,13 +47,46 @@ const MentorContainer = styled("div")`
 
 const ChatContainer = styled("div")`
   width: 60%;
+  height: 90%;
   background-color: white;
   border-radius: 30px;
   display: flex;
   align-items: center;
-  padding: 50px;
+  padding: 20px 50px 20px 50px;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: scroll;
+`;
+
+const ConversationContainer = styled("div")`
+  height: 100%;
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  overflow: scroll;
+`;
+
+const ChatBubble = styled("div")`
+  height: auto;
+  width: auto;
+  padding: 15px;
+  background-color: #fff7cc;
+  border-radius: 15px;
+  margin-bottom: 15px;
+`;
+
+const MyChatBubble = styled(ChatBubble)`
+  align-self: flex-end;
+  background-color: #0e92fb;
+  color: white;
+`;
+
+const OtherChatBubble = styled(ChatBubble)`
+  align-self: flex-start;
+  background-color: #e5e5e5;
+  color: black;
 `;
 
 const Container = styled("div")`
@@ -61,6 +94,8 @@ const Container = styled("div")`
   top: 25px;
   display: flex;
   justify-content: center;
+  height: 80%;
+  align-items: stretch;
 `;
 
 const TypeBar = styled.input`
@@ -83,7 +118,8 @@ export default class MentorPage extends React.Component {
       mentorID: null,
       menteeID: null,
       mStatus: null,
-      mRef: null,
+      mentor_id: null,
+      mentee_id: null,
       mPic: null,
       mname: null,
       mmajor: null,
@@ -95,16 +131,16 @@ export default class MentorPage extends React.Component {
       minterest3: null,
       dataLoaded: false,
       // chat states:
-      curMessage: ""
+      curMessage: "",
+      allMessages: null
     };
     this.loadData = this.loadData.bind(this);
+    this.loadMessages = this.loadMessages.bind(this);
     this.match = this.match.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTyping = this.handleTyping.bind(this);
     this.setMentorMenteeIDs = this.setMentorMenteeIDs.bind(this);
   }
-
-  componentDidMount() {}
 
   match() {
     const { user } = this.props;
@@ -126,18 +162,19 @@ export default class MentorPage extends React.Component {
     });
   }
 
+  componentDidMount() {}
+
   loadData() {
     const { user } = this.props;
-    console.log("load");
     if (user) {
       getUser(user.uid, userData => {
-        let pair = userData.partner;
-        if (pair) {
-          getUser(pair, userData => {
+        let partner = userData.partner;
+        if (partner) {
+          getUser(partner, userData => {
             this.setState(
               {
                 mStatus: userData.isMentor,
-                mRef: pair,
+                mRef: partner,
                 mPic: userData.avatar,
                 mname: userData.name,
                 mmajor: userData.major,
@@ -157,17 +194,47 @@ export default class MentorPage extends React.Component {
     }
   }
 
+  loadMessages() {
+    getMessages(
+      this.props.user,
+      this.state.mentorID,
+      this.state.menteeID,
+      messages => {
+        this.setState({ allMessages: messages.reverse() });
+      }
+    );
+  }
+
+  displayMessages() {
+    if (!this.state.allMessages) return;
+    else {
+      return this.state.allMessages.map((msg, i) => {
+        if (msg.sender === this.props.user.uid) {
+          return <MyChatBubble key={i}>{msg.text}</MyChatBubble>;
+        } else {
+          return <OtherChatBubble key={i}>{msg.text}</OtherChatBubble>;
+        }
+      });
+    }
+  }
+
   setMentorMenteeIDs(partnerIsMentor) {
     if (!partnerIsMentor) {
-      this.setState({
-        mentorID: this.props.user.uid,
-        menteeID: this.state.mRef
-      });
+      this.setState(
+        {
+          mentorID: this.props.user.uid,
+          menteeID: this.state.mRef
+        },
+        () => this.loadMessages()
+      );
     } else {
-      this.setState({
-        mentorID: this.state.mRef,
-        menteeID: this.props.user.uid
-      });
+      this.setState(
+        {
+          mentorID: this.state.mRef,
+          menteeID: this.props.user.uid
+        },
+        () => this.loadMessages()
+      );
     }
   }
 
@@ -177,14 +244,13 @@ export default class MentorPage extends React.Component {
       return;
     } else {
       sendMessage(
-        this.props.user.uid,
+        this.props.user,
         this.state.mentorID,
         this.state.menteeID,
         this.state.curMessage
       );
-      console.log("submitted message");
     }
-    this.setState({ curMessage: "" });
+    this.setState({ curMessage: "" }, () => this.loadMessages());
   }
 
   handleTyping(event) {
@@ -227,6 +293,9 @@ export default class MentorPage extends React.Component {
                   </h2>
                 </MentorContainer>
                 <ChatContainer>
+                  <ConversationContainer>
+                    {this.displayMessages()}
+                  </ConversationContainer>
                   <Type>
                     <TypeBar
                       placeholder="Type a message..."
@@ -266,6 +335,9 @@ export default class MentorPage extends React.Component {
                   </h2>
                 </MentorContainer>
                 <ChatContainer>
+                  <ConversationContainer>
+                    {this.displayMessages()}
+                  </ConversationContainer>
                   <Type>
                     <TypeBar
                       placeholder="Type a message..."
@@ -282,25 +354,23 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (this.props.user && this.state.mRef && !this.state.mPic) {
+          } else if (
+            this.props.user &&
+            this.state.mentor_id &&
+            !this.state.mPic
+          ) {
             return <ChatContainer>Loading...</ChatContainer>;
-          } else if (this.props.user && !this.state.mRef) {
+          } else if (this.props.user && !this.state.mentor_id) {
             return (
               <Container>
-                <ChatContainer>
-                  You haven't signed up for a mentor! Click the button below to
-                  be matched with a current UCLA student!
-                  <Button onClick={this.match}>Find a Mentor</Button>
-                </ChatContainer>
+                You haven't signed up for a mentor! Click the button below to be
+                matched with a current UCLA student!
+                <Button onClick={this.match}>Find a Mentor</Button>
               </Container>
             );
           } else if (!this.props.user) {
             return (
-              <Container>
-                <ChatContainer>
-                  Log in to find your mentor or be a mentor!
-                </ChatContainer>
-              </Container>
+              <Container>Log in to find your mentor or be a mentor!</Container>
             );
           }
         })()}
