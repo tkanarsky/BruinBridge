@@ -60,29 +60,6 @@ const UCLAname = styled("div")`
   }
 `;
 
-const Button = styled("button")`
-  display: flex;
-  background-color: #fff7cc;
-  border: 1px solid #ffd600;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 200px;
-  height: 50px;
-  border-radius: 50px;
-  font-size: 20px;
-  font-family: "Balsamiq Sans", "Open Sans", sans-serif;
-  font-weight: 700;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-  &:hover {
-    cursor: pointer;
-  }
-  ${mobile} {
-    display: none;
-  }
-`;
-
 const Fact = styled("div")`
   font-size: 18px;
   white-space: nowrap;
