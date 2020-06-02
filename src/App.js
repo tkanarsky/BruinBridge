@@ -88,10 +88,7 @@ class App extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        getUser(user.uid, userData => {
-          user.mentorStatus = userData.is_mentor;
-          this.setState({ user });
-        });
+        this.setState({ user });
       }
     });
   }
@@ -101,10 +98,12 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <ReactRouterGlobalHistory />
-          <NavBar user={this.state.user} 
+          <NavBar
+            user={this.state.user}
             loginAsMentor={this.loginAsMentor}
             loginAsMentee={this.loginAsMentee}
-            logout={this.logout}/>
+            logout={this.logout}
+          />
           <Switch>
             <Route exact path="/">
               <LandingPage
