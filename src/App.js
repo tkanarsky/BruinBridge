@@ -87,7 +87,10 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <ReactRouterGlobalHistory />
-          <NavBar user={this.state.user} logout={this.logout}/>
+          <NavBar user={this.state.user} 
+            loginAsMentor={this.loginAsMentor}
+            loginAsMentee={this.loginAsMentee}
+            logout={this.logout}/>
           <Switch>
             <Route exact path="/">
               <LandingPage

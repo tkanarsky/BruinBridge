@@ -63,23 +63,22 @@ export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ismentor: false,
-      ismentee: false,
       loaded: false,
+      m: "",
     }
     this.loadUser = this.loadUser.bind(this);
   };
   
 loadUser(){
-  if (!this.state.loaded && this.props.user) {
+  if (this.props.user) {
     let u = this.props.user;
     let uid = u.uid;
     getUser(uid, userData => {
       if (userData.is_mentor){
-        this.setState({ismentor: true});
+        this.setState({m: "My Mentee"});
       }
       else {
-        this.setState({ismentee: true});
+        this.setState({m: "My Mentor"});
       }
     });
     this.setState({ loaded: true });
@@ -102,11 +101,8 @@ loadUser(){
         <Container>
           <LHSBox><StyledLink to="/">Home</StyledLink></LHSBox>
           <LHSBox><StyledLink to="/forum">Forum</StyledLink></LHSBox>
-          {this.state.ismentee &&  
-          <LHSBox><StyledLink to="/mentor">My Mentor</StyledLink></LHSBox>
-          }
-          {this.state.ismentor &&
-          <LHSBox><StyledLink to="/mentor">My Mentee</StyledLink></LHSBox>
+          {this.props.user &&
+          <LHSBox><StyledLink to="/mentor">{this.state.m}</StyledLink></LHSBox>
           }
           <DummyFiller />
           {this.props.user && 
@@ -116,10 +112,10 @@ loadUser(){
           <RHSBox><ClickableText onClick={this.props.logout}>Sign Out</ClickableText></RHSBox>
           }
           {!this.props.user && 
-          <RHSBox><ClickableText /*onClick={}*/>Be a Mentor</ClickableText></RHSBox>
+          <RHSBox><ClickableText onClick={this.props.loginAsMentor}>Be a Mentor</ClickableText></RHSBox>
           }
           {!this.props.user && 
-          <RHSBox><ClickableText /*onClick={}*/>Find a Mentor</ClickableText></RHSBox>
+          <RHSBox><ClickableText onClick={this.props.loginAsMentee}>Find a Mentor</ClickableText></RHSBox>
           }
         </Container>
       </Element>
