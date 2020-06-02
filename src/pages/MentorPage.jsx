@@ -118,8 +118,6 @@ export default class MentorPage extends React.Component {
       mentorID: null,
       menteeID: null,
       mStatus: null,
-      mentor_id: null,
-      mentee_id: null,
       mPic: null,
       mname: null,
       mmajor: null,
