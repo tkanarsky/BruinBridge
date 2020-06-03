@@ -7,6 +7,7 @@ import InterestsDropdown from "../components/InterestsDropdown";
 import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
 import { mediaQueries } from "../constants/media";
+import { Button } from "react-scroll";
 const { mobile, notMobile } = mediaQueries;
 
 const Container = styled("div")`
@@ -67,14 +68,15 @@ export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      major: null,
+      major: "",
       school: null,
       year: null,
       bio: null,
       karma: 0,
-      interest1: null,
-      interest2: null,
-      interest3: null
+      interest1: "",
+      interest2: "",
+      interest3: "",
+      edit: false,
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.handleInterest1 = this.handleInterest1.bind(this);
@@ -161,7 +163,7 @@ export default class ProfilePage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.major && this.state.interest1) {
+          if (this.props.user && this.state.major && this.state.interest1 && this.state.edit) {
             return (
               <Container>
                 <PicContainer>
@@ -230,6 +232,53 @@ export default class ProfilePage extends React.Component {
                     curInt3={this.state.interest3}
                     handle={this.handleInterest}
                   ></InterestsDropdown>
+                </InfoContainer>
+              </Container>
+            );
+          } else if(this.props.user && !this.state.edit && this.state.major && this.state.interest1){
+            return (
+              <Container>
+                <PicContainer>
+                  <img
+                    src={this.props.user.photoURL}
+                    alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                    className={css`
+                      border-radius: 50%;
+                      height: 200px;
+                      width: 200px;
+                      ${mobile} {
+                        width: 100px;
+                        height: 100px;
+                      }
+                    `}
+                  />
+                  <BoldInfo>{this.props.user.displayName}</BoldInfo>
+                  <Pair>
+                    {" "}
+                    <strong>Karma: &#8287;</strong>
+                    {this.state.karma}
+                  </Pair>
+                </PicContainer>
+                <InfoContainer>
+                  <Pair>
+                  <strong>Major: &#8287;</strong>
+                  {this.state.major.value}
+                  </Pair>
+                  <Pair>
+                  <strong>College: &#8287;</strong>
+                  {this.state.school}
+                  </Pair>
+                  <Pair>
+                    <strong>Graduation Year: &#8287;</strong>
+                    {this.state.year}
+                  </Pair>
+                  <Pair>
+                    <strong>Bio: &#8287;</strong>
+                    {this.state.bio}
+                  </Pair>
+                  <Pair>
+                    <strong>Interests: &#8287;</strong>
+                  </Pair>
                 </InfoContainer>
               </Container>
             );
