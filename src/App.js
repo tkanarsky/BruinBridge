@@ -20,7 +20,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: null
+      user: null,
+      userIsMentor: true
     };
     this.loginAsMentor = this.loginAsMentor.bind(this);
     this.loginAsMentee = this.loginAsMentee.bind(this);
@@ -58,6 +59,7 @@ class App extends React.Component {
           });
           getHistory().push("/forum");
         }
+        this.setState({userIsMentor: true});
       });
     });
   }
@@ -72,6 +74,7 @@ class App extends React.Component {
         } else {
           getHistory().push("/forum");
         }
+        this.setState({userIsMentor: false});
       });
     });
   }
@@ -88,10 +91,7 @@ class App extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        getUser(user.uid, userData => {
-          user.mentorStatus = userData.is_mentor;
-          this.setState({ user });
-        });
+        this.setState({ user });
       }
     });
   }
@@ -102,9 +102,11 @@ class App extends React.Component {
         <Router>
           <ReactRouterGlobalHistory />
           <NavBar user={this.state.user} 
+            mentorStatus={this.state.userIsMentor}
             loginAsMentor={this.loginAsMentor}
             loginAsMentee={this.loginAsMentee}
-            logout={this.logout}/>
+            logout={this.logout}
+          />
           <Switch>
             <Route exact path="/">
               <LandingPage
