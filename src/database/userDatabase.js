@@ -74,7 +74,7 @@ export function deleteUser(id) {
   userDb.child(id).delete();
 }
 
-export function matching(id) {
+export function matching(id, callback) {
   getUser(id, (userData) => {
     const menteeSchool = userData.school;
     const menteeMajor = userDb.major;
@@ -117,6 +117,7 @@ export function matching(id) {
         console.log("Matching mentor with " + bestMentorId);
         matchMentor(bestMentorId, id);
         establishChat(bestMentorId, id);
+        callback();
       }
       else{
         alert("No Mentor available");
