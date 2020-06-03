@@ -98,6 +98,17 @@ const Container = styled("div")`
   align-items: stretch;
 `;
 
+const NoChatContainer = styled("div")`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 30px;
+  flex-direction: column;
+  padding: 50px;
+  height: 25%;
+`;
+
 const TypeBar = styled.input`
   width: 100%;
   background-color: #fff7cc;
@@ -312,7 +323,11 @@ export default class MentorPage extends React.Component {
                 </ChatContainer>
               </Container>
             );
-          } else if (this.props.user & this.state.mRef && !this.state.mStatus) {
+          } else if (
+            this.props.user &&
+            this.state.mRef &&
+            !this.state.mStatus
+          ) {
             return (
               <Container>
                 <MentorContainer>
@@ -368,9 +383,11 @@ export default class MentorPage extends React.Component {
           ) {
             return (
               <Container>
-                You haven't signed up for a mentor! Click the button below to be
-                matched with a current UCLA student!
-                <Button onClick={this.match}>Find a Mentor</Button>
+                <NoChatContainer>
+                  You haven't signed up for a mentor! Click the button below to
+                  be matched with a current UCLA student!
+                  <Button onClick={this.match}>Find a Mentor</Button>
+                </NoChatContainer>
               </Container>
             );
           } else if (
