@@ -7,7 +7,6 @@ import InterestsDropdown from "../components/InterestsDropdown";
 import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
 import { mediaQueries } from "../constants/media";
-import { Button } from "react-scroll";
 const { mobile, notMobile } = mediaQueries;
 
 const Container = styled("div")`
@@ -63,20 +62,41 @@ const Pair = styled("div")`
     flex-wrap: wrap;
   }
 `;
+ 
+const Button = styled("button")`
+  display: flex;
+  background-color: #fff7cc;
+  border: 1px solid #ffd600;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-family: "Open Sans";
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      major: "",
+      major: null,
       school: null,
       year: null,
       bio: null,
       karma: 0,
-      interest1: "",
-      interest2: "",
-      interest3: "",
-      edit: false,
+      interest1: null,
+      interest2: null,
+      interest3: null,
+      edit: true,
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.handleInterest1 = this.handleInterest1.bind(this);
@@ -85,6 +105,7 @@ export default class ProfilePage extends React.Component {
     this.onSaveYear = this.onSaveYear.bind(this);
     this.onSaveBio = this.onSaveBio.bind(this);
     this.loadData = this.loadData.bind(this);
+    this.Edit = this.Edit.bind(this);
   }
 
   loadData() {
@@ -123,6 +144,11 @@ export default class ProfilePage extends React.Component {
         });
       });
     }
+  }
+
+
+  Edit(){
+    this.setState({edit: !this.state.edit});
   }
 
   handleMajor(major, school) {
@@ -232,6 +258,7 @@ export default class ProfilePage extends React.Component {
                     curInt3={this.state.interest3}
                     handle={this.handleInterest}
                   ></InterestsDropdown>
+                  <Button onClick={this.edit}>Done</Button>
                 </InfoContainer>
               </Container>
             );
@@ -277,8 +304,9 @@ export default class ProfilePage extends React.Component {
                     {this.state.bio}
                   </Pair>
                   <Pair>
-                    <strong>Interests: &#8287;</strong>
+                  <strong>Interests: &#8287;</strong>
                   </Pair>
+                  <Button onClick={this.edit}>Edit</Button>
                 </InfoContainer>
               </Container>
             );
