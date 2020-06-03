@@ -96,7 +96,10 @@ export default class ProfilePage extends React.Component {
       interest1: null,
       interest2: null,
       interest3: null,
-      edit: true,
+      edit: false,
+      i1: "",
+      i2: "",
+      i3: "",
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.handleInterest1 = this.handleInterest1.bind(this);
@@ -140,6 +143,9 @@ export default class ProfilePage extends React.Component {
               value: userData.interest3
             }
           ],
+          i1: userData.interest1,
+          i2: userData.interest2,
+          i3: userData.interest3,
           dataLoaded: true
         });
       });
@@ -149,6 +155,7 @@ export default class ProfilePage extends React.Component {
 
   Edit(){
     this.setState({edit: !this.state.edit});
+    this.loadData();
   }
 
   handleMajor(major, school) {
@@ -258,7 +265,7 @@ export default class ProfilePage extends React.Component {
                     curInt3={this.state.interest3}
                     handle={this.handleInterest}
                   ></InterestsDropdown>
-                  <Button onClick={this.edit}>Done</Button>
+                  <Button onClick={this.Edit}>Done</Button>
                 </InfoContainer>
               </Container>
             );
@@ -305,8 +312,13 @@ export default class ProfilePage extends React.Component {
                   </Pair>
                   <Pair>
                   <strong>Interests: &#8287;</strong>
+                  {this.state.i1}
+                  {", "}
+                  {this.state.i2}
+                  {", "}
+                  {this.state.i3}
                   </Pair>
-                  <Button onClick={this.edit}>Edit</Button>
+                  <Button onClick={this.Edit}>Edit</Button>
                 </InfoContainer>
               </Container>
             );
