@@ -173,7 +173,7 @@ export default class MentorPage extends React.Component {
           getUser(partner, userData => {
             this.setState(
               {
-                mStatus: userData.isMentor,
+                mStatus: userData.is_mentor,
                 mRef: partner,
                 mPic: userData.avatar,
                 mname: userData.name,
@@ -364,11 +364,15 @@ export default class MentorPage extends React.Component {
             !this.state.mPic
           ) {
             return <ChatContainer>Loading...</ChatContainer>;
+<<<<<<< HEAD
           } else if (
             this.props.user &&
             !this.state.mRef &&
             this.state.mStatus
           ) {
+=======
+          } else if (this.props.user && !this.state.mRef && !this.state.mStatus) {
+>>>>>>> 9eea5c86213faad48294d2a806b7023cfbb9047e
             return (
               <Container>
                 You haven't signed up for a mentor! Click the button below to be
@@ -376,11 +380,16 @@ export default class MentorPage extends React.Component {
                 <Button onClick={this.match}>Find a Mentor</Button>
               </Container>
             );
+<<<<<<< HEAD
           } else if (
             this.props.user &&
             !this.state.mRef &&
             !this.state.mStatus
           ) {
+=======
+          } 
+          else if (this.props.user && !this.state.mRef && this.state.mStatus) {
+>>>>>>> 9eea5c86213faad48294d2a806b7023cfbb9047e
             return (
               <Container>
                 <ChatContainer>Wait To be matched with a mentee!</ChatContainer>
