@@ -68,7 +68,6 @@ export function subscribeToChat(user, mentorId, menteeId, callback) {
     chatRef
     .child(getChatHash(mentorId, menteeId))
     .child("messages")
-    .limitToLast(100)
     .on("child_added", (data) => {
         callback(data.val());
     });

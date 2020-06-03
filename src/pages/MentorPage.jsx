@@ -117,9 +117,8 @@ export default class MentorPage extends React.Component {
     this.state = {
       mentorID: null,
       menteeID: null,
+      mRef: null,
       mStatus: null,
-      mentor_id: null,
-      mentee_id: null,
       mPic: null,
       mname: null,
       mmajor: null,
@@ -135,11 +134,10 @@ export default class MentorPage extends React.Component {
       allMessages: null
     };
     this.loadData = this.loadData.bind(this);
-    this.loadMessages = this.loadMessages.bind(this);
+    this.onNewMessage = this.onNewMessage.bind(this);
     this.match = this.match.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTyping = this.handleTyping.bind(this);
-    this.setMentorMenteeIDs = this.setMentorMenteeIDs.bind(this);
   }
 
   match() {
@@ -157,24 +155,42 @@ export default class MentorPage extends React.Component {
         alert("Error: Must be mentee");
         return;
       }
-      matching(user.uid);
-      this.loadData();
+      matching(user.uid, () => {
+        this.loadData();
+        console.log("done with matching!");
+      });
     });
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    // console.log("componentMounted!");
+    this.loadData();
+  }
+
+  componentDidUpdate() {
+    if (!this.state.dataLoaded) {
+      console.log("data loading...");
+      this.loadData();
+    }
+  }
 
   loadData() {
+    console.log("load");
     const { user } = this.props;
     if (user) {
+      console.log("user exists...")
       getUser(user.uid, userData => {
+        console.log("loaded myself");
         let partner = userData.partner;
         if (partner) {
           getUser(partner, userData => {
+            console.log("loaded partner");
             this.setState(
               {
                 mStatus: userData.is_mentor,
                 mRef: partner,
+                mentorID: (userData.is_mentor ? partner : user.uid),
+                menteeID: (userData.is_mentor ? user.uid : partner),
                 mPic: userData.avatar,
                 mname: userData.name,
                 mmajor: userData.major,
@@ -186,23 +202,24 @@ export default class MentorPage extends React.Component {
                 minterest3: userData.interest3,
                 dataLoaded: true
               },
-              () => this.setMentorMenteeIDs(this.state.mStatus)
+              () => {
+                console.log("Chat subscribed!");
+                subscribeToChat(user, this.state.mentorID, this.state.menteeID, this.onNewMessage);
+              }
             );
+            console.log("State set!")
+            this.forceUpdate();
           });
+        } else {
+          this.setState({
+                         dataLoaded: true,
+                         mStatus: userData.is_mentor,
+                         mRef: null
+                         });
+          this.forceUpdate();
         }
       });
     }
-  }
-
-  loadMessages() {
-    getMessages(
-      this.props.user,
-      this.state.mentorID,
-      this.state.menteeID,
-      messages => {
-        this.setState({ allMessages: messages.reverse() });
-      }
-    );
   }
 
   displayMessages() {
@@ -218,24 +235,13 @@ export default class MentorPage extends React.Component {
     }
   }
 
-  setMentorMenteeIDs(partnerIsMentor) {
-    if (!partnerIsMentor) {
-      this.setState(
-        {
-          mentorID: this.props.user.uid,
-          menteeID: this.state.mRef
-        },
-        () => this.loadMessages()
-      );
-    } else {
-      this.setState(
-        {
-          mentorID: this.state.mRef,
-          menteeID: this.props.user.uid
-        },
-        () => this.loadMessages()
-      );
-    }
+  onNewMessage(newMessage) {
+    let messageList = this.state.allMessages;
+    if (!messageList)
+      messageList = [];
+    console.log(newMessage);
+    messageList.unshift(newMessage);
+    this.setState({allMessages: messageList});
   }
 
   handleSubmit() {
@@ -250,7 +256,7 @@ export default class MentorPage extends React.Component {
         this.state.curMessage
       );
     }
-    this.setState({ curMessage: "" }, () => this.loadMessages());
+    this.setState({ curMessage: "" });
   }
 
   handleTyping(event) {
@@ -258,9 +264,6 @@ export default class MentorPage extends React.Component {
   }
 
   render() {
-    if (!this.state.dataLoaded) {
-      this.loadData();
-    }
     return (
       <div
         style={{
@@ -270,11 +273,18 @@ export default class MentorPage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.mRef && this.state.mStatus) {
+          if (this.props.user && this.state.mRef) {
             return (
               <Container>
                 <MentorContainer>
-                  <h1>My Mentor:</h1>
+                  {
+                    this.state.mStatus &&
+                    <h1>My Mentor:</h1>
+                  }
+                  {
+                    !this.state.mStatus && 
+                    <h1>My Mentee:</h1>
+                  }
                   <img
                     src={this.state.mPic}
                     className={css`
@@ -314,60 +324,13 @@ export default class MentorPage extends React.Component {
             );
           } else if (
             this.props.user &&
-            this.state.mRef &&
-            !this.state.mStatus
+            !this.state.dataLoaded
           ) {
-            return (
-              <Container>
-                <MentorContainer>
-                  <h1>My Mentee:</h1>
-                  <img
-                    src={this.state.mPic}
-                    className={css`
-                      border-radius: 50%;
-                      height: 200px;
-                      width: 200px;
-                    `}
-                  />
-                  <h2>Name: {this.state.mname}</h2>
-                  <h2>Major: {this.state.mmajor}</h2>
-                  <h2>Graduation Year: {this.state.myear}</h2>
-                  <h2>Bio: {this.state.mbio}</h2>
-                  <h2>
-                    Interests: {this.state.minterest1}, {this.state.minterest2},{" "}
-                    {this.state.minterest3}
-                  </h2>
-                </MentorContainer>
-                <ChatContainer>
-                  <ConversationContainer>
-                    {this.displayMessages()}
-                  </ConversationContainer>
-                  <Type>
-                    <TypeBar
-                      placeholder="Type a message..."
-                      value={this.state.curMessage}
-                      onChange={this.handleTyping}
-                      onKeyPress={event => {
-                        if (event.key === "Enter") {
-                          this.handleSubmit();
-                        }
-                      }}
-                    ></TypeBar>
-                    <FiArrowUpCircle onClick={this.handleSubmit} size={30} />
-                  </Type>
-                </ChatContainer>
-              </Container>
-            );
+            return <Container>Loading...</Container>;
           } else if (
             this.props.user &&
-            this.state.mentor_id &&
-            !this.state.mPic
-          ) {
-            return <ChatContainer>Loading...</ChatContainer>;
-          } else if (
-            this.props.user &&
-            !this.state.mRef &&
-            !this.state.mStatus
+            !this.state.mStatus &&
+            this.state.dataLoaded
           ) {
             return (
               <Container>
@@ -378,12 +341,12 @@ export default class MentorPage extends React.Component {
             );
           } else if (
             this.props.user &&
-            !this.state.mRef &&
+            this.state.dataLoaded &&
             this.state.mStatus
           ) {
             return (
               <Container>
-                <ChatContainer>Wait To be matched with a mentee!</ChatContainer>
+                Wait to be matched with a mentee!
               </Container>
             );
           }
