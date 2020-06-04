@@ -57,6 +57,7 @@ const Button = styled("button")`
 
   &:hover {
     cursor: pointer;
+    background-color: #61b9ff;
   }
 `;
 
@@ -66,6 +67,9 @@ const CreatePostButton = styled(Button)`
 
 const CancelButton = styled(Button)`
   background-color: red;
+  &:hover {
+    background-color: #ff5b96;
+  }
 `;
 
 const UCLAimg = styled("div")`
