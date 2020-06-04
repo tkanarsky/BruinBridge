@@ -195,6 +195,7 @@ const FilterButton = styled("button")`
   margin-right: 15px;
   &:hover {
     cursor: pointer;
+    background-color: #f6f6f6;
   }
 `;
 
