@@ -1,12 +1,13 @@
 import React from "react";
 import { css } from "emotion";
+import { timeSince } from "../database/postDatabase.js";
 import styled from "styled-components";
 import { Fade } from "react-reveal";
 
 const CommentsContainer = styled("div")`
   display: flex;
-  flex-direction: row;
-  width: 90%;
+  flex-direction: column;
+  width: 95%;
   border-radius: 5px;
   background-color: #e5e5e5;
   padding-top: 20px;
@@ -18,25 +19,33 @@ const CommentsContainer = styled("div")`
 
 const Profile = styled("div")`
   display: flex;
-  flex-direction: column;
-  width: 7%;
+  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  align-self: flex-start;
+  padding-right: 5px;
 `;
 
 const Name = styled("div")`
-  font-weight: 700;
-  font-size: 12px;
   display: flex;
-  flex-wrap: wrap;
-  padding-top: 3px;
+  align-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  padding-left: 5px;
+`;
+
+const ProfileContainer = styled("div")`
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
 `;
 
 const CommentBody = styled("div")`
-  width: 90%;
-  font-size: 14px;
-  padding-right: 25px;
+  width: 95%;
+  font-size: 16px;
+  flex-direction: column;
+  padding-right: 20px;
   padding-bottom: 10px;
-  padding-left: 25px;
 `;
 
 const All = styled("div")`
@@ -44,28 +53,31 @@ const All = styled("div")`
   justify-content: flex-end;
   padding-top: 10px;
 `;
+
 export default class CommentCard extends React.Component {
   render() {
     return (
-        <Fade down distance={"15px"} duration={500}>
-        <All> 
+      <Fade down distance={"15px"} duration={500}>
+        <All>
           <CommentsContainer>
-            <Profile>
-              <img
-                src={this.props.authorPic}
-                alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
-                className={css`
-                  border-radius: 50%;
-                  height: 45px;
-                  width: 45px;
-                `}
-              />
-              <Name>{this.props.authorName}</Name>
-            </Profile>
+            <ProfileContainer>
+              <Profile>
+                <img
+                  src={this.props.authorPic}
+                  alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                  className={css`
+                    border-radius: 50%;
+                    height: 24px;
+                    width: 24px;
+                  `}
+                />
+              </Profile>
+              <Name>{this.props.authorName} posted {timeSince(this.props.timestamp)}</Name>
+            </ProfileContainer>     
             <CommentBody>{this.props.text}</CommentBody>
           </CommentsContainer>
         </All>
-        </Fade>
+      </Fade>
     );
   }
 }

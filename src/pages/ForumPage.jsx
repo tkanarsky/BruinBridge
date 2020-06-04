@@ -143,6 +143,8 @@ const FilterButton = styled("button")`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
+  left-padding: 5px;
+  right-padding: 5px;
   font-size: 18px;
   width: 100px;
   height: 40px;
@@ -292,6 +294,7 @@ export default class ForumPage extends React.Component {
             </SubmitQuestion>
             <PostContainer>
               <Filters>
+                Sort by:
                 <FilterButton onClick={() => this.loadPosts("top")}>
                   <IoIosRocket />
                   &nbsp; Top

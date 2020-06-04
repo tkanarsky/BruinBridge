@@ -21,6 +21,8 @@ export default class ForumPost extends React.Component {
                 upvotes={post.upvotes}
                 authorPic={post.author_avatar}
                 authorName={post.author_name}
+                timestamp={post.timestamp}
+                replies={post.replies}
                 user={this.props.user}
                 title={post.title}
                 body={post.body}
@@ -41,7 +43,7 @@ export default class ForumPost extends React.Component {
         {(() => {
           if (this.props.posts) {
             return (
-              <Accordion allowMultipleExpanded={true}>
+              <Accordion allowMultipleExpanded={true} allowZeroExpanded={true}>
                 {" "}
                 {this.renderPosts(this.props.posts)}
               </Accordion>

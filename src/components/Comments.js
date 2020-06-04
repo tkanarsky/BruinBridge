@@ -59,6 +59,7 @@ export default class Comments extends React.Component {
           authorPic={comment.author_avatar}
           authorName={comment.author_name}
           text={comment.body}
+          timestamp={comment.timestamp}
         ></CommentCard>
       );
     });
