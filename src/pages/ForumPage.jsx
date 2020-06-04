@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Modal } from "react-bootstrap";
+import { Button } from "./LandingPage.jsx"
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
@@ -221,7 +222,7 @@ class SubmitPostModal extends React.Component {
       getPosts({ sort: "top", limit: 100 }, allPosts => {
         this.setState({ title: "", postInput: "", posts: allPosts });
       });
-      this.loadPosts(this.state.postOrder);
+      //this.loadPosts(this.state.postOrder);
     } else alert("You must be logged in to submit a post!");
     this.handleClose();
     event.preventDefault();
