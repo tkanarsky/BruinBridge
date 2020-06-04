@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { css } from "emotion";
 import { YearPicker } from "react-dropdown-date";
 import MajorDropdown from "../components/MajorDropdown";
+import YearDropdown from "../components/YearDropdown";
 import InterestsDropdown from "../components/InterestsDropdown";
 import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
@@ -15,7 +16,9 @@ const Container = styled("div")`
   position: relative;
   top: 25px;
   display: flex;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
   border-radius: 25px;
   margin-left: 2%;
   margin-right: 2%;
@@ -23,7 +26,6 @@ const Container = styled("div")`
   padding-bottom: 50px;
   ${mobile} {
     flex-direction: column;
-    align-items: center;
   }
 `;
 
@@ -40,7 +42,6 @@ const InfoContainer = styled("div")`
   flex-direction: column;
   padding-left: 30px;
   padding-top: 30px;
-  width: 50%;
 `;
 
 const PicContainer = styled("div")`
@@ -54,12 +55,32 @@ const Pair = styled("div")`
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* width: 100%; */
   padding-top: 15px;
   flex-wrap: flex-wrap;
   ${mobile} {
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+`;
+
+const Button = styled("button")`
+  display: flex;
+  background-color: #fff7cc;
+  border: 1px solid #ffd600;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-family: "Open Sans";
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -74,7 +95,11 @@ export default class ProfilePage extends React.Component {
       karma: 0,
       interest1: null,
       interest2: null,
-      interest3: null
+      interest3: null,
+      edit: false,
+      i1: "",
+      i2: "",
+      i3: ""
     };
     this.handleMajor = this.handleMajor.bind(this);
     this.handleInterest1 = this.handleInterest1.bind(this);
@@ -83,6 +108,7 @@ export default class ProfilePage extends React.Component {
     this.onSaveYear = this.onSaveYear.bind(this);
     this.onSaveBio = this.onSaveBio.bind(this);
     this.loadData = this.loadData.bind(this);
+    this.Edit = this.Edit.bind(this);
   }
 
   loadData() {
@@ -117,14 +143,23 @@ export default class ProfilePage extends React.Component {
               value: userData.interest3
             }
           ],
+          i1: userData.interest1,
+          i2: userData.interest2,
+          i3: userData.interest3,
           dataLoaded: true
         });
       });
     }
   }
 
-  handleMajor(m) {
-    this.setState({ major: m });
+  Edit() {
+    this.setState({ edit: !this.state.edit });
+    this.loadData();
+  }
+
+  handleMajor(major, school) {
+    this.setState({ major: major, school: school });
+    updateUser(this.props.user.uid, { major: major, school: school });
   }
 
   handleInterest1(i) {
@@ -160,7 +195,12 @@ export default class ProfilePage extends React.Component {
         }}
       >
         {(() => {
-          if (this.props.user && this.state.major && this.state.interest1) {
+          if (
+            this.props.user &&
+            this.state.major &&
+            this.state.interest1 &&
+            this.state.edit
+          ) {
             return (
               <Container>
                 <PicContainer>
@@ -178,30 +218,27 @@ export default class ProfilePage extends React.Component {
                     `}
                   />
                   <BoldInfo>{this.props.user.displayName}</BoldInfo>
+                  <Pair>
+                    {" "}
+                    <strong>Karma: &#8287;</strong>
+                    {this.state.karma}
+                  </Pair>
                 </PicContainer>
                 <InfoContainer>
                   <strong>Major: &#8287;</strong>
                   <MajorDropdown
-                    id={this.props.user.uid}
                     curMajor={this.state.major}
                     handle={this.handleMajor}
                   ></MajorDropdown>
                   <Pair>
-                  <strong>College: {this.state.school} &#8287;</strong>
+                    <strong>College: {this.state.school} &#8287;</strong>
                   </Pair>
                   <Pair>
                     <strong>Graduation Year: &#8287;</strong>
-                    <YearPicker
-                      defaultValue={2023}
-                      start={2018}
-                      end={2025}
-                      value={this.state.year}
-                      onChange={this.onSaveYear}
-                      id={"year"}
-                      name={"year"}
-                      classes={"classes"}
-                      optionClasses={"option classes"}
-                    />
+                    <YearDropdown
+                      curYear={this.state.year}
+                      handle={this.onSaveYear}
+                    ></YearDropdown>
                   </Pair>
                   <Pair>
                     <strong>Bio: &#8287;</strong>
@@ -215,11 +252,6 @@ export default class ProfilePage extends React.Component {
                     />
                   </Pair>
                   <Pair>
-                    {" "}
-                    <strong>Karma: &#8287;</strong>
-                    {this.state.karma}
-                  </Pair>
-                  <Pair>
                     <strong>Interests: &#8287;</strong>
                   </Pair>
                   <InterestsDropdown
@@ -229,6 +261,65 @@ export default class ProfilePage extends React.Component {
                     curInt3={this.state.interest3}
                     handle={this.handleInterest}
                   ></InterestsDropdown>
+                  <Button onClick={this.Edit}>Done</Button>
+                </InfoContainer>
+              </Container>
+            );
+          } else if (
+            this.props.user &&
+            !this.state.edit &&
+            this.state.major &&
+            this.state.interest1
+          ) {
+            return (
+              <Container>
+                <PicContainer>
+                  <img
+                    src={this.props.user.photoURL}
+                    alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                    className={css`
+                      border-radius: 50%;
+                      height: 200px;
+                      width: 200px;
+                      ${mobile} {
+                        width: 100px;
+                        height: 100px;
+                      }
+                    `}
+                  />
+                  <BoldInfo>{this.props.user.displayName}</BoldInfo>
+                  <Pair>
+                    {" "}
+                    <strong>Karma: &#8287;</strong>
+                    {this.state.karma}
+                  </Pair>
+                </PicContainer>
+                <InfoContainer>
+                  <Pair>
+                    <strong>Major: &#8287;</strong>
+                    {this.state.major.value}
+                  </Pair>
+                  <Pair>
+                    <strong>College: &#8287;</strong>
+                    {this.state.school}
+                  </Pair>
+                  <Pair>
+                    <strong>Graduation Year: &#8287;</strong>
+                    {this.state.year}
+                  </Pair>
+                  <Pair>
+                    <strong>Bio: &#8287;</strong>
+                    {this.state.bio}
+                  </Pair>
+                  <Pair>
+                    <strong>Interests: &#8287;</strong>
+                    {this.state.i1}
+                    {", "}
+                    {this.state.i2}
+                    {", "}
+                    {this.state.i3}
+                  </Pair>
+                  <Button onClick={this.Edit}>Edit</Button>
                 </InfoContainer>
               </Container>
             );

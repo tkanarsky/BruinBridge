@@ -1,41 +1,57 @@
 import React from "react";
 import Select from "react-select";
-import { updateUser } from "../database/userDatabase.js";
 import { majorList } from "../constants/majors";
 
 export default class MajorDropdown extends React.Component {
-  state = {
-    selectedOption: this.props.curMajor
-  };
 
-  componentDidMount() {
-    this.setState({ selectedOption: this.props.curMajor });
+  constructor(props) {
+    super(props);
+      this.state = {
+        selectedOption: this.props.curMajor
+      };
   }
 
   handleChange = selectedOption => {
     this.setState({ selectedOption });
-    updateUser(this.props.id, { major: selectedOption["value"] });
-    if (selectedOption["value"] === "Nursing"){
-      updateUser(this.props.id, { school: "School of Nursing" });
+    let newMajor = selectedOption["value"];
+    let school = null;
+    switch(newMajor) {
+      case "Nursing":
+        school = "School of Nursing"; break;
+      case "Public Affairs":
+        school = "Luskin School of Public Affairs"; break;
+      case "Film & Television":
+      case "Theater":
+        school = "School of Theater, Film, and Television"; break;
+      case "Architectural Studies":
+      case "Art":
+      case "Dance":
+      case "Design | Media Arts":
+      case "World Arts and Cultures":
+        school = "School of the Arts and Architecture"; break;
+      case "Ethnomusicology":
+      case "Global Jazz Studies":
+      case "Musicology":
+      case "Music Composition":
+      case "Music Education":
+      case "Music History and Industry":
+      case "Music Performance":
+        school = "Herb Alpert School of Music"; break;
+      case "Aerospace Engineering":
+      case "Chemical Engineering":
+      case "Bioengineering":
+      case "Civil Engineering":
+      case "Computer Engineering":
+      case "Computer Science":
+      case "Computer Science and Engineering":
+      case "Electrical Engineering":
+      case "Materials Engineering":
+      case "Mechanical Engineering":
+        school = "Samueli School of Engineering"; break;
+      default:
+        school = "College of Letters and Science";
     }
-    else if(selectedOption["value"] === "Public Affairs"){
-      updateUser(this.props.id, { school: "Luskin School of Public Affairs" });
-    }
-    else if (selectedOption["value"] === "Film & Television" || selectedOption["value"] === "Theater"){
-      updateUser(this.props.id, { school: "School of Theater, Film and Television" });
-    }
-    else if (selectedOption["value"] === "Architectural Studies" || selectedOption["value"] === "Art" || selectedOption["value"] === "Dance" || selectedOption["value"] === "Design | Media Arts" || selectedOption["value"] === "World Arts and Cultures"){
-      updateUser(this.props.id, { school: "School of the Arts and Architecture"});
-    }
-    else if (selectedOption["value"] === "Ethnomusicology" || selectedOption["value"] === "Global Jazz Studies" || selectedOption["value"] === "Musicology" || selectedOption["value"] === "Music Composition" || selectedOption["value"] === "Music Education" || selectedOption["value"] === "Music History and Industry" || selectedOption["value"] === "Music Performance"){
-      updateUser(this.props.id, { school: "Herb Alpert School of Music"});
-    }
-    else if (selectedOption["value"] === "Aerospace Engineering" || selectedOption["value"] === "Bioengineering" || selectedOption["value"] === "Chemical Engineering" || selectedOption["value"] === "Civil Engineering" || selectedOption["value"] === "Computer Engineering" || selectedOption["value"] === "Computer Science" || selectedOption["value"] === "Computer Science and Engineering" || selectedOption["value"] === "Electrical Engineering" || selectedOption["value"] === "Materials Engineering" || selectedOption["value"] === "Mechanical Engineering"){
-      updateUser(this.props.id, { school: "Samueli School of Engineering"});
-    }
-    else{
-      updateUser(this.props.id, { school: "College of Letters and Science" });
-    }
+    this.props.handle(newMajor, school)
   };
 
   render() {

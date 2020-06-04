@@ -1,6 +1,7 @@
 import React from "react";
 import { createComment, getComments } from "../database/commentDatabase.js";
 import CommentCard from "./CommentCard";
+import { Fade } from "react-reveal";
 
 export default class Comments extends React.Component {
   constructor(props) {
@@ -66,35 +67,37 @@ export default class Comments extends React.Component {
   render() {
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Add a comment &#160;
+        <Fade down distance={"15px"} duration={500}>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Add a comment &#160;
+              <input
+                type="text"
+                value={this.state.comment}
+                onChange={this.handleComment}
+                style={{
+                  lineHeight: "2em",
+                  fontSize: "16px",
+                  paddingLeft: "5x",
+                  width: "80%"
+                }}
+              ></input>
+            </label>
             <input
-              type="text"
-              value={this.state.comment}
-              onChange={this.handleComment}
+              type="submit"
+              value="Submit"
               style={{
-                lineHeight: "2em",
-                fontSize: "16px",
-                paddingLeft: "5x",
-                width: "80%"
+                backgroundColor: "#ffe457",
+                fontFamily: "Open Sans",
+                fontSize: "15px",
+                borderRadius: "20px",
+                width: "100px",
+                height: "50px"
               }}
-            ></input>
-          </label>
-          <input
-            type="submit"
-            value="Submit"
-            style={{
-              backgroundColor: "#ffe457",
-              fontFamily: "Open Sans",
-              fontSize: "15px",
-              borderRadius: "20px",
-              width: "100px",
-              height: "50px"
-            }}
-          />
-        </form>
-        {this.renderComments(this.state.comments)}
+            />
+          </form>
+          </Fade>
+          {this.renderComments(this.state.comments)}
       </>
     );
   }
