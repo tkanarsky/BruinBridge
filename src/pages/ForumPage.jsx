@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { Modal } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
 import { mediaQueries } from "../constants/media";
@@ -9,7 +11,7 @@ const { mobile, notMobile } = mediaQueries;
 
 const SchoolContainer = styled("div")`
   width: 20%;
-  height: 90%;
+  height: 96%;
   position: sticky;
   display: flex;
   flex-direction: column;
@@ -99,10 +101,11 @@ const FactHolder = styled("div")`
 const PostContainer = styled("div")`
   background-color: white;
   border-radius: 25px;
-  width: 95%;
+  width: 98%;
   height: 80%;
   margin-top: 25px;
-  padding: 20px;
+  padding: 20px 20px 20px;
+  box-sizing: border-box;
   overflow: scroll;
   ${mobile} {
     padding: 10px;
@@ -112,10 +115,11 @@ const PostContainer = styled("div")`
 const SubmitQuestion = styled("div")`
   background-color: white;
   border-radius: 20px;
-  width: 97%;
-  height: 50px;
+  width: 98%;
+  height: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
+  box-sizing: border-box;
   ${mobile} {
     height: 150px;
     display: flex;
@@ -176,32 +180,32 @@ const FilterButton = styled("button")`
   }
 `;
 
-export default class ForumPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+class SubmitPostModal extends React.Component {
+	constructor(props, context) {
+		super(props, context);
+
+		this.state = {
+      show: false,
       postInput: "",
-      title: "",
-      posts: null,
-      postOrder: "top"
+      title: ""
     };
+    
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
-    this.loadPosts = this.loadPosts.bind(this);
-  }
+	}
 
-  componentDidMount() {
-    this.loadPosts(this.state.postOrder);
-  }
+	handleClose() {
+		this.setState({ show: false });
+	}
 
-  loadPosts(order) {
-    this.setState({ postOrder: order });
-    getPosts({ sort: order, limit: 100 }, allPosts => {
-      this.setState({ posts: allPosts }, () => this.forceUpdate());
-    });
+	handleShow() {
+		this.setState({ show: true });
   }
-
+  
   handleChange(event) {
     this.setState({ postInput: event.target.value });
   }
@@ -235,28 +239,18 @@ export default class ForumPage extends React.Component {
     event.preventDefault();
   }
 
-  render() {
-    return (
-      <div
-        style={{
-          backgroundColor: "#ADE1FF",
-          width: "100%",
-          height: "100vh"
-        }}
-      >
-        <AllContainer>
-          <SchoolContainer>
-            <UCLAimg></UCLAimg>
-            <UCLAname></UCLAname>
-            <Button>Find a Mentor</Button>
-            <FactHolder>
-              <Fact>#1 Public University!</Fact>
-              <Fact>#1 College Dining Hall Food!</Fact>
-              <Fact>yay woooooooo</Fact>
-              <Fact>more info here</Fact>
-            </FactHolder>
-          </SchoolContainer>
-          <QuestionsContainer>
+	render() {
+		return (
+			<>
+				<Button variant="primary" onClick={this.handleShow}>
+					Create a Post
+        </Button>
+
+				<Modal size="lg" show={this.state.show} onHide={this.handleClose} centered backdrop="static">
+					<Modal.Header closeButton>
+						<Modal.Title>Create a Post</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
             <SubmitQuestion>
               <form onSubmit={this.handleSubmit}>
                 <FlexBox>
@@ -279,6 +273,8 @@ export default class ForumPage extends React.Component {
                       flexGrow: 1
                     }}
                   />
+                </FlexBox>
+                <FlexBox>
                   <label
                     style={{
                       paddingLeft: "25px",
@@ -299,6 +295,8 @@ export default class ForumPage extends React.Component {
                       flexGrow: 2
                     }}
                   />
+                  </FlexBox>
+                  <FlexBox>
                   <input
                     type="submit"
                     value="Submit"
@@ -316,6 +314,103 @@ export default class ForumPage extends React.Component {
                 </FlexBox>
               </form>
             </SubmitQuestion>
+          </Modal.Body>
+					<Modal.Footer>
+						<Button onClick={this.handleClose}>
+							Close
+            </Button>
+						<Button onClick={this.handleClose}>
+							Save Changes
+            </Button>
+					</Modal.Footer>
+				</Modal>
+			</>
+		);
+	}
+}
+
+export default class ForumPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // postInput: "",
+      // title: "",
+      posts: null,
+      postOrder: "top"
+    };
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleTitle = this.handleTitle.bind(this);
+    this.loadPosts = this.loadPosts.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadPosts(this.state.postOrder);
+  }
+
+  loadPosts(order) {
+    this.setState({ postOrder: order });
+    getPosts({ sort: order, limit: 100 }, allPosts => {
+      this.setState({ posts: allPosts }, () => this.forceUpdate());
+    });
+  }
+  /*
+  handleChange(event) {
+    this.setState({ postInput: event.target.value });
+  }
+
+  handleTitle(event) {
+    this.setState({ title: event.target.value });
+  }
+
+  handleSubmit(event) {
+    if (this.state.title === "") {
+      alert("Must have post title");
+      return;
+    }
+    if (this.state.postInput === "") {
+      alert("Must not submit blank question");
+      return;
+    }
+    if (this.props.user) {
+      createPost(
+        this.props.user,
+        this.state.title,
+        this.state.postInput,
+        postId => {}
+      );
+      console.log("Created post!");
+      alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      getPosts({ sort: "top", limit: 100 }, allPosts => {
+        this.setState({ title: "", postInput: "", posts: allPosts });
+      });
+    } else alert("You must be logged in to submit a post!");
+    event.preventDefault();
+  }
+  */
+
+  render() {
+    return (
+      <div
+        style={{
+          backgroundColor: "#ADE1FF",
+          width: "100%",
+          height: "100vh"
+        }}
+      >
+        <AllContainer>
+          <SchoolContainer>
+            <UCLAimg></UCLAimg>
+            <UCLAname></UCLAname>  
+            <FactHolder>
+              <Fact>Welcome to BruinBridge!</Fact>
+              <Fact>Get started by creating a post</Fact>
+              <Fact>or finding a mentor!</Fact>
+            </FactHolder>
+            <SubmitPostModal user={this.props.user}/>
+            <Button>Find a Mentor</Button>
+          </SchoolContainer>
+          <QuestionsContainer>
             <PostContainer>
               <Filters>
                 Sort by:

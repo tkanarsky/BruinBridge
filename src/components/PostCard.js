@@ -18,7 +18,7 @@ import {
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
-  width: 96%;
+  width: 100%;
   height: auto;
   padding-top: 20px;
   padding-bottom: 20px;

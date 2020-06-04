@@ -77,7 +77,7 @@ export default class Comments extends React.Component {
                 lineHeight: "2em",
                 fontSize: "16px",
                 paddingLeft: "5x",
-                width: "80%"
+                width: "75%"
               }}
             ></input>
           </label>
@@ -86,7 +86,7 @@ export default class Comments extends React.Component {
             value="Submit"
             style={{
               backgroundColor: "#ffe457",
-              fontFamily: "Open Sans",
+              fontFamily: "Balsamiq Sans, Open Sans, sans-serif",
               fontSize: "15px",
               borderRadius: "20px",
               width: "100px",
