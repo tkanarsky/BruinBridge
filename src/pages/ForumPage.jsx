@@ -207,6 +207,7 @@ export default class ForumPage extends React.Component {
       );
       console.log("Created post!");
       // alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      this.setState({ postInput: "", title: "" });
       this.loadPosts(this.state.postOrder);
     } else alert("You must be logged in to submit a post!");
     event.preventDefault();
