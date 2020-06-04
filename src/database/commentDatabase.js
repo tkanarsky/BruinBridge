@@ -30,7 +30,9 @@ export function createComment(user, postId, text, idCallback) {
       getPost(postId, data => {
         let replyList = data.replies;
         replyList.push(newCommentRef.id);
+        console.log(postId);
         updatePost(postId, { replies: replyList });
+        console.log(replyList);
       });
       idCallback(newCommentRef.id);
     });
@@ -66,9 +68,12 @@ export function getComments(postId, callback) {
       .get()
       .then(snapshot => {
         let comments = [];
+        let commentIDs = [];
         snapshot.forEach(comment => {
           comments.push(comment.data());
+          commentIDs.push(comment.id);
         });
+        updatePost(postId, {replies: commentIDs});
         callback(comments);
       });
   });

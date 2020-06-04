@@ -34,7 +34,7 @@ export function postExists(key, callback) {
 }
 
 export function updatePost(key, data) {
-  if (!key || !data || (!data.title && !data.body)) return false;
+  if (!key || !data /* || (!data.title && !data.body)*/) return false;
   postExists(key, value => {
     if (!value) return false;
     data.edited = true;

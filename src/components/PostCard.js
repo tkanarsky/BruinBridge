@@ -12,7 +12,8 @@ import {
   FaRegThumbsUp,
   FaRegThumbsDown,
   FaThumbsUp,
-  FaThumbsDown
+  FaThumbsDown,
+  FaComments
 } from "react-icons/fa";
 
 const PostBackground = styled("div")`
@@ -70,11 +71,15 @@ const QuestionStyle = styled("div")`
 
 const DescriptionStyle = styled("div")`
   font-size: 16px;
+  padding-bottom: 15px;
   max-width: 800px;
 `;
 
-const CommentButtonStyle = styled("div")`
-  
+const CommentContainer = styled("div")`
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  max-width: 800px;
 `;
 const QuestionContainer = styled("div")`
   display: flex;
@@ -382,6 +387,16 @@ export default class PostCard extends React.Component {
           </ProfileContainer>  
           <QuestionStyle>{this.props.title}</QuestionStyle>
           <DescriptionStyle>{this.props.body}</DescriptionStyle>
+          <CommentContainer>
+            <FaComments
+              className={css`
+                height: 30px;
+                width: 30px;
+                padding-right: 10px;
+              `}
+            />
+            {this.props.replies.length} Comment{this.props.replies.length === 1 ? "" : "s"}
+          </CommentContainer>
         </QuestionContainer>
       </PostBackground>
     );

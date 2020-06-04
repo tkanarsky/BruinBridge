@@ -87,8 +87,7 @@ export default class CommentCard extends React.Component {
               />
             </Profile>
             <Name>{this.props.authorName} posted {timeSince(this.props.timestamp)}</Name>
-          </ProfileContainer>
-          
+          </ProfileContainer>     
           <CommentBody>{this.props.text}</CommentBody>
         </CommentsContainer>
       </All>
