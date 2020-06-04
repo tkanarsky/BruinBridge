@@ -72,14 +72,24 @@ export default class NavBar extends React.Component {
         <Container>
           <LHSBox><StyledLink to="/">Home</StyledLink></LHSBox>
           <LHSBox><StyledLink to="/forum">Forum</StyledLink></LHSBox>
-          {this.props.user && 
+          {this.props.user && !this.props.mentorStatus &&
           <LHSBox><StyledLink to="/mentor">My Mentor</StyledLink></LHSBox>
           }
+          {this.props.user && this.props.mentorStatus && 
+          <LHSBox><StyledLink to="/mentor">My Mentee</StyledLink></LHSBox>
+          }
           <DummyFiller />
-          {this.props.user && [
-          <RHSBox><StyledLink to="profile">My Profile</StyledLink></RHSBox>,
+          {this.props.user && 
+          <RHSBox><StyledLink to="profile">My Profile</StyledLink></RHSBox>
+          }
+          {this.props.user && 
           <RHSBox><ClickableText onClick={this.props.logout}>Sign Out</ClickableText></RHSBox>
-          ]
+          }
+          {!this.props.user && 
+          <RHSBox><ClickableText onClick={this.props.loginAsMentor}>Be a Mentor</ClickableText></RHSBox>
+          }
+          {!this.props.user && 
+          <RHSBox><ClickableText onClick={this.props.loginAsMentee}>Find a Mentor</ClickableText></RHSBox>
           }
         </Container>
       </Element>

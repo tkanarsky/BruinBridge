@@ -66,29 +66,6 @@ const UCLAname = styled("div")`
   }
 `;
 
-const Button = styled("button")`
-  display: flex;
-  background-color: #fff7cc;
-  border: 1px solid #ffd600;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 200px;
-  height: 50px;
-  border-radius: 50px;
-  font-size: 20px;
-  font-family: "Balsamiq Sans", "Open Sans", sans-serif;
-  font-weight: 700;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-  &:hover {
-    cursor: pointer;
-  }
-  ${mobile} {
-    display: none;
-  }
-`;
-
 const Fact = styled("div")`
   font-size: 18px;
   white-space: nowrap;
@@ -179,6 +156,8 @@ const FilterButton = styled("button")`
   font-size: 18px;
   width: 100px;
   height: 40px;
+  margin-left: 15px;
+  margin-right: 15px;
   &:hover {
     cursor: pointer;
   }
@@ -242,6 +221,7 @@ class SubmitPostModal extends React.Component {
       getPosts({ sort: "top", limit: 100 }, allPosts => {
         this.setState({ title: "", postInput: "", posts: allPosts });
       });
+      this.loadPosts(this.state.postOrder);
     } else alert("You must be logged in to submit a post!");
     this.handleClose();
     event.preventDefault();
@@ -335,8 +315,6 @@ class SubmitPostModal extends React.Component {
 		);
 	}
 }
-
-
 
 export default class ForumPage extends React.Component {
   constructor(props) {

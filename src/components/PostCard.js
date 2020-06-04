@@ -15,6 +15,7 @@ import {
   FaThumbsDown,
   FaComments
 } from "react-icons/fa";
+import { Fade } from "react-reveal";
 
 const PostBackground = styled("div")`
   background-color: #fff7cc;
@@ -91,6 +92,7 @@ export default class PostCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      postID: this.props.postID,
       userID: null,
       upvotes: this.props.upvotes,
       upvoteIcon: (
@@ -116,8 +118,19 @@ export default class PostCard extends React.Component {
   }
 
   componentDidUpdate() {
-    this.loadUser();
+    if (!this.state.loaded) this.loadUser();
   }
+ 
+  static getDerivedStateFromProps(nextProps, prevState){
+    if(nextProps.postID !== prevState.postID){ // If we reorder the posts in the 
+      return {
+        postID: nextProps.postID,
+        upvotes: nextProps.upvotes,
+        loaded: false
+      };
+   }
+   else return null;
+ }
 
   loadUser() {
     if (!this.state.loaded && this.props.user) {
@@ -364,7 +377,8 @@ export default class PostCard extends React.Component {
 
   render() {
     return (
-      <PostBackground>
+      <Fade duration={500} appear spy={this.state.postID}>
+        <PostBackground>
         <Votes>
           {this.state.upvoteIcon}
           {this.state.upvotes}
@@ -399,6 +413,7 @@ export default class PostCard extends React.Component {
           </CommentContainer>
         </QuestionContainer>
       </PostBackground>
+      </Fade>
     );
   }
 }
