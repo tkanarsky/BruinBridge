@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
@@ -11,16 +11,20 @@ const { mobile, notMobile } = mediaQueries;
 
 const SchoolContainer = styled("div")`
   width: 20%;
-  height: 96%;
+  height: 95%;
   position: sticky;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 30px;
-  margin-left: 30px;
+  margin-left: 20px;
   margin-right: 10px;
-  padding: 25px;
+  margin-bottom: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
   ${notMobile} {
     background-color: white;
   }
@@ -102,8 +106,7 @@ const PostContainer = styled("div")`
   background-color: white;
   border-radius: 25px;
   width: 98%;
-  height: 80%;
-  margin-top: 25px;
+  height: 95%;
   padding: 20px 20px 20px;
   box-sizing: border-box;
   overflow: scroll;
@@ -151,6 +154,7 @@ const AllContainer = styled("div")`
   flex-direction: row;
   padding-top: 25px;
   height: 100%;
+  padding-bottom: 25px;
   ${mobile} {
     flex-direction: column;
     align-items: center;
@@ -178,6 +182,10 @@ const FilterButton = styled("button")`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const ModalStyle = styled(Modal)`
+  font-family: 'Balsamiq Sans';
 `;
 
 class SubmitPostModal extends React.Component {
@@ -230,12 +238,12 @@ class SubmitPostModal extends React.Component {
         this.state.postInput,
         postId => {}
       );
-      console.log("Created post!");
-      alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      alert("Post submitted successfully!");
       getPosts({ sort: "top", limit: 100 }, allPosts => {
         this.setState({ title: "", postInput: "", posts: allPosts });
       });
     } else alert("You must be logged in to submit a post!");
+    this.handleClose();
     event.preventDefault();
   }
 
@@ -246,7 +254,12 @@ class SubmitPostModal extends React.Component {
 					Create a Post
         </Button>
 
-				<Modal size="lg" show={this.state.show} onHide={this.handleClose} centered backdrop="static">
+				<ModalStyle
+          size="lg"
+          show={this.state.show}
+          onHide={this.handleClose}
+          centered backdrop="static"
+        >
 					<Modal.Header closeButton>
 						<Modal.Title>Create a Post</Modal.Title>
 					</Modal.Header>
@@ -256,11 +269,13 @@ class SubmitPostModal extends React.Component {
                 <FlexBox>
                   <label
                     style={{
-                      paddingRight: "10px"
+                      paddingRight: "10px",
                     }}
                   >
-                    Title
+                  Title
                   </label>
+                </FlexBox>
+                <FlexBox>
                   <input
                     type="text"
                     value={this.state.title}
@@ -277,70 +292,59 @@ class SubmitPostModal extends React.Component {
                 <FlexBox>
                   <label
                     style={{
-                      paddingLeft: "25px",
+                      paddingTop: "10px",
                       paddingRight: "10px"
                     }}
                   >
-                    Description
+                    <span>
+                      Description
+                    </span>
                   </label>
-                  <input
-                    type="text"
+                </FlexBox>
+                <FlexBox>
+                  <textarea
                     value={this.state.postInput}
                     onChange={this.handleChange}
                     style={{
-                      lineHeight: "2em",
+                      lineHeight: "1.5em",
+                      resize: "none",
+                      overflow: "scroll",
+                      height: "200px",
                       fontSize: "16px",
                       paddingLeft: "5px",
                       paddingRight: "5px",
-                      flexGrow: 2
+                      flexGrow: 5
                     }}
                   />
                   </FlexBox>
                   <FlexBox>
-                  <input
-                    type="submit"
-                    value="Submit"
-                    style={{
-                      backgroundColor: "#ffe457",
-                      fontFamily: "Balsamiq Sans",
-                      fontWeight: 700,
-                      fontSize: "15px",
-                      marginLeft: "25px",
-                      borderRadius: "20px",
-                      width: "100px",
-                      height: "50px"
-                    }}
-                  />
                 </FlexBox>
               </form>
             </SubmitQuestion>
           </Modal.Body>
 					<Modal.Footer>
 						<Button onClick={this.handleClose}>
-							Close
+							Cancel
             </Button>
-						<Button onClick={this.handleClose}>
-							Save Changes
+						<Button onClick={this.handleSubmit}>
+							Post
             </Button>
 					</Modal.Footer>
-				</Modal>
+				</ModalStyle>
 			</>
 		);
 	}
 }
 
+
+
 export default class ForumPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // postInput: "",
-      // title: "",
       posts: null,
       postOrder: "top"
     };
-    // this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleTitle = this.handleTitle.bind(this);
     this.loadPosts = this.loadPosts.bind(this);
   }
 
@@ -354,40 +358,6 @@ export default class ForumPage extends React.Component {
       this.setState({ posts: allPosts }, () => this.forceUpdate());
     });
   }
-  /*
-  handleChange(event) {
-    this.setState({ postInput: event.target.value });
-  }
-
-  handleTitle(event) {
-    this.setState({ title: event.target.value });
-  }
-
-  handleSubmit(event) {
-    if (this.state.title === "") {
-      alert("Must have post title");
-      return;
-    }
-    if (this.state.postInput === "") {
-      alert("Must not submit blank question");
-      return;
-    }
-    if (this.props.user) {
-      createPost(
-        this.props.user,
-        this.state.title,
-        this.state.postInput,
-        postId => {}
-      );
-      console.log("Created post!");
-      alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
-      getPosts({ sort: "top", limit: 100 }, allPosts => {
-        this.setState({ title: "", postInput: "", posts: allPosts });
-      });
-    } else alert("You must be logged in to submit a post!");
-    event.preventDefault();
-  }
-  */
 
   render() {
     return (
