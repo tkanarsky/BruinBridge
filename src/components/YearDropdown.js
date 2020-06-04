@@ -17,8 +17,10 @@ const YearDrop = styled("div")`
 export default class YearDropdown extends React.Component {
   constructor(props) {
     super(props);
+    let curYear = [];
+    curYear.push({ label: this.props.curYear, value: this.props.curYear });
     this.state = {
-      selectedOption: this.props.curYear
+      selectedOption: curYear
     };
   }
 
