@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Modal } from "react-bootstrap";
-import { Button } from "./LandingPage.jsx"
+import { Button } from "./LandingPage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
@@ -109,7 +109,7 @@ const SubmitQuestion = styled("div")`
   }
 `;
 
-const FlexBox = styled("div")`
+export const FlexBox = styled("div")`
   display: flex;
   flex-direction: row wrap;
   justify-content: start;
@@ -231,7 +231,7 @@ class SubmitPostModal extends React.Component {
 	render() {
 		return (
 			<>
-				<Button variant="primary" onClick={this.handleShow}>
+				<Button onClick={this.handleShow}>
 					Create a Post
         </Button>
 
@@ -297,9 +297,8 @@ class SubmitPostModal extends React.Component {
                       flexGrow: 5
                     }}
                   />
-                  </FlexBox>
-                  <FlexBox>
                 </FlexBox>
+                <FlexBox />
               </form>
             </SubmitQuestion>
           </Modal.Body>

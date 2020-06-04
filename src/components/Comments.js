@@ -1,6 +1,8 @@
 import React from "react";
 import { createComment, getComments } from "../database/commentDatabase.js";
 import CommentCard from "./CommentCard";
+import { FlexBox } from "../pages/ForumPage";
+import { Button } from "../pages/LandingPage"
 import { Fade } from "react-reveal";
 
 export default class Comments extends React.Component {
@@ -69,32 +71,37 @@ export default class Comments extends React.Component {
       <>
         <Fade down distance={"15px"} duration={500}>
           <form onSubmit={this.handleSubmit}>
-            <label>
-              Add a comment &#160;
-              <input
-                type="text"
+            <FlexBox>
+              <label
+                style={{
+                  paddingTop: "10px",
+                  paddingRight: "10px"
+                }}
+              >
+                <span>
+                  Add a comment...
+                </span>
+              </label>
+            </FlexBox>
+            <FlexBox>
+              <textarea
                 value={this.state.comment}
                 onChange={this.handleComment}
                 style={{
-                  lineHeight: "2em",
+                  lineHeight: "1.5em",
+                  resize: "none",
+                  overflow: "scroll",
+                  height: "80px",
                   fontSize: "16px",
-                  paddingLeft: "5x",
-                  width: "75%"
+                  paddingLeft: "5px",
+                  paddingRight: "5px",
+                  flexGrow: 5
                 }}
               />
-            </label>
-            <input
-              type="submit"
-              value="Submit"
-              style={{
-                backgroundColor: "#ffe457",
-                fontFamily: "Balsamiq Sans, Open Sans, sans-serif",
-                fontSize: "15px",
-                borderRadius: "20px",
-                width: "100px",
-                height: "50px"
-              }}
-            />
+            </FlexBox>
+            <Button onClick={this.handleSubmit}>
+							Submit
+            </Button>
           </form>
         </Fade>
         {this.renderComments(this.state.comments)}
