@@ -1,5 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { Modal } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
 import { mediaQueries } from "../constants/media";
@@ -9,16 +11,20 @@ const { mobile, notMobile } = mediaQueries;
 
 const SchoolContainer = styled("div")`
   width: 20%;
-  height: 90%;
+  height: 95%;
   position: sticky;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 30px;
-  margin-left: 30px;
+  margin-left: 20px;
   margin-right: 10px;
-  padding: 25px;
+  margin-bottom: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
   ${notMobile} {
     background-color: white;
   }
@@ -76,10 +82,10 @@ const FactHolder = styled("div")`
 const PostContainer = styled("div")`
   background-color: white;
   border-radius: 25px;
-  width: 95%;
-  height: 80%;
-  margin-top: 25px;
-  padding: 20px;
+  width: 98%;
+  height: 95%;
+  padding: 20px 20px 20px;
+  box-sizing: border-box;
   overflow: scroll;
   ${mobile} {
     padding: 10px;
@@ -89,10 +95,11 @@ const PostContainer = styled("div")`
 const SubmitQuestion = styled("div")`
   background-color: white;
   border-radius: 20px;
-  width: 97%;
-  height: 50px;
+  width: 98%;
+  height: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
+  box-sizing: border-box;
   ${mobile} {
     height: 150px;
     display: flex;
@@ -124,6 +131,7 @@ const AllContainer = styled("div")`
   flex-direction: row;
   padding-top: 25px;
   height: 100%;
+  padding-bottom: 25px;
   ${mobile} {
     flex-direction: column;
     align-items: center;
@@ -155,32 +163,36 @@ const FilterButton = styled("button")`
   }
 `;
 
-export default class ForumPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const ModalStyle = styled(Modal)`
+  font-family: 'Balsamiq Sans';
+`;
+
+class SubmitPostModal extends React.Component {
+	constructor(props, context) {
+		super(props, context);
+
+		this.state = {
+      show: false,
       postInput: "",
-      title: "",
-      posts: null,
-      postOrder: "top"
+      title: ""
     };
+    
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
-    this.loadPosts = this.loadPosts.bind(this);
-  }
+	}
 
-  componentDidMount() {
-    this.loadPosts(this.state.postOrder);
-  }
+	handleClose() {
+		this.setState({ show: false });
+	}
 
-  loadPosts(order) {
-    this.setState({ postOrder: order });
-    getPosts({ sort: order, limit: 100 }, allPosts => {
-      this.setState({ posts: allPosts }, () => this.forceUpdate());
-    });
+	handleShow() {
+		this.setState({ show: true });
   }
-
+  
   handleChange(event) {
     this.setState({ postInput: event.target.value });
   }
@@ -205,11 +217,124 @@ export default class ForumPage extends React.Component {
         this.state.postInput,
         postId => {}
       );
-      console.log("Created post!");
-      // alert(this.state.title + " Post: " + this.state.postInput); //testing purposes can delete later
+      alert("Post submitted successfully!");
+      getPosts({ sort: "top", limit: 100 }, allPosts => {
+        this.setState({ title: "", postInput: "", posts: allPosts });
+      });
       this.loadPosts(this.state.postOrder);
     } else alert("You must be logged in to submit a post!");
+    this.handleClose();
     event.preventDefault();
+  }
+
+	render() {
+		return (
+			<>
+				<Button variant="primary" onClick={this.handleShow}>
+					Create a Post
+        </Button>
+
+				<ModalStyle
+          size="lg"
+          show={this.state.show}
+          onHide={this.handleClose}
+          centered backdrop="static"
+        >
+					<Modal.Header closeButton>
+						<Modal.Title>Create a Post</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+            <SubmitQuestion>
+              <form onSubmit={this.handleSubmit}>
+                <FlexBox>
+                  <label
+                    style={{
+                      paddingRight: "10px",
+                    }}
+                  >
+                  Title
+                  </label>
+                </FlexBox>
+                <FlexBox>
+                  <input
+                    type="text"
+                    value={this.state.title}
+                    onChange={this.handleTitle}
+                    style={{
+                      lineHeight: "2em",
+                      fontSize: "16px",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                      flexGrow: 1
+                    }}
+                  />
+                </FlexBox>
+                <FlexBox>
+                  <label
+                    style={{
+                      paddingTop: "10px",
+                      paddingRight: "10px"
+                    }}
+                  >
+                    <span>
+                      Description
+                    </span>
+                  </label>
+                </FlexBox>
+                <FlexBox>
+                  <textarea
+                    value={this.state.postInput}
+                    onChange={this.handleChange}
+                    style={{
+                      lineHeight: "1.5em",
+                      resize: "none",
+                      overflow: "scroll",
+                      height: "200px",
+                      fontSize: "16px",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                      flexGrow: 5
+                    }}
+                  />
+                  </FlexBox>
+                  <FlexBox>
+                </FlexBox>
+              </form>
+            </SubmitQuestion>
+          </Modal.Body>
+					<Modal.Footer>
+						<Button onClick={this.handleClose}>
+							Cancel
+            </Button>
+						<Button onClick={this.handleSubmit}>
+							Post
+            </Button>
+					</Modal.Footer>
+				</ModalStyle>
+			</>
+		);
+	}
+}
+
+export default class ForumPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: null,
+      postOrder: "top"
+    };
+    this.loadPosts = this.loadPosts.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadPosts(this.state.postOrder);
+  }
+
+  loadPosts(order) {
+    this.setState({ postOrder: order });
+    getPosts({ sort: order, limit: 100 }, allPosts => {
+      this.setState({ posts: allPosts }, () => this.forceUpdate());
+    });
   }
 
   render() {
@@ -224,74 +349,16 @@ export default class ForumPage extends React.Component {
         <AllContainer>
           <SchoolContainer>
             <UCLAimg></UCLAimg>
-            <UCLAname></UCLAname>
+            <UCLAname></UCLAname>  
             <FactHolder>
-              <Fact>#1 Public University!</Fact>
-              <Fact>#1 College Dining Hall Food!</Fact>
-              <Fact>yay woooooooo</Fact>
-              <Fact>more info here</Fact>
+              <Fact>Welcome to BruinBridge!</Fact>
+              <Fact>Get started by creating a post</Fact>
+              <Fact>or finding a mentor!</Fact>
             </FactHolder>
+            <SubmitPostModal user={this.props.user}/>
+            <Button>Find a Mentor</Button>
           </SchoolContainer>
           <QuestionsContainer>
-            <SubmitQuestion>
-              <form onSubmit={this.handleSubmit}>
-                <FlexBox>
-                  <label
-                    style={{
-                      paddingRight: "10px"
-                    }}
-                  >
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    value={this.state.title}
-                    onChange={this.handleTitle}
-                    style={{
-                      lineHeight: "2em",
-                      fontSize: "16px",
-                      paddingLeft: "5px",
-                      paddingRight: "5px",
-                      flexGrow: 1
-                    }}
-                  />
-                  <label
-                    style={{
-                      paddingLeft: "25px",
-                      paddingRight: "10px"
-                    }}
-                  >
-                    Description
-                  </label>
-                  <input
-                    type="text"
-                    value={this.state.postInput}
-                    onChange={this.handleChange}
-                    style={{
-                      lineHeight: "2em",
-                      fontSize: "16px",
-                      paddingLeft: "5px",
-                      paddingRight: "5px",
-                      flexGrow: 2
-                    }}
-                  />
-                  <input
-                    type="submit"
-                    value="Submit"
-                    style={{
-                      backgroundColor: "#ffe457",
-                      fontFamily: "Balsamiq Sans",
-                      fontWeight: 700,
-                      fontSize: "15px",
-                      marginLeft: "25px",
-                      borderRadius: "20px",
-                      width: "100px",
-                      height: "50px"
-                    }}
-                  />
-                </FlexBox>
-              </form>
-            </SubmitQuestion>
             <PostContainer>
               <Filters>
                 Sort by:
