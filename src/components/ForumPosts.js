@@ -1,8 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Modal } from "react-bootstrap";
-import { Button } from "../pages/LandingPage"
-import { FlexBox } from "../pages/ForumPage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Accordion,
@@ -28,8 +26,6 @@ class OpenPostModal extends React.Component {
 
 		this.state = {
       show: false,
-      // postInput: "",
-      // title: ""
     };
     
     this.handleShow = this.handleShow.bind(this);
@@ -53,6 +49,7 @@ class OpenPostModal extends React.Component {
             upvotes={this.props.post.upvotes}
             authorPic={this.props.post.author_avatar}
             authorName={this.props.post.author_name}
+            authorID={this.props.post.author_id}
             timestamp={this.props.post.timestamp}
             replies={this.props.post.replies}
             user={this.props.user}
@@ -70,12 +67,13 @@ class OpenPostModal extends React.Component {
 					<Modal.Header closeButton>
             <Modal.Title>Commenting on {this.props.post.author_name}'s post: {this.props.post.title}</Modal.Title>
           </Modal.Header>
-					<Modal.Body closeButton>
+					<Modal.Body>
             <PostCard
               postID={this.props.post.post_id}
               upvotes={this.props.post.upvotes}
               authorPic={this.props.post.author_avatar}
               authorName={this.props.post.author_name}
+              authorID={this.props.post.author_id}
               timestamp={this.props.post.timestamp}
               replies={this.props.post.replies}
               user={this.props.user}
@@ -96,28 +94,6 @@ export default class ForumPost extends React.Component {
     return allPosts.map((post, i) => {
       return (
         <OpenPostModal post={post} user={this.props.user}/>
-        /*
-        <AccordionItem key={i}>
-          <AccordionItemHeading>
-            <AccordionItemButton>
-              <PostCard
-                postID={post.post_id}
-                upvotes={post.upvotes}
-                authorPic={post.author_avatar}
-                authorName={post.author_name}
-                timestamp={post.timestamp}
-                replies={post.replies}
-                user={this.props.user}
-                title={post.title}
-                body={post.body}
-              ></PostCard>
-            </AccordionItemButton>
-          </AccordionItemHeading>
-          <AccordionItemPanel>
-            <Comments user={this.props.user} postID={post.post_id}></Comments>
-          </AccordionItemPanel>
-        </AccordionItem>
-        */
       );
     });
   }
