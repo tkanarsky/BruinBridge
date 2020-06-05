@@ -8,7 +8,7 @@ import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
 import { mediaQueries } from "../constants/media";
 import { BsPencil } from "react-icons/bs";
-const { mobile, notMobile } = mediaQueries;
+const { mobile } = mediaQueries;
 
 const Container = styled("div")`
   background-color: white;

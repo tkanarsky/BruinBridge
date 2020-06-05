@@ -196,7 +196,7 @@ export function timeSince(timestamp) {
     let d = new Date(timestamp);
     let day = d.getDate();
     let month = d.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ", "");
-    let year = d.getFullYear() == now.getFullYear() ? "" : " " + d.getFullYear();
+    let year = d.getFullYear() === now.getFullYear() ? "" : " " + d.getFullYear();
     return day + " " + month + year;
   }
 }

@@ -6,7 +6,7 @@ import {
   downvotePost,
   timeSince
 } from "../database/postDatabase.js";
-import styled, { css as styledCSS } from "styled-components";
+import styled from "styled-components";
 import { css } from "emotion";
 import {
   FaRegThumbsUp,
@@ -15,7 +15,6 @@ import {
   FaThumbsDown,
   FaComments
 } from "react-icons/fa";
-import ProfilePage from "../pages/ProfilePage";
 import { getUser } from "../database/userDatabase"
 import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -124,7 +123,11 @@ class OpenProfileModal extends React.Component {
 		this.setState({ show: false });
 	}
 
-	handleShow() {
+	handleShow(e) {
+    console.log("handleshow called in profile modal");
+    e.stopPropagation();
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
 		this.setState({ show: true });
   }
 

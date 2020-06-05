@@ -1,13 +1,9 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel
 } from "react-accessible-accordion";
 import Comments from "./Comments";
 import PostCard from "./PostCard";
@@ -36,7 +32,11 @@ class OpenPostModal extends React.Component {
 		this.setState({ show: false });
 	}
 
-	handleShow() {
+	handleShow(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+    console.log("handleshow called in post modal");
 		this.setState({ show: true });
   }
 

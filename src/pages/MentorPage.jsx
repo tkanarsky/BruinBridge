@@ -6,12 +6,11 @@ import { css } from "emotion";
 import { FiArrowUpCircle } from "react-icons/fi";
 import {
   sendMessage,
-  getMessages,
   subscribeToChat,
   unsubscribeFromChat
 } from "../database/chatDatabase";
 import { mediaQueries } from "../constants/media";
-const { mobile, notMobile } = mediaQueries;
+const { mobile } = mediaQueries;
 
 const Button = styled("button")`
   display: flex;
