@@ -6,7 +6,7 @@ import {
   downvotePost,
   timeSince
 } from "../database/postDatabase.js";
-import styled from "styled-components";
+import styled, { css as styledCSS } from "styled-components";
 import { css } from "emotion";
 import {
   FaRegThumbsUp,
@@ -15,6 +15,10 @@ import {
   FaThumbsDown,
   FaComments
 } from "react-icons/fa";
+import ProfilePage from "../pages/ProfilePage";
+import { getUser } from "../database/userDatabase"
+import { Modal } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Fade } from "react-reveal";
 
 const PostBackground = styled("div")`
@@ -86,6 +90,118 @@ const QuestionContainer = styled("div")`
   display: flex;
   flex-direction: column;
 `;
+
+const ModalStyle = styled(Modal)`
+  font-family: 'Balsamiq Sans';
+  margin-top: 50px;
+  margin-bottom: 50px;
+  max-height: 100%;
+  overflow-y: scroll;
+`;
+
+class OpenProfileModal extends React.Component {
+	constructor(props, context) {
+		super(props, context);
+
+		this.state = {
+      show: false,
+      dataLoaded: false,
+      name: null,
+      pic: null,
+      major: null,
+      year: null,
+      bio: null,
+      karma: null,
+      interests: null
+    };
+    
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.loadData = this.loadData.bind(this);
+	}
+
+	handleClose() {
+		this.setState({ show: false });
+	}
+
+	handleShow() {
+		this.setState({ show: true });
+  }
+
+  loadData() {
+    getUser(this.props.userID, user => {
+      this.setState({
+        dataLoaded: true,
+        name: user.name,
+        pic: user.avatar,
+        major: user.major,
+        year: user.year,
+        bio: user.bio,
+        karma: user.karma,
+        interest1: user.interest1,
+        interest2: user.interest2,
+        interest3: user.interest3
+      });
+      this.forceUpdate();
+    });
+  }
+
+	render() {
+    if (!this.state.dataLoaded) {
+      this.loadData();
+    }
+		return (
+      <>
+        <Profile>
+          <img
+            src={this.props.authorPic}
+            alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+            className={css`
+              border-radius: 50%;
+              height: 40px;
+              width: 40px;
+            `}
+            onClick={this.handleShow}
+          />
+        </Profile>
+
+        <ModalStyle
+          show={this.state.show}
+          onHide={this.handleClose}
+          centered
+        >
+					<Modal.Header closeButton>
+            <Modal.Title> {(this.state.dataLoaded) ? this.state.name + "'s Profile" : "Loading..."}</Modal.Title>
+          </Modal.Header>
+					<Modal.Body>
+            <PostBackground>
+              <QuestionContainer>
+                <ProfileContainer>
+                  <Profile>
+                    <img
+                      src={this.props.authorPic}
+                      alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                      className={css`
+                        border-radius: 50%;
+                        height: 80px;
+                        width: 80px;
+                      `}
+                    />
+                  </Profile>  
+                  <Name>{this.state.name}</Name> 
+                </ProfileContainer>
+                <DescriptionStyle>Major: {(this.state.dataLoaded) ? this.state.major : "loading..."}</DescriptionStyle>
+                <DescriptionStyle>Class of {(this.state.dataLoaded) ? this.state.year : "loading..."}</DescriptionStyle>
+                <DescriptionStyle>Karma: {(this.state.dataLoaded) ? this.state.karma: "loading..."}</DescriptionStyle>
+              </QuestionContainer>
+            </PostBackground>
+          </Modal.Body>       
+					<Modal.Footer />
+				</ModalStyle>
+      </>
+		);
+	}
+}
 
 export default class PostCard extends React.Component {
   _disabled = false;
@@ -387,15 +503,7 @@ export default class PostCard extends React.Component {
           <QuestionContainer>
             <ProfileContainer>
               <Profile>
-                <img
-                  src={this.props.authorPic}
-                  alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
-                  className={css`
-                    border-radius: 50%;
-                    height: 40px;
-                    width: 40px;
-                  `}
-                />
+                <OpenProfileModal userID={this.props.authorID} authorPic={this.props.authorPic}/>
               </Profile>  
               <Name>{this.props.authorName} posted {timeSince(this.props.timestamp)}</Name> 
             </ProfileContainer>  
