@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = styled("button")`
+export const Button = styled("button")`
   display: flex;
   background-color: #fff7cc;
   border: 1px solid #ffd600;
