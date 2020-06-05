@@ -21,29 +21,28 @@ class OpenPostModal extends React.Component {
 		super(props, context);
 
 		this.state = {
-      show: false,
+      showModal: false,
     };
     
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.postModalShow = this.postModalShow.bind(this);
+    this.postModalClose = this.postModalClose.bind(this);
 	}
 
-	handleClose() {
-		this.setState({ show: false });
+	postModalClose() {
+		this.setState({ showModal: false });
 	}
 
-	handleShow(e) {
+	postModalShow(e) {
     e.stopPropagation();
     e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation();
     console.log("handleshow called in post modal");
-		this.setState({ show: true });
+		this.setState({ showModal: true });
   }
 
 	render() {
 		return (
 			<>
-        <div onClick={this.handleShow}>
+        <div onDoubleClick={this.postModalShow}>
           <PostCard
             postID={this.props.post.post_id}
             upvotes={this.props.post.upvotes}
@@ -60,8 +59,8 @@ class OpenPostModal extends React.Component {
        
 				<ModalStyle
           size="xl"
-          show={this.state.show}
-          onHide={this.handleClose}
+          show={this.state.showModal}
+          onHide={this.postModalClose}
           centered
         >
 					<Modal.Header closeButton>
@@ -93,7 +92,7 @@ export default class ForumPost extends React.Component {
   renderPosts(allPosts) {
     return allPosts.map((post, i) => {
       return (
-        <OpenPostModal post={post} user={this.props.user}/>
+        <OpenPostModal post={post} user={this.props.user} key={i}/>
       );
     });
   }

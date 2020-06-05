@@ -119,15 +119,14 @@ class OpenProfileModal extends React.Component {
     this.loadData = this.loadData.bind(this);
 	}
 
-	handleClose() {
+	handleClose(e) {
 		this.setState({ show: false });
 	}
 
 	handleShow(e) {
-    console.log("handleshow called in profile modal");
     e.stopPropagation();
     e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation();
+    console.log("handleshow called in profile modal");
 		this.setState({ show: true });
   }
 
@@ -147,7 +146,7 @@ class OpenProfileModal extends React.Component {
       });
       this.forceUpdate();
     });
-  }
+  } 
 
 	render() {
     if (!this.state.dataLoaded) {
@@ -500,7 +499,7 @@ export default class PostCard extends React.Component {
 
   render() {
     return (
-      <Fade duration={500} appear spy={this.state.postID}>
+      <Fade duration={500} appear spy={this.state.postID} key={this.state.postID}>
         <PostBackground>
           <Votes>
             {this.state.upvoteIcon}
