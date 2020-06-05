@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { css } from "emotion";
-import { YearPicker } from "react-dropdown-date";
 import MajorDropdown from "../components/MajorDropdown";
 import YearDropdown from "../components/YearDropdown";
 import InterestsDropdown from "../components/InterestsDropdown";
 import { updateUser, getUser } from "../database/userDatabase.js";
 import EdiText from "react-editext";
 import { mediaQueries } from "../constants/media";
+import { BsPencil } from "react-icons/bs";
 const { mobile, notMobile } = mediaQueries;
 
 const Container = styled("div")`
@@ -69,18 +69,18 @@ const Button = styled("button")`
   border: 1px solid #ffd600;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 200px;
+  width: 150px;
   height: 50px;
   border-radius: 50px;
   font-size: 20px;
-  font-family: "Open Sans";
-  font-weight: bold;
+  font-family: "Balsamiq Sans";
   justify-content: center;
   align-items: center;
   margin: 20px;
 
   &:hover {
     cursor: pointer;
+    background-color: #ffd600;
   }
 `;
 
@@ -319,7 +319,10 @@ export default class ProfilePage extends React.Component {
                     {", "}
                     {this.state.i3}
                   </Pair>
-                  <Button onClick={this.Edit}>Edit</Button>
+                  <Button onClick={this.Edit}>
+                    <BsPencil />
+                    &nbsp; Edit
+                  </Button>
                 </InfoContainer>
               </Container>
             );

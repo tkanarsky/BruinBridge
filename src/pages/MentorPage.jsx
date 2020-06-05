@@ -7,7 +7,8 @@ import { FiArrowUpCircle } from "react-icons/fi";
 import {
   sendMessage,
   getMessages,
-  subscribeToChat
+  subscribeToChat,
+  unsubscribeFromChat
 } from "../database/chatDatabase";
 import { mediaQueries } from "../constants/media";
 const { mobile, notMobile } = mediaQueries;
@@ -208,6 +209,11 @@ export default class MentorPage extends React.Component {
 
   componentDidMount() {
     this.loadData();
+  }
+
+  componentWillUnmount() {
+    unsubscribeFromChat(this.props.user, this.state.mentorID, 
+      this.state.menteeID);
   }
 
   componentDidUpdate() {

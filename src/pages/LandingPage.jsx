@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Button = styled("button")`
+const Button = styled("button")`
   display: flex;
   background-color: #fff7cc;
   border: 1px solid #ffd600;
@@ -11,7 +11,7 @@ export const Button = styled("button")`
   height: 50px;
   border-radius: 50px;
   font-size: 20px;
-  font-family: 'Balsamiq Sans', "Open Sans", sans-serif;
+  font-family: "Balsamiq Sans", "Open Sans", sans-serif;
   font-weight: bold;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@ const ButtonContainer = styled("div")`
 `;
 
 const Caption = styled("div")`
-  font-family: 'Balsamiq Sans', "Open Sans", sans-serif;
+  font-family: "Balsamiq Sans", "Open Sans", sans-serif;
   font-size: 25px;
   text-align: center;
   padding-top: 40px;

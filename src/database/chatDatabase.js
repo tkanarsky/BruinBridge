@@ -72,3 +72,11 @@ export function subscribeToChat(user, mentorId, menteeId, callback) {
         callback(data.val());
     });
 }
+
+export function unsubscribeFromChat(user, mentorId, menteeId) {
+    if (!(user.uid === mentorId || user.uid === menteeId)) return false;
+    chatRef
+    .child(getChatHash(mentorId, menteeId))
+    .child("messages")
+    .off("child_added");
+}

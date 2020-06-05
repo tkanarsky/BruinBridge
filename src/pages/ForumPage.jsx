@@ -7,6 +7,7 @@ import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
 import { mediaQueries } from "../constants/media";
 import { IoIosRocket } from "react-icons/io";
+import { BsPencil } from "react-icons/bs";
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 const { mobile, notMobile } = mediaQueries;
 
@@ -35,6 +36,40 @@ const SchoolContainer = styled("div")`
     height: 10%;
     flex-direction: row;
     justify-content: space-around;
+  }
+`;
+
+const Button = styled("button")`
+  display: flex;
+  background-color: #0e92fb;
+  border: 1px solid #ade1ff;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-family: "Balsamiq Sans", "Open Sans", sans-serif;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  /* margin: 20px; */
+  color: white;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #61b9ff;
+  }
+`;
+
+const CreatePostButton = styled(Button)`
+  color: white;
+`;
+
+const CancelButton = styled(Button)`
+  background-color: red;
+  &:hover {
+    background-color: #ff5b96;
   }
 `;
 
@@ -152,8 +187,8 @@ const FilterButton = styled("button")`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  left-padding: 5px;
-  right-padding: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
   font-size: 18px;
   width: 100px;
   height: 40px;
@@ -161,39 +196,50 @@ const FilterButton = styled("button")`
   margin-right: 15px;
   &:hover {
     cursor: pointer;
+    background-color: #f6f6f6;
+  }
+`;
+
+const FilterPostButtons = styled("div")`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px;
+  ${mobile} {
+    flex-direction: column;
   }
 `;
 
 const ModalStyle = styled(Modal)`
-  font-family: 'Balsamiq Sans';
+  font-family: "Balsamiq Sans";
 `;
 
 class SubmitPostModal extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+  constructor(props, context) {
+    super(props, context);
 
-		this.state = {
+    this.state = {
       show: false,
       postInput: "",
       title: ""
     };
-    
+
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
-	}
-
-	handleClose() {
-		this.setState({ show: false });
-	}
-
-	handleShow() {
-		this.setState({ show: true });
   }
-  
+
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
   handleChange(event) {
     this.setState({ postInput: event.target.value });
   }
@@ -228,32 +274,35 @@ class SubmitPostModal extends React.Component {
     event.preventDefault();
   }
 
-	render() {
-		return (
-			<>
-				<Button onClick={this.handleShow}>
-					Create a Post
-        </Button>
 
-				<ModalStyle
+  render() {
+    return (
+      <>
+        <CreatePostButton variant="primary" onClick={this.handleShow}>
+          <BsPencil />
+          &nbsp; Create a Post &nbsp;
+        </CreatePostButton>
+
+        <ModalStyle
           size="lg"
           show={this.state.show}
           onHide={this.handleClose}
-          centered backdrop="static"
+          centered
+          backdrop="static"
         >
-					<Modal.Header closeButton>
-						<Modal.Title>Create a Post</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
+          <Modal.Header closeButton>
+            <Modal.Title>Create a Post</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <SubmitQuestion>
               <form onSubmit={this.handleSubmit}>
                 <FlexBox>
                   <label
                     style={{
-                      paddingRight: "10px",
+                      paddingRight: "10px"
                     }}
                   >
-                  Title
+                    Title
                   </label>
                 </FlexBox>
                 <FlexBox>
@@ -277,9 +326,7 @@ class SubmitPostModal extends React.Component {
                       paddingRight: "10px"
                     }}
                   >
-                    <span>
-                      Description
-                    </span>
+                    <span>Description</span>
                   </label>
                 </FlexBox>
                 <FlexBox>
@@ -302,18 +349,14 @@ class SubmitPostModal extends React.Component {
               </form>
             </SubmitQuestion>
           </Modal.Body>
-					<Modal.Footer>
-						<Button onClick={this.handleClose}>
-							Cancel
-            </Button>
-						<Button onClick={this.handleSubmit}>
-							Post
-            </Button>
-					</Modal.Footer>
-				</ModalStyle>
-			</>
-		);
-	}
+          <Modal.Footer>
+            <CancelButton onClick={this.handleClose}>Cancel</CancelButton>
+            <Button onClick={this.handleSubmit}>Post</Button>
+          </Modal.Footer>
+        </ModalStyle>
+      </>
+    );
+  }
 }
 
 export default class ForumPage extends React.Component {
@@ -349,32 +392,33 @@ export default class ForumPage extends React.Component {
         <AllContainer>
           <SchoolContainer>
             <UCLAimg></UCLAimg>
-            <UCLAname></UCLAname>  
+            <UCLAname></UCLAname>
             <FactHolder>
               <Fact>Welcome to BruinBridge!</Fact>
               <Fact>Get started by creating a post</Fact>
               <Fact>or finding a mentor!</Fact>
             </FactHolder>
-            <SubmitPostModal user={this.props.user}/>
-            <Button>Find a Mentor</Button>
           </SchoolContainer>
           <QuestionsContainer>
             <PostContainer>
-              <Filters>
-                Sort by:
-                <FilterButton onClick={() => this.loadPosts("top")}>
-                  <IoIosRocket />
-                  &nbsp; Top
-                </FilterButton>
-                <FilterButton onClick={() => this.loadPosts("new")}>
-                  <FaSortAmountUpAlt />
-                  &nbsp; New
-                </FilterButton>
-                <FilterButton onClick={() => this.loadPosts("old")}>
-                  <FaSortAmountDown />
-                  &nbsp; Old
-                </FilterButton>
-              </Filters>
+              <FilterPostButtons>
+                <SubmitPostModal user={this.props.user} />
+                <Filters>
+                  Sort by:
+                  <FilterButton onClick={() => this.loadPosts("top")}>
+                    <IoIosRocket />
+                    &nbsp; Top
+                  </FilterButton>
+                  <FilterButton onClick={() => this.loadPosts("new")}>
+                    <FaSortAmountUpAlt />
+                    &nbsp; New
+                  </FilterButton>
+                  <FilterButton onClick={() => this.loadPosts("old")}>
+                    <FaSortAmountDown />
+                    &nbsp; Old
+                  </FilterButton>
+                </Filters>
+              </FilterPostButtons>
               <ForumPosts
                 user={this.props.user}
                 posts={this.state.posts}
