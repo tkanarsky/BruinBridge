@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Modal } from "react-bootstrap";
-import { Button } from "./LandingPage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
