@@ -1,13 +1,14 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Modal } from "react-bootstrap";
-//import { Button } from "./LandingPage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createPost, getPosts } from "../database/postDatabase.js";
 import ForumPosts from "../components/ForumPosts";
 import { mediaQueries } from "../constants/media";
 import { IoIosRocket } from "react-icons/io";
 import { BsPencil } from "react-icons/bs";
+import { facts } from "../constants/facts.js";
+import { Fade } from "react-reveal"
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 const { mobile, notMobile } = mediaQueries;
 
@@ -104,10 +105,13 @@ const UCLAname = styled("div")`
 
 const Fact = styled("div")`
   font-size: 18px;
-  white-space: nowrap;
   ${mobile} {
     display: none;
   }
+`;
+
+const FactHeading = styled(Fact)`
+font-weight: 700;
 `;
 
 const FactHolder = styled("div")`
@@ -376,7 +380,9 @@ export default class ForumPage extends React.Component {
   loadPosts(order) {
     this.setState({ postOrder: order });
     getPosts({ sort: order, limit: 100 }, allPosts => {
-      this.setState({ posts: allPosts }, () => this.forceUpdate());
+      if (this.state.factNum)
+        this.setState({ posts: allPosts }, () => this.forceUpdate());
+      else this.setState({ posts: allPosts, factNum: Math.floor(Math.random() * facts.length) }, () => this.forceUpdate());
     });
   }
 
@@ -393,11 +399,15 @@ export default class ForumPage extends React.Component {
           <SchoolContainer>
             <UCLAimg></UCLAimg>
             <UCLAname></UCLAname>
-            <FactHolder>
-              <Fact>Welcome to BruinBridge!</Fact>
-              <Fact>Get started by creating a post</Fact>
-              <Fact>or finding a mentor!</Fact>
-            </FactHolder>
+            {this.state.factNum &&
+              <Fade duration={500}>
+                <FactHolder>
+                  <FactHeading>Fun fact: </FactHeading>
+                  <Fact>{facts[this.state.factNum]}</Fact>
+                </FactHolder>
+              </Fade>
+            }
+            
           </SchoolContainer>
           <QuestionsContainer>
             <PostContainer>
