@@ -379,40 +379,40 @@ export default class PostCard extends React.Component {
     return (
       <Fade duration={500} appear spy={this.state.postID}>
         <PostBackground>
-        <Votes>
-          {this.state.upvoteIcon}
-          {this.state.upvotes}
-          {this.state.downvoteIcon}
-        </Votes>
-        <QuestionContainer>
-          <ProfileContainer>
-            <Profile>
-              <img
-                src={this.props.authorPic}
-                alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+          <Votes>
+            {this.state.upvoteIcon}
+            {this.state.upvotes}
+            {this.state.downvoteIcon}
+          </Votes>
+          <QuestionContainer>
+            <ProfileContainer>
+              <Profile>
+                <img
+                  src={this.props.authorPic}
+                  alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                  className={css`
+                    border-radius: 50%;
+                    height: 40px;
+                    width: 40px;
+                  `}
+                />
+              </Profile>  
+              <Name>{this.props.authorName} posted {timeSince(this.props.timestamp)}</Name> 
+            </ProfileContainer>  
+            <QuestionStyle>{this.props.title}</QuestionStyle>
+            <DescriptionStyle>{this.props.body}</DescriptionStyle>
+            <CommentContainer>
+              <FaComments
                 className={css`
-                  border-radius: 50%;
-                  height: 40px;
-                  width: 40px;
+                  height: 30px;
+                  width: 30px;
+                  padding-right: 10px;
                 `}
               />
-            </Profile>  
-            <Name>{this.props.authorName} posted {timeSince(this.props.timestamp)}</Name> 
-          </ProfileContainer>  
-          <QuestionStyle>{this.props.title}</QuestionStyle>
-          <DescriptionStyle>{this.props.body}</DescriptionStyle>
-          <CommentContainer>
-            <FaComments
-              className={css`
-                height: 30px;
-                width: 30px;
-                padding-right: 10px;
-              `}
-            />
-            {this.props.replies.length} Comment{this.props.replies.length === 1 ? "" : "s"}
-          </CommentContainer>
-        </QuestionContainer>
-      </PostBackground>
+              {this.props.replies.length} Comment{this.props.replies.length === 1 ? "" : "s"}
+            </CommentContainer>
+          </QuestionContainer>
+        </PostBackground>
       </Fade>
     );
   }
