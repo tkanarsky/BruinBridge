@@ -177,7 +177,8 @@ export default class PostCard extends React.Component {
     }
   }
 
-  handleUpvoteWithDownvote() {
+  handleUpvoteWithDownvote(e) {
+    e.stopPropagation();
     if (!this.props.user) {
       alert("You must be logged in to upvote or downvote!");
       return;
@@ -212,7 +213,8 @@ export default class PostCard extends React.Component {
     }
   }
 
-  handleDownvoteWithUpvote() {
+  handleDownvoteWithUpvote(e) {
+    e.stopPropagation();
     if (!this.props.user) {
       alert("You must be logged in to upvote or downvote!");
       return;
@@ -249,7 +251,8 @@ export default class PostCard extends React.Component {
     }
   }
 
-  handleUpvote() {
+  handleUpvote(e) {
+    e.stopPropagation();
     if (!this.props.user) {
       alert("You must be logged in to upvote or downvote!");
       return;
@@ -313,7 +316,8 @@ export default class PostCard extends React.Component {
     }
   }
 
-  handleDownvote() {
+  handleDownvote(e) {
+    e.stopPropagation();
     if (!this.props.user) {
       alert("You must be logged in to upvote or downvote!");
       return;
