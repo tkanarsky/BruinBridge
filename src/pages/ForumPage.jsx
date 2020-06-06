@@ -8,7 +8,7 @@ import { mediaQueries } from "../constants/media";
 import { IoIosRocket } from "react-icons/io";
 import { BsPencil } from "react-icons/bs";
 import { facts } from "../constants/facts.js";
-import { Fade } from "react-reveal"
+import { Fade } from "react-reveal";
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 const { mobile, notMobile } = mediaQueries;
 
@@ -111,7 +111,7 @@ const Fact = styled("div")`
 `;
 
 const FactHeading = styled(Fact)`
-font-weight: 700;
+  font-weight: 700;
 `;
 
 const FactHolder = styled("div")`
@@ -211,6 +211,8 @@ const FilterPostButtons = styled("div")`
   padding: 15px;
   ${mobile} {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -277,7 +279,6 @@ class SubmitPostModal extends React.Component {
     this.handleClose();
     event.preventDefault();
   }
-
 
   render() {
     return (
@@ -382,7 +383,14 @@ export default class ForumPage extends React.Component {
     getPosts({ sort: order, limit: 100 }, allPosts => {
       if (this.state.factNum)
         this.setState({ posts: allPosts }, () => this.forceUpdate());
-      else this.setState({ posts: allPosts, factNum: Math.floor(Math.random() * facts.length) }, () => this.forceUpdate());
+      else
+        this.setState(
+          {
+            posts: allPosts,
+            factNum: Math.floor(Math.random() * facts.length)
+          },
+          () => this.forceUpdate()
+        );
     });
   }
 
@@ -399,15 +407,14 @@ export default class ForumPage extends React.Component {
           <SchoolContainer>
             <UCLAimg></UCLAimg>
             <UCLAname></UCLAname>
-            {this.state.factNum &&
+            {this.state.factNum && (
               <Fade duration={500}>
                 <FactHolder>
                   <FactHeading>Fun fact: </FactHeading>
                   <Fact>{facts[this.state.factNum]}</Fact>
                 </FactHolder>
               </Fade>
-            }
-            
+            )}
           </SchoolContainer>
           <QuestionsContainer>
             <PostContainer>

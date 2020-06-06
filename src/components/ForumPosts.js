@@ -2,14 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Accordion,
-} from "react-accessible-accordion";
 import Comments from "./Comments";
 import PostCard from "./PostCard";
 
 const ModalStyle = styled(Modal)`
-  font-family: 'Balsamiq Sans';
+  font-family: "Balsamiq Sans";
   margin-top: 50px;
   margin-bottom: 50px;
   max-height: 100%;
@@ -17,31 +14,31 @@ const ModalStyle = styled(Modal)`
 `;
 
 class OpenPostModal extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+  constructor(props, context) {
+    super(props, context);
 
-		this.state = {
-      showModal: false,
+    this.state = {
+      showModal: false
     };
-    
+
     this.postModalShow = this.postModalShow.bind(this);
     this.postModalClose = this.postModalClose.bind(this);
-	}
+  }
 
-	postModalClose() {
-		this.setState({ showModal: false });
-	}
+  postModalClose() {
+    this.setState({ showModal: false });
+  }
 
-	postModalShow(e) {
+  postModalShow(e) {
     e.stopPropagation();
     e.preventDefault();
     console.log("handleshow called in post modal");
-		this.setState({ showModal: true });
+    this.setState({ showModal: true });
   }
 
-	render() {
-		return (
-			<>
+  render() {
+    return (
+      <>
         <div onDoubleClick={this.postModalShow}>
           <PostCard
             postID={this.props.post.post_id}
@@ -56,17 +53,20 @@ class OpenPostModal extends React.Component {
             body={this.props.post.body}
           />
         </div>
-       
-				<ModalStyle
+
+        <ModalStyle
           size="xl"
           show={this.state.showModal}
           onHide={this.postModalClose}
           centered
         >
-					<Modal.Header closeButton>
-            <Modal.Title>Commenting on {this.props.post.author_name}'s post: {this.props.post.title}</Modal.Title>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Commenting on {this.props.post.author_name}'s post:{" "}
+              {this.props.post.title}
+            </Modal.Title>
           </Modal.Header>
-					<Modal.Body>
+          <Modal.Body>
             <PostCard
               postID={this.props.post.post_id}
               upvotes={this.props.post.upvotes}
@@ -79,21 +79,22 @@ class OpenPostModal extends React.Component {
               title={this.props.post.title}
               body={this.props.post.body}
             />
-            <Comments user={this.props.user} postID={this.props.post.post_id}></Comments>
-          </Modal.Body>       
-					<Modal.Footer />
-				</ModalStyle>
-			</>
-		);
-	}
+            <Comments
+              user={this.props.user}
+              postID={this.props.post.post_id}
+            ></Comments>
+          </Modal.Body>
+          <Modal.Footer />
+        </ModalStyle>
+      </>
+    );
+  }
 }
 
 export default class ForumPost extends React.Component {
   renderPosts(allPosts) {
     return allPosts.map((post, i) => {
-      return (
-        <OpenPostModal post={post} user={this.props.user} key={i}/>
-      );
+      return <OpenPostModal post={post} user={this.props.user} key={i} />;
     });
   }
 
@@ -102,12 +103,7 @@ export default class ForumPost extends React.Component {
       <>
         {(() => {
           if (this.props.posts) {
-            return (
-              <Accordion allowMultipleExpanded={true} allowZeroExpanded={true}>
-                {" "}
-                {this.renderPosts(this.props.posts)}
-              </Accordion>
-            );
+            return this.renderPosts(this.props.posts);
           } else {
             return <div>Loading...</div>;
           }
