@@ -387,7 +387,7 @@ export default class ForumPage extends React.Component {
         this.setState(
           {
             posts: allPosts,
-            factNum: Math.floor(Math.random() * facts.length)
+            fact: facts[Math.floor(Math.random() * facts.length)]
           },
           () => this.forceUpdate()
         );
@@ -407,11 +407,11 @@ export default class ForumPage extends React.Component {
           <SchoolContainer>
             <UCLAimg></UCLAimg>
             <UCLAname></UCLAname>
-            {this.state.factNum && (
+            {this.state.fact && (
               <Fade duration={500}>
                 <FactHolder>
                   <FactHeading>Fun fact: </FactHeading>
-                  <Fact>{facts[this.state.factNum]}</Fact>
+                  <Fact>{this.state.fact}</Fact>
                 </FactHolder>
               </Fade>
             )}
