@@ -83,6 +83,9 @@ const ChatContainer = styled("div")`
   flex-direction: column;
   justify-content: flex-end;
   overflow: scroll;
+  ${mobile} {
+    width: 85%;
+  }
 `;
 
 const ConversationContainer = styled("div")`
@@ -155,6 +158,16 @@ const Type = styled("div")`
   width: 100%;
   height: 5%;
 `;
+
+const Mheader = styled("div")`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  ${mobile} {
+    flex-direction: row;
+  }
+`;
 export default class MentorPage extends React.Component {
   constructor(props) {
     super(props);
@@ -211,8 +224,11 @@ export default class MentorPage extends React.Component {
   }
 
   componentWillUnmount() {
-    unsubscribeFromChat(this.props.user, this.state.mentorID, 
-      this.state.menteeID);
+    unsubscribeFromChat(
+      this.props.user,
+      this.state.mentorID,
+      this.state.menteeID
+    );
   }
 
   componentDidUpdate() {
@@ -329,23 +345,26 @@ export default class MentorPage extends React.Component {
             return (
               <Container>
                 <MentorContainer>
-                  {this.state.mStatus && <h1>My Mentor</h1>}
-                  {!this.state.mStatus && <h1>My Mentee</h1>}
-                  <img
-                    src={this.state.mPic}
-                    alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
-                    className={css`
-                      border-radius: 50%;
-                      height: 200px;
-                      width: 200px;
-                      ${mobile} {
-                        height: 75px;
-                        width: 75px;
-                      }
-                    `}
-                  />
+                  <Mheader>
+                    {this.state.mStatus && <h2>My Mentor</h2>}
+                    {!this.state.mStatus && <h2>My Mentee</h2>}
+                    <img
+                      src={this.state.mPic}
+                      alt="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxfRU55yMsbgdDn_rpmnqf60WKvo157flOJxTdO3NkqG0guXn4&usqp=CAU"
+                      className={css`
+                        border-radius: 50%;
+                        height: 200px;
+                        width: 200px;
+                        ${mobile} {
+                          height: 75px;
+                          width: 75px;
+                        }
+                      `}
+                    />
 
-                  <h1>{this.state.mname}</h1>
+                    <h2>{this.state.mname}</h2>
+                  </Mheader>
+
                   <ProfileInfo>
                     <Text>
                       <strong>{this.state.mmajor} Major</strong>

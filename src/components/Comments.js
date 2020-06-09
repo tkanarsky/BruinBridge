@@ -2,7 +2,7 @@ import React from "react";
 import { createComment, getComments } from "../database/commentDatabase.js";
 import CommentCard from "./CommentCard";
 import { FlexBox } from "../pages/ForumPage";
-import { Button } from "../pages/LandingPage"
+import { Button } from "../pages/LandingPage";
 import { Fade } from "react-reveal";
 
 export default class Comments extends React.Component {
@@ -78,9 +78,7 @@ export default class Comments extends React.Component {
                   paddingRight: "10px"
                 }}
               >
-                <span>
-                  Add a comment...
-                </span>
+                <span>Add a comment...</span>
               </label>
             </FlexBox>
             <FlexBox>
@@ -99,9 +97,7 @@ export default class Comments extends React.Component {
                 }}
               />
             </FlexBox>
-            <Button onClick={this.handleSubmit}>
-							Submit
-            </Button>
+            <Button onClick={this.handleSubmit}>Submit</Button>
           </form>
         </Fade>
         {this.renderComments(this.state.comments)}

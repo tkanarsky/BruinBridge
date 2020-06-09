@@ -41,7 +41,7 @@ const InfoContainer = styled("div")`
   display: flex;
   flex-direction: column;
   padding-left: 30px;
-  padding-top: 30px;
+  padding-top: 10px;
 `;
 
 const PicContainer = styled("div")`
@@ -82,6 +82,12 @@ const Button = styled("button")`
     cursor: pointer;
     background-color: #ffd600;
   }
+`;
+
+const Hold = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export default class ProfilePage extends React.Component {
@@ -261,8 +267,8 @@ export default class ProfilePage extends React.Component {
                     curInt3={this.state.interest3}
                     handle={this.handleInterest}
                   ></InterestsDropdown>
-                  <Button onClick={this.Edit}>Done</Button>
                 </InfoContainer>
+                <Button onClick={this.Edit}>Done</Button>
               </Container>
             );
           } else if (
@@ -294,36 +300,38 @@ export default class ProfilePage extends React.Component {
                     {this.state.karma}
                   </Pair>
                 </PicContainer>
-                <InfoContainer>
-                  <Pair>
-                    <strong>Major: &#8287;</strong>
-                    {this.state.major.value}
-                  </Pair>
-                  <Pair>
-                    <strong>College: &#8287;</strong>
-                    {this.state.school}
-                  </Pair>
-                  <Pair>
-                    <strong>Graduation Year: &#8287;</strong>
-                    {this.state.year}
-                  </Pair>
-                  <Pair>
-                    <strong>Bio: &#8287;</strong>
-                    {this.state.bio}
-                  </Pair>
-                  <Pair>
-                    <strong>Interests: &#8287;</strong>
-                    {this.state.i1}
-                    {", "}
-                    {this.state.i2}
-                    {", "}
-                    {this.state.i3}
-                  </Pair>
+                <Hold>
                   <Button onClick={this.Edit}>
                     <BsPencil />
                     &nbsp; Edit
                   </Button>
-                </InfoContainer>
+                  <InfoContainer>
+                    <Pair>
+                      <strong>Major: &#8287;</strong>
+                      {this.state.major.value}
+                    </Pair>
+                    <Pair>
+                      <strong>College: &#8287;</strong>
+                      {this.state.school}
+                    </Pair>
+                    <Pair>
+                      <strong>Graduation Year: &#8287;</strong>
+                      {this.state.year}
+                    </Pair>
+                    <Pair>
+                      <strong>Bio: &#8287;</strong>
+                      {this.state.bio}
+                    </Pair>
+                    <Pair>
+                      <strong>Interests: &#8287;</strong>
+                      {this.state.i1}
+                      {", "}
+                      {this.state.i2}
+                      {", "}
+                      {this.state.i3}
+                    </Pair>
+                  </InfoContainer>
+                </Hold>
               </Container>
             );
           } else if (this.props.user && !this.state.major) {

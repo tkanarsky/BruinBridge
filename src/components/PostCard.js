@@ -15,7 +15,7 @@ import {
   FaThumbsDown,
   FaComments
 } from "react-icons/fa";
-import { getUser } from "../database/userDatabase"
+import { getUser } from "../database/userDatabase";
 import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Fade } from "react-reveal";
@@ -91,7 +91,7 @@ const QuestionContainer = styled("div")`
 `;
 
 const ModalStyle = styled(Modal)`
-  font-family: 'Balsamiq Sans';
+  font-family: "Balsamiq Sans";
   margin-top: 50px;
   margin-bottom: 50px;
   max-height: 100%;
@@ -99,10 +99,10 @@ const ModalStyle = styled(Modal)`
 `;
 
 class OpenProfileModal extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+  constructor(props, context) {
+    super(props, context);
 
-		this.state = {
+    this.state = {
       show: false,
       dataLoaded: false,
       name: null,
@@ -113,21 +113,20 @@ class OpenProfileModal extends React.Component {
       karma: null,
       interests: null
     };
-    
+
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.loadData = this.loadData.bind(this);
-	}
+  }
 
-	handleClose(e) {
-		this.setState({ show: false });
-	}
+  handleClose(e) {
+    this.setState({ show: false });
+  }
 
-	handleShow(e) {
+  handleShow(e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log("handleshow called in profile modal");
-		this.setState({ show: true });
+    this.setState({ show: true });
   }
 
   loadData() {
@@ -146,13 +145,13 @@ class OpenProfileModal extends React.Component {
       });
       this.forceUpdate();
     });
-  } 
+  }
 
-	render() {
+  render() {
     if (!this.state.dataLoaded) {
       this.loadData();
     }
-		return (
+    return (
       <>
         <Profile>
           <img
@@ -167,15 +166,16 @@ class OpenProfileModal extends React.Component {
           />
         </Profile>
 
-        <ModalStyle
-          show={this.state.show}
-          onHide={this.handleClose}
-          centered
-        >
-					<Modal.Header closeButton>
-            <Modal.Title> {(this.state.dataLoaded) ? this.state.name + "'s Profile" : "Loading..."}</Modal.Title>
+        <ModalStyle show={this.state.show} onHide={this.handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {" "}
+              {this.state.dataLoaded
+                ? this.state.name + "'s Profile"
+                : "Loading..."}
+            </Modal.Title>
           </Modal.Header>
-					<Modal.Body>
+          <Modal.Body>
             <PostBackground>
               <QuestionContainer>
                 <ProfileContainer>
@@ -189,20 +189,29 @@ class OpenProfileModal extends React.Component {
                         width: 80px;
                       `}
                     />
-                  </Profile>  
-                  <Name>{this.state.name}</Name> 
+                  </Profile>
+                  <Name>{this.state.name}</Name>
                 </ProfileContainer>
-                <DescriptionStyle>Major: {(this.state.dataLoaded) ? this.state.major : "loading..."}</DescriptionStyle>
-                <DescriptionStyle>Class of {(this.state.dataLoaded) ? this.state.year : "loading..."}</DescriptionStyle>
-                <DescriptionStyle>Karma: {(this.state.dataLoaded) ? this.state.karma: "loading..."}</DescriptionStyle>
+                <DescriptionStyle>
+                  Major:{" "}
+                  {this.state.dataLoaded ? this.state.major : "loading..."}
+                </DescriptionStyle>
+                <DescriptionStyle>
+                  Class of{" "}
+                  {this.state.dataLoaded ? this.state.year : "loading..."}
+                </DescriptionStyle>
+                <DescriptionStyle>
+                  Karma:{" "}
+                  {this.state.dataLoaded ? this.state.karma : "loading..."}
+                </DescriptionStyle>
               </QuestionContainer>
             </PostBackground>
-          </Modal.Body>       
-					<Modal.Footer />
-				</ModalStyle>
+          </Modal.Body>
+          <Modal.Footer />
+        </ModalStyle>
       </>
-		);
-	}
+    );
+  }
 }
 
 export default class PostCard extends React.Component {
@@ -238,17 +247,16 @@ export default class PostCard extends React.Component {
   componentDidUpdate() {
     if (!this.state.loaded) this.loadUser();
   }
- 
-  static getDerivedStateFromProps(nextProps, prevState){
-    if(nextProps.postID !== prevState.postID){ // If we reorder the posts in the 
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.postID !== prevState.postID) {
       return {
         postID: nextProps.postID,
         upvotes: nextProps.upvotes,
         loaded: false
       };
-   }
-   else return null;
- }
+    } else return null;
+  }
 
   loadUser() {
     if (!this.state.loaded && this.props.user) {
@@ -303,7 +311,6 @@ export default class PostCard extends React.Component {
     }
     if (!this._disabled) {
       this._disabled = true;
-      console.log("processing upvote with downvote");
       upvotePost(this.state.userID, this.props.postID, successCallback => {
         if (this.state.loaded && successCallback) {
           this.setState(
@@ -339,7 +346,6 @@ export default class PostCard extends React.Component {
     }
     if (!this._disabled) {
       this._disabled = true;
-      console.log("processing downvote with upvote");
       downvotePost(this.state.userID, this.props.postID, successCallback => {
         if (this.state.loaded && successCallback) {
           this.setState(
@@ -362,8 +368,6 @@ export default class PostCard extends React.Component {
               this._disabled = false;
             }
           );
-          console.log(this.state.upvotes);
-          console.log("downvoted with upvote");
         }
       });
     }
@@ -377,7 +381,6 @@ export default class PostCard extends React.Component {
     }
     if (!this._disabled) {
       this._disabled = true;
-      console.log("processing upvote");
       upvotePost(this.state.userID, this.props.postID, successCallback => {
         if (this.state.loaded && successCallback) {
           this.setState(
@@ -400,8 +403,6 @@ export default class PostCard extends React.Component {
               this._disabled = false;
             }
           );
-          console.log(this.state.upvotes);
-          console.log("upvoted");
         } else {
           removeVote(this.state.userID, this.props.postID, successCallback => {
             if (this.state.loaded && successCallback) {
@@ -425,8 +426,6 @@ export default class PostCard extends React.Component {
                   this._disabled = false;
                 }
               );
-              console.log(this.state.upvotes);
-              console.log("removed vote");
             }
           });
         }
@@ -442,7 +441,6 @@ export default class PostCard extends React.Component {
     }
     if (!this._disabled) {
       this._disabled = true;
-      console.log("processing downvote");
       downvotePost(this.state.userID, this.props.postID, successCallback => {
         if (this.state.loaded && successCallback) {
           this.setState(
@@ -488,8 +486,6 @@ export default class PostCard extends React.Component {
                   this._disabled = false;
                 }
               );
-              console.log(this.state.votes);
-              console.log("removed vote");
             }
           });
         }
@@ -499,7 +495,12 @@ export default class PostCard extends React.Component {
 
   render() {
     return (
-      <Fade duration={500} appear spy={this.state.postID} key={this.state.postID}>
+      <Fade
+        duration={500}
+        appear
+        spy={this.state.postID}
+        key={this.state.postID}
+      >
         <PostBackground>
           <Votes>
             {this.state.upvoteIcon}
@@ -509,10 +510,15 @@ export default class PostCard extends React.Component {
           <QuestionContainer>
             <ProfileContainer>
               <Profile>
-                <OpenProfileModal userID={this.props.authorID} authorPic={this.props.authorPic}/>
-              </Profile>  
-              <Name>{this.props.authorName} posted {timeSince(this.props.timestamp)}</Name> 
-            </ProfileContainer>  
+                <OpenProfileModal
+                  userID={this.props.authorID}
+                  authorPic={this.props.authorPic}
+                />
+              </Profile>
+              <Name>
+                {this.props.authorName} posted {timeSince(this.props.timestamp)}
+              </Name>
+            </ProfileContainer>
             <QuestionStyle>{this.props.title}</QuestionStyle>
             <DescriptionStyle>{this.props.body}</DescriptionStyle>
             <CommentContainer>
@@ -523,7 +529,8 @@ export default class PostCard extends React.Component {
                   padding-right: 10px;
                 `}
               />
-              {this.props.replies.length} Comment{this.props.replies.length === 1 ? "" : "s"}
+              {this.props.replies.length} Comment
+              {this.props.replies.length === 1 ? "" : "s"}
             </CommentContainer>
           </QuestionContainer>
         </PostBackground>
