@@ -67,7 +67,7 @@ class OpenPostModal extends React.Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <PostCard
+            {/* <PostCard
               postID={this.props.post.post_id}
               upvotes={this.props.post.upvotes}
               authorPic={this.props.post.author_avatar}
@@ -78,7 +78,7 @@ class OpenPostModal extends React.Component {
               user={this.props.user}
               title={this.props.post.title}
               body={this.props.post.body}
-            />
+            /> */}
             <Comments
               user={this.props.user}
               postID={this.props.post.post_id}
