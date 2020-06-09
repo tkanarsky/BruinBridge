@@ -32,7 +32,6 @@ class OpenPostModal extends React.Component {
   postModalShow(e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log("handleshow called in post modal");
     this.setState({ showModal: true });
   }
 
@@ -67,18 +66,6 @@ class OpenPostModal extends React.Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* <PostCard
-              postID={this.props.post.post_id}
-              upvotes={this.props.post.upvotes}
-              authorPic={this.props.post.author_avatar}
-              authorName={this.props.post.author_name}
-              authorID={this.props.post.author_id}
-              timestamp={this.props.post.timestamp}
-              replies={this.props.post.replies}
-              user={this.props.user}
-              title={this.props.post.title}
-              body={this.props.post.body}
-            /> */}
             <Comments
               user={this.props.user}
               postID={this.props.post.post_id}

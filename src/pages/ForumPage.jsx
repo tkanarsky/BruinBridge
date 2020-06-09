@@ -274,7 +274,6 @@ class SubmitPostModal extends React.Component {
       getPosts({ sort: "top", limit: 100 }, allPosts => {
         this.setState({ title: "", postInput: "", posts: allPosts });
       });
-      //this.loadPosts(this.state.postOrder);
     } else alert("You must be logged in to submit a post!");
     this.handleClose();
     event.preventDefault();
